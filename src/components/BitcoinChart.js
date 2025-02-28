@@ -7,8 +7,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Area,
-  ReferenceDot
+  Area
 } from 'recharts';
 import { useTheme } from '../context/ThemeContext';
 import styled from 'styled-components';
@@ -366,8 +365,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
           timestamp,
           price: Math.round(closePrice),
           priceDiff,
-          percentChange: Number(percentChange.toFixed(2)),
-          isKeyPoint: index % (timeframe === '24h' ? 4 : timeframe === '7d' ? 6 : timeframe === '30d' ? 5 : 4) === 0
+          percentChange: Number(percentChange.toFixed(2))
         };
       });
 
@@ -751,22 +749,6 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 animationDuration={750}
                 animationEasing="cubic-bezier(0.4, 0, 0.2, 1)"
               />
-              {chartData.map((point, index) => {
-                if (point.isKeyPoint) {
-                  return (
-                    <ReferenceDot
-                      key={`${index}-${point.timestamp}`}
-                      x={point.timestamp}
-                      y={point.price}
-                      r={4}
-                      fill={point.percentChange >= 0 ? '#22c55e' : '#ef4444'}
-                      stroke={isDarkMode ? '#2d2d2d' : '#ffffff'}
-                      strokeWidth={2}
-                    />
-                  );
-                }
-                return null;
-              })}
             </LineChart>
           </ResponsiveContainer>
         )}

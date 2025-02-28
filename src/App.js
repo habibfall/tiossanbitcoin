@@ -259,7 +259,7 @@ function AppContent() {
                     </div>
                   </>
                 ) : (
-                  <span>Loading...</span>
+                  <span className="price">Loading...</span>
                 )}
               </p>
               <p className="update-time">

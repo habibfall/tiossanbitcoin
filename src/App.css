@@ -74,7 +74,7 @@
 .price-box {
   background: rgba(26, 26, 26, 0.95);
   border-radius: 16px;
-  padding: 2.5rem 4rem;
+  padding: 3rem 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
   width: 100%;
@@ -94,7 +94,7 @@
 
 .price {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(4rem, 10vw, 6rem);
+  font-size: clamp(8rem, 20vw, 12rem);
   font-weight: 700;
   color: #F7931A;
   display: flex;
@@ -112,7 +112,7 @@
 }
 
 .currency {
-  font-size: 2rem !important;
+  font-size: 4rem !important;
   color: #aaa;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
@@ -175,22 +175,20 @@
 }
 
 @media (max-width: 768px) {
+  .price {
+    font-size: clamp(5rem, 16vw, 9rem);
+  }
+
+  .currency {
+    font-size: 3rem !important;
+  }
+
   .price-box {
-    padding: 2rem;
-    margin: 1rem;
-    width: 95%;
+    padding: 2rem 1.5rem;
   }
 
   .price-box h2 {
     font-size: 2rem;
-  }
-
-  .price {
-    font-size: clamp(2.5rem, 8vw, 4.5rem);
-  }
-
-  .currency {
-    font-size: 1.5rem !important;
   }
 
   .price-change {
@@ -214,16 +212,16 @@
 }
 
 @media (max-width: 480px) {
-  .price-box {
-    padding: 1.5rem;
-  }
-
   .price {
-    font-size: clamp(2rem, 7vw, 3.5rem);
+    font-size: clamp(4rem, 14vw, 7rem);
   }
 
   .currency {
-    font-size: 1.2rem !important;
+    font-size: 2rem !important;
+  }
+
+  .price-box {
+    padding: 1.5rem 1rem;
   }
 
   .price-change {

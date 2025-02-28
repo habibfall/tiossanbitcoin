@@ -102,10 +102,10 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
           }}
         >
           <img 
-            src="/logo.png"
+            src={process.env.PUBLIC_URL + '/static/images/tiossan.png'}
             alt="Tiossan Logo" 
             style={{ 
-              height: '40px',
+              height: '100%',
               width: 'auto',
               display: 'block',
               filter: isDarkMode ? 'invert(1)' : 'none'
@@ -113,7 +113,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             onError={(e) => {
               console.error('Failed to load logo:', e);
               e.target.onerror = null;
-              e.target.src = "/default.png";
+              e.target.src = process.env.PUBLIC_URL + '/static/images/bitcoin-default.png';
             }}
           />
         </button>

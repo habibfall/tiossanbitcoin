@@ -234,7 +234,7 @@ const newsTranslations = {
   }
 };
 
-const defaultImage = '/default.png';
+const defaultImage = process.env.PUBLIC_URL + '/static/images/bitcoin-default.png';
 
 // Curated news translations
 const curatedNews = {
@@ -565,11 +565,11 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src="/static/images/heart-of-cheetah.jpg"
+                  src={process.env.PUBLIC_URL + '/static/images/heart-of-cheetah.jpg'}
                   alt="Heart of a Cheetah Book"
                   style={{
-                    width: '200px',
-                    height: '300px',
+                    width: '100%',
+                    height: 'auto',
                     objectFit: 'cover'
                   }}
                   onError={(e) => {
@@ -586,11 +586,11 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src="/static/images/bitcoin-standard.jpg"
+                  src={process.env.PUBLIC_URL + '/static/images/bitcoin-standard.jpg'}
                   alt="The Bitcoin Standard Book"
                   style={{
-                    width: '200px',
-                    height: '300px',
+                    width: '100%',
+                    height: 'auto',
                     objectFit: 'cover'
                   }}
                   onError={(e) => {
@@ -607,11 +607,11 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src="/static/images/matt-kratte.jpg"
+                  src={process.env.PUBLIC_URL + '/static/images/matt-kratte.jpg'}
                   alt="Matt Kratter Book"
                   style={{
-                    width: '200px',
-                    height: '300px',
+                    width: '100%',
+                    height: 'auto',
                     objectFit: 'cover'
                   }}
                   onError={(e) => {

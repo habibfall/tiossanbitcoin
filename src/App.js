@@ -87,43 +87,41 @@ function AppContent() {
       setFetchError(null);
       console.log('Fetching Bitcoin price from Binance...');
       
-      const [priceResponse, dayStatsResponse, klinesResponse] = await Promise.all([
-        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT', { timeout: 5000 }),
-        fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT', { timeout: 5000 }),
-        fetch('https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=30', { timeout: 5000 })
+      const [priceData, dayStats, klinesResponse] = await Promise.all([
+        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT').then(res => res.json()),
+        fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT').then(res => res.json()),
+        fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=30`).then(res => res.json())
       ]);
       
-      if (!priceResponse.ok || !dayStatsResponse.ok || !klinesResponse.ok) {
+      if (!priceData.ok || !dayStats.ok || !klinesResponse.ok) {
         throw new Error('Binance API request failed');
       }
       
-      const [priceData, dayStats, klinesData] = await Promise.all([
-        priceResponse.json(),
-        dayStatsResponse.json(),
-        klinesResponse.json()
-      ]);
-      
-      if (priceData.price && dayStats.priceChangePercent && klinesData.length > 0) {
+      if (priceData.price && dayStats.priceChangePercent && klinesResponse.length > 0) {
         const currentPrice = parseFloat(priceData.price);
         const usdToFcfa = 655.957;
         const priceInFcfa = Math.round(currentPrice * usdToFcfa);
         
-        const closePrices = klinesData.map(kline => parseFloat(kline[4]));
-        const sevenDaysAgo = closePrices[closePrices.length - 8] || currentPrice;
-        const thirtyDaysAgo = closePrices[0] || currentPrice;
-        
         const change24h = parseFloat(dayStats.priceChangePercent);
+        
+        const sevenDayIndex = klinesResponse.length >= 7 ? klinesResponse.length - 7 : 0;
+        const sevenDaysAgo = parseFloat(klinesResponse[sevenDayIndex][1]);
         const change7d = ((currentPrice - sevenDaysAgo) / sevenDaysAgo) * 100;
+        
+        const thirtyDaysAgo = parseFloat(klinesResponse[0][1]);
         const change30d = ((currentPrice - thirtyDaysAgo) / thirtyDaysAgo) * 100;
         
         const newPriceChanges = {
           '24h': Number(change24h.toFixed(2)),
           '7d': Number(change7d.toFixed(2)),
-          '30d': Number(change30d.toFixed(2))
+          '30d': Number(change30d.toFixed(2)),
+          '1y': priceChanges['1y']
         };
         
         setPriceChanges(newPriceChanges);
-        setPriceChange(newPriceChanges[timeframe]);
+        if (timeframe !== '1y') {
+          setPriceChange(newPriceChanges[timeframe]);
+        }
         setBitcoinPrice(priceInFcfa);
         setLastUpdated(new Date());
         setIsInitialLoad(false);
@@ -217,6 +215,10 @@ function AppContent() {
   const handleTimeframeChange = useCallback((newTimeframe, newPercentChange) => {
     setTimeframe(newTimeframe);
     setPriceChange(newPercentChange);
+    setPriceChanges(prev => ({
+      ...prev,
+      [newTimeframe]: newPercentChange
+    }));
   }, []);
 
   return (

@@ -103,7 +103,8 @@
   gap: 0.5rem;
   margin: 2rem 0;
   line-height: 1.2;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .price span {
@@ -114,7 +115,7 @@
   font-size: 1.5rem !important;
   color: #aaa;
   margin-left: 0.5rem;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
   font-weight: 500;
 }
 
@@ -122,13 +123,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 50px;
   font-weight: 600;
-  font-size: 1.5rem;
-  min-width: 120px;
+  font-size: 1.25rem;
+  min-width: 100px;
+  margin-left: 0.5rem;
+  white-space: nowrap;
   position: relative;
-  top: 0.2rem;
 }
 
 .price-change.positive {
@@ -193,10 +195,10 @@
   }
 
   .price-change {
-    font-size: 1.2rem;
-    padding: 0.5rem 1rem;
-    min-width: auto;
-    margin-top: 0.5rem;
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+    min-width: 80px;
+    margin-top: 0;
   }
 
   .quiz-container {

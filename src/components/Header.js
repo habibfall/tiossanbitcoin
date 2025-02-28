@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from './ThemeToggle';
+import OptimizedImage from './OptimizedImage';
 import '../styles/Header.css';
 
 const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) => {
@@ -101,7 +102,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             height: '40px'
           }}
         >
-          <img 
+          <OptimizedImage 
             src="/static/images/tiossan.png"
             alt="Tiossan Logo" 
             style={{ 
@@ -110,6 +111,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
               display: 'block',
               filter: isDarkMode ? 'invert(1)' : 'none'
             }}
+            priority={true}
             onError={(e) => {
               console.error('Failed to load logo:', e);
               e.target.onerror = null;

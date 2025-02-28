@@ -85,7 +85,6 @@ function AppContent() {
   const fetchBitcoinPrice = useCallback(async (retryCount = 0) => {
     try {
       setFetchError(null);
-      console.log('Fetching Bitcoin price from Binance...');
       
       const [priceData, dayStats, klinesResponse] = await Promise.all([
         fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT').then(res => res.json()),
@@ -116,17 +115,22 @@ function AppContent() {
         '30d': Number(change30d.toFixed(2)),
         '1y': priceChanges['1y']
       };
-      
-      setPriceChanges(newPriceChanges);
-      if (timeframe !== '1y') {
-        setPriceChange(newPriceChanges[timeframe]);
+
+      // Only update if price has actually changed
+      if (bitcoinPrice !== priceInFcfa) {
+        setIsPriceUpdating(true);
+        setBitcoinPrice(priceInFcfa);
+        setPriceChanges(newPriceChanges);
+        if (timeframe !== '1y') {
+          setPriceChange(newPriceChanges[timeframe]);
+        }
+        setLastUpdated(new Date());
+        
+        // Reset the update animation after a delay
+        setTimeout(() => setIsPriceUpdating(false), 800);
       }
-      setBitcoinPrice(priceInFcfa);
-      setLastUpdated(new Date());
-      setIsInitialLoad(false);
       
-      setIsPriceUpdating(true);
-      setTimeout(() => setIsPriceUpdating(false), 800);
+      setIsInitialLoad(false);
       
       return {
         price: priceInFcfa,
@@ -149,7 +153,7 @@ function AppContent() {
       }
       throw error;
     }
-  }, [timeframe, isInitialLoad, priceChanges]);
+  }, [timeframe, isInitialLoad, priceChanges, bitcoinPrice]);
 
   // Memoize the validatePriceChange function
   const validatePriceChange = useCallback((value) => {
@@ -180,12 +184,12 @@ function AppContent() {
     };
 
     updatePrice();
-    const interval = setInterval(updatePrice, 600000);
+    // Update price every 10 seconds instead of every minute
+    const interval = setInterval(updatePrice, 10000);
     
     return () => {
       isMounted = false;
       clearInterval(interval);
-      console.log('Cleaning up price update interval');
     };
   }, [fetchBitcoinPrice]);
 

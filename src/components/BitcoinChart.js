@@ -737,15 +737,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 stroke={chartData[chartData.length - 1]?.percentChange >= 0 ? '#22c55e' : '#ef4444'}
                 strokeWidth={2.5}
                 dot={false}
-                activeDot={{
-                  r: 6,
-                  stroke: isDarkMode ? '#2d2d2d' : '#ffffff',
-                  strokeWidth: 2,
-                  fill: (props) => {
-                    const { payload } = props;
-                    return payload.percentChange >= 0 ? '#22c55e' : '#ef4444';
-                  }
-                }}
+                activeDot={false}
                 animationDuration={750}
                 animationEasing="cubic-bezier(0.4, 0, 0.2, 1)"
               />

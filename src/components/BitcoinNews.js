@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import Image from 'next/image';
 import './BitcoinNews.css';
-import bitcoinDefaultImage from '../assets/images/bitcoin-default.png';
-import heartOfCheetahImage from '../assets/images/heart-of-cheetah.jpg';
-import bitcoinStandardImage from '../assets/images/bitcoin-standard.jpg';
-import mattKratteImage from '../assets/images/matt-kratte.jpg';
 
 const englishTerms = [
   {
@@ -72,7 +67,7 @@ const bitcoinTerms = {
     {
       term: "Portefeuille",
       definition: "Jumtukaay numérik bi lay may nga denc, yonnee ak jot Bitcoin ci kaarange.",
-      example: "Sa portefeuille Bitcoin mel na ni compte banque numérik boo kontrole sa bopp."
+      example: "Sa portefeuille Bitcoin mel na ni compte banque numérique boo kontrole sa bopp."
     },
     {
       term: "Bloc",
@@ -400,7 +395,7 @@ const BitcoinNews = ({ language = 'french' }) => {
         image: item.imageurl,
         sourceUrl: item.url,
         source: item.source,
-        fallbackImage: bitcoinDefaultImage
+        fallbackImage: defaultImage
       }));
       
       // Update cache

@@ -93,49 +93,45 @@ function AppContent() {
         fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=30`).then(res => res.json())
       ]);
       
-      if (!priceData.ok || !dayStats.ok || !klinesResponse.ok) {
-        throw new Error('Binance API request failed');
+      if (!priceData.price || !dayStats.priceChangePercent || !Array.isArray(klinesResponse)) {
+        throw new Error('Invalid data from Binance API');
       }
       
-      if (priceData.price && dayStats.priceChangePercent && klinesResponse.length > 0) {
-        const currentPrice = parseFloat(priceData.price);
-        const usdToFcfa = 655.957;
-        const priceInFcfa = Math.round(currentPrice * usdToFcfa);
-        
-        const change24h = parseFloat(dayStats.priceChangePercent);
-        
-        const sevenDayIndex = klinesResponse.length >= 7 ? klinesResponse.length - 7 : 0;
-        const sevenDaysAgo = parseFloat(klinesResponse[sevenDayIndex][1]);
-        const change7d = ((currentPrice - sevenDaysAgo) / sevenDaysAgo) * 100;
-        
-        const thirtyDaysAgo = parseFloat(klinesResponse[0][1]);
-        const change30d = ((currentPrice - thirtyDaysAgo) / thirtyDaysAgo) * 100;
-        
-        const newPriceChanges = {
-          '24h': Number(change24h.toFixed(2)),
-          '7d': Number(change7d.toFixed(2)),
-          '30d': Number(change30d.toFixed(2)),
-          '1y': priceChanges['1y']
-        };
-        
-        setPriceChanges(newPriceChanges);
-        if (timeframe !== '1y') {
-          setPriceChange(newPriceChanges[timeframe]);
-        }
-        setBitcoinPrice(priceInFcfa);
-        setLastUpdated(new Date());
-        setIsInitialLoad(false);
-        
-        setIsPriceUpdating(true);
-        setTimeout(() => setIsPriceUpdating(false), 800);
-        
-        return {
-          price: priceInFcfa,
-          timestamp: new Date()
-        };
-      }
+      const currentPrice = parseFloat(priceData.price);
+      const usdToFcfa = 655.957;
+      const priceInFcfa = Math.round(currentPrice * usdToFcfa);
       
-      throw new Error('Invalid data from Binance API');
+      const change24h = parseFloat(dayStats.priceChangePercent);
+      
+      const sevenDayIndex = klinesResponse.length >= 7 ? klinesResponse.length - 7 : 0;
+      const sevenDaysAgo = parseFloat(klinesResponse[sevenDayIndex][1]);
+      const change7d = ((currentPrice - sevenDaysAgo) / sevenDaysAgo) * 100;
+      
+      const thirtyDaysAgo = parseFloat(klinesResponse[0][1]);
+      const change30d = ((currentPrice - thirtyDaysAgo) / thirtyDaysAgo) * 100;
+      
+      const newPriceChanges = {
+        '24h': Number(change24h.toFixed(2)),
+        '7d': Number(change7d.toFixed(2)),
+        '30d': Number(change30d.toFixed(2)),
+        '1y': priceChanges['1y']
+      };
+      
+      setPriceChanges(newPriceChanges);
+      if (timeframe !== '1y') {
+        setPriceChange(newPriceChanges[timeframe]);
+      }
+      setBitcoinPrice(priceInFcfa);
+      setLastUpdated(new Date());
+      setIsInitialLoad(false);
+      
+      setIsPriceUpdating(true);
+      setTimeout(() => setIsPriceUpdating(false), 800);
+      
+      return {
+        price: priceInFcfa,
+        timestamp: new Date()
+      };
     } catch (error) {
       console.error('Error fetching Bitcoin price:', error);
       setFetchError(error.message);
@@ -153,7 +149,7 @@ function AppContent() {
       }
       throw error;
     }
-  }, [timeframe, isInitialLoad]);
+  }, [timeframe, isInitialLoad, priceChanges]);
 
   // Memoize the validatePriceChange function
   const validatePriceChange = useCallback((value) => {

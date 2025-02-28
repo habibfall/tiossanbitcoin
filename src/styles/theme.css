@@ -1,0 +1,685 @@
+:root {
+  /* Light theme variables */
+  --bg-primary-light: #f8f9fa;
+  --bg-secondary-light: #ffffff;
+  --text-primary-light: #333333;
+  --text-secondary-light: #666666;
+  --header-bg-light: linear-gradient(to right, #101010, #202020);
+  --header-text-light: #ffffff;
+  --accent-color-light: #f7931a;
+  --border-color-light: rgba(0, 0, 0, 0.1);
+  --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --bg-gradient-light: linear-gradient(to bottom right, #f8f9fa, #ffffff);
+
+  /* Dark theme variables */
+  --bg-primary-dark: #1a1a1a;
+  --bg-secondary-dark: #2d2d2d;
+  --text-primary-dark: #ffffff;
+  --text-secondary-dark: #b3b3b3;
+  --header-bg-dark: linear-gradient(to right, #101010, #202020);
+  --header-text-dark: #ffffff;
+  --accent-color-dark: #f7931a;
+  --border-color-dark: rgba(255, 255, 255, 0.1);
+  --shadow-dark: 0 4px 6px rgba(0, 0, 0, 0.2);
+  --bg-gradient-dark: linear-gradient(to bottom right, #1a1a1a, #2d2d2d);
+
+  /* Spacing and radius */
+  --spacing-base: 16px;
+  --border-radius: 16px;
+  --button-hover-brightness: 1.1;
+  --button-radius: 20px;
+}
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+}
+
+/* Light theme (default) */
+.app {
+  background: var(--bg-gradient-light);
+  color: var(--text-primary-light);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.app-header {
+  background: var(--header-bg-light);
+  color: var(--header-text-light);
+  padding: var(--spacing-base);
+  gap: var(--spacing-base);
+}
+
+.price-box,
+.chart-container,
+.bitcoin-converter,
+.faq-container {
+  background-color: var(--bg-secondary-light);
+  box-shadow: var(--shadow-light),
+              0 0 40px rgba(247, 147, 26, 0.1),
+              0 0 80px rgba(247, 147, 26, 0.05);
+  border-radius: var(--border-radius);
+  margin: var(--spacing-base) auto;
+  padding: var(--spacing-base);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.price-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    transparent 40%,
+    rgba(255, 255, 255, 0.1),
+    transparent 60%,
+    transparent
+  );
+  transform: translateX(-100%) rotate(45deg);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  20%, 100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+.price-box:hover,
+.chart-container:hover,
+.bitcoin-converter:hover,
+.faq-container:hover {
+  transform: translateY(-2px);
+}
+
+.price {
+  color: var(--accent-color-light);
+  margin: var(--spacing-base) 0;
+  font-size: 48px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  text-align: center;
+  padding: 0 16px;
+}
+
+.price span {
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 20px rgba(245, 158, 11, 0.3);
+  position: relative;
+  line-height: 1.2;
+}
+
+.price .currency {
+  font-size: 0.3em;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
+  margin-left: 4px;
+  align-self: flex-start;
+  margin-top: 8px;
+}
+
+.price-change {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin: 8px auto;
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2),
+              inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+  min-width: 100px;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.price-change.positive {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+.price-change.negative {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2),
+              inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dark .price-change {
+  background: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3),
+              inset 0 2px 4px rgba(255, 255, 255, 0.05);
+}
+
+.dark .price-change.negative {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3),
+              inset 0 2px 4px rgba(255, 255, 255, 0.05);
+}
+
+@keyframes pricePulse {
+  0% { 
+    opacity: 0.8; 
+    transform: scale(0.98);
+    text-shadow: 0 2px 10px rgba(245, 158, 11, 0.2);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+    text-shadow: 0 2px 20px rgba(245, 158, 11, 0.4);
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1);
+    text-shadow: 0 2px 10px rgba(245, 158, 11, 0.2);
+  }
+}
+
+.price-update {
+  animation: pricePulse 0.8s ease-out;
+}
+
+.update-time {
+  color: var(--text-secondary-light);
+  margin-top: calc(var(--spacing-base) / 2);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+}
+
+/* Dark theme */
+.app.dark {
+  background: var(--bg-gradient-dark);
+  color: var(--text-primary-dark);
+}
+
+.dark .app-header {
+  background-color: var(--header-bg-dark);
+  color: var(--header-text-dark);
+}
+
+.dark .price-box,
+.dark .chart-container,
+.dark .bitcoin-converter,
+.dark .faq-container {
+  background-color: var(--bg-secondary-dark);
+  box-shadow: var(--shadow-dark),
+              0 0 40px rgba(247, 147, 26, 0.15),
+              0 0 80px rgba(247, 147, 26, 0.1);
+}
+
+.dark .price {
+  color: var(--accent-color-dark);
+  background: linear-gradient(to right, #f59e0b, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+}
+
+.dark .update-time {
+  color: var(--text-secondary-dark);
+}
+
+/* Button styles with hover effect */
+.timeframe-buttons {
+  display: inline-flex;
+  justify-content: center;
+  gap: 0;
+  margin: 0 auto 20px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 30px;
+  padding: 4px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: fit-content;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dark .timeframe-buttons {
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.timeframe-button {
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary-light);
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 90px;
+}
+
+.dark .timeframe-button {
+  color: var(--text-secondary-dark);
+}
+
+.timeframe-button:hover {
+  color: var(--accent-color-light);
+}
+
+.dark .timeframe-button:hover {
+  color: var(--accent-color-dark);
+}
+
+.timeframe-button.active {
+  color: var(--accent-color-light);
+  font-weight: 600;
+}
+
+.dark .timeframe-button.active {
+  color: var(--accent-color-dark);
+}
+
+.timeframe-button.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  border-radius: 25px;
+  z-index: -1;
+  box-shadow: 
+    0 2px 8px rgba(247, 147, 26, 0.15),
+    0 4px 15px rgba(247, 147, 26, 0.1),
+    0 0 0 1px rgba(247, 147, 26, 0.1);
+  animation: buttonGlow 2s infinite alternate;
+}
+
+.dark .timeframe-button.active::before {
+  background: var(--bg-secondary-dark);
+  box-shadow: 
+    0 2px 8px rgba(247, 147, 26, 0.2),
+    0 4px 15px rgba(247, 147, 26, 0.15),
+    0 0 0 1px rgba(247, 147, 26, 0.2);
+}
+
+@keyframes buttonGlow {
+  0% {
+    box-shadow: 
+      0 2px 8px rgba(247, 147, 26, 0.15),
+      0 4px 15px rgba(247, 147, 26, 0.1),
+      0 0 0 1px rgba(247, 147, 26, 0.1);
+  }
+  100% {
+    box-shadow: 
+      0 4px 12px rgba(247, 147, 26, 0.25),
+      0 6px 20px rgba(247, 147, 26, 0.2),
+      0 0 0 1px rgba(247, 147, 26, 0.15);
+  }
+}
+
+.dark .timeframe-button.active {
+  text-shadow: 0 0 10px rgba(247, 147, 26, 0.3);
+}
+
+/* Chart transition animation */
+.chart-container {
+  position: relative;
+}
+
+.chart-container .recharts-wrapper {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.chart-container.transitioning .recharts-wrapper {
+  opacity: 0;
+}
+
+/* Input styles */
+.bitcoin-converter input {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
+  width: 100%;
+  margin: calc(var(--spacing-base) / 2) 0;
+}
+
+.bitcoin-converter input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  outline: none;
+}
+
+/* Button styles */
+.bitcoin-converter button {
+  background: #f59e0b;
+  border: none;
+  color: white;
+  font-weight: 500;
+  padding: 12px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  width: 100%;
+  cursor: pointer;
+}
+
+.bitcoin-converter button:hover {
+  background: #f97316;
+  transform: translateY(-1px);
+}
+
+.bitcoin-converter button:active {
+  transform: translateY(1px);
+}
+
+/* Dark theme adjustments */
+.dark .bitcoin-converter input {
+  background-color: var(--bg-primary-dark);
+  color: var(--text-primary-dark);
+  border-color: var(--border-color-dark);
+}
+
+.dark .bitcoin-converter input:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+/* Theme toggle specific styles */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent-color-light);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 8px rgba(247, 147, 26, 0.2);
+}
+
+.theme-toggle:hover {
+  background: #f59e0b;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 12px rgba(247, 147, 26, 0.3);
+}
+
+.theme-toggle svg {
+  transition: transform 0.2s ease-in-out;
+  stroke: white;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(15deg);
+}
+
+.dark .theme-toggle {
+  background: var(--accent-color-dark);
+  color: white;
+  box-shadow: 0 2px 8px rgba(247, 147, 26, 0.2);
+}
+
+.dark .theme-toggle:hover {
+  background: #f59e0b;
+  box-shadow: 0 2px 12px rgba(247, 147, 26, 0.3);
+}
+
+.dark .theme-toggle svg {
+  stroke: white;
+}
+
+/* Auto mode toggle button */
+.auto-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  padding: 0;
+}
+
+.auto-toggle svg {
+  transition: transform 0.2s ease-in-out;
+}
+
+.auto-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.auto-toggle:hover svg {
+  transform: rotate(15deg);
+}
+
+.auto-toggle.active {
+  background: var(--accent-color-light);
+  border-color: var(--accent-color-light);
+}
+
+.dark .auto-toggle.active {
+  background: var(--accent-color-dark);
+  border-color: var(--accent-color-dark);
+}
+
+/* Language menu styles */
+.language-menu {
+  border-radius: var(--border-radius);
+  margin-top: calc(var(--spacing-base) / 2);
+}
+
+.language-option {
+  padding: calc(var(--spacing-base) / 2);
+}
+
+/* FAQ styles */
+.faq-item {
+  border-radius: var(--border-radius);
+  margin-bottom: var(--spacing-base);
+}
+
+.faq-question {
+  padding: var(--spacing-base);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+  font-size: 0.95rem;
+}
+
+.faq-answer {
+  padding: var(--spacing-base);
+  padding-top: 0;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+/* Chart container specific styles */
+.chart-container {
+  padding: var(--spacing-base);
+}
+
+/* Custom tooltip styles */
+.custom-tooltip {
+  border-radius: var(--border-radius);
+  padding: calc(var(--spacing-base) / 2);
+}
+
+/* Fix for Bitcoin converter text in dark mode */
+.dark .bitcoin-converter h2,
+.dark .bitcoin-converter h3,
+.dark .bitcoin-converter label {
+  color: var(--text-primary-dark);
+}
+
+.dark .bitcoin-converter .result h3 {
+  color: var(--text-primary-dark);
+}
+
+/* Data points and small numbers */
+.tooltip-date,
+.recharts-text {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+}
+
+/* Headings and titles */
+.app-header .logo {
+  font-family: 'Clash Display', sans-serif;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* UI elements */
+button,
+select,
+.language-button,
+.theme-toggle {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 500;
+}
+
+.tooltip-content,
+.chart-tooltip {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+}
+
+/* Bitcoin converter styles */
+.bitcoin-converter input,
+.bitcoin-converter .result p,
+.bitcoin-converter label {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
+}
+
+.bitcoin-converter label {
+  font-size: 0.9rem;
+}
+
+.bitcoin-converter input {
+  font-size: 1.1rem;
+}
+
+.bitcoin-converter .result p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--accent-color-light);
+}
+
+.dark .bitcoin-converter .result p {
+  color: var(--accent-color-dark);
+}
+
+/* Add responsive styles */
+@media (max-width: 768px) {
+  .price-box {
+    padding: 20px;
+    margin: 10px;
+  }
+
+  .price {
+    font-size: 36px;
+    padding: 0 8px;
+    gap: 4px;
+  }
+
+  .price-change {
+    font-size: 1rem;
+    padding: 4px 10px;
+    margin: 6px auto;
+  }
+
+  .update-time {
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .price {
+    font-size: 32px;
+  }
+
+  .price-box {
+    padding: 16px;
+    margin: 8px;
+  }
+
+  .price-change {
+    font-size: 0.9rem;
+    padding: 4px 8px;
+  }
+}
+
+/* Theme controls */
+.theme-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+} 

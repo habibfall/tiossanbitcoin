@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="400" version="1.1" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#f8f9fa"/>
+  <g transform="translate(400,200) scale(1.5)">
+    <circle cx="0" cy="0" r="60" fill="#f7931a"/>
+    <g fill="#ffffff">
+      <path d="M-15,-25 L5,-25 C20,-25 30,-15 30,0 C30,15 20,25 5,25 L-15,25 L-15,-25 Z"/>
+      <path d="M-5,-15 L5,-15 C15,-15 20,-10 20,0 C20,10 15,15 5,15 L-5,15 L-5,-15 Z"/>
+      <rect x="-10" y="-30" width="5" height="60"/>
+      <rect x="-20" y="-30" width="5" height="60"/>
+    </g>
+  </g>
+  <text x="400" y="320" text-anchor="middle" font-size="24" font-family="Arial" fill="#495057">Bitcoin News</text>
+</svg> 

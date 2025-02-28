@@ -1,0 +1,341 @@
+.bitcoin-quiz-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bitcoin-quiz-container.dark {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.bitcoin-quiz-container.dark .quiz-option {
+  color: #ffffff;
+  background-color: #2a2a2a;
+  border: 1px solid #3a3a3a;
+}
+
+.bitcoin-quiz-container.dark .quiz-option:hover {
+  background-color: #3a3a3a;
+}
+
+.bitcoin-quiz-container.dark .quiz-option.correct {
+  background-color: #1b4332;
+  color: #ffffff;
+}
+
+.bitcoin-quiz-container.dark .quiz-option.incorrect {
+  background-color: #641e16;
+  color: #ffffff;
+}
+
+.bitcoin-quiz-container.light {
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+.quiz-progress {
+  margin-bottom: 2rem;
+  text-align: center;
+  color: var(--primary-color, #F4A940);
+  font-size: 1.1rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.quiz-question {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+  animation: slideInFromRight 0.4s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.quiz-option {
+  padding: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+  animation: fadeInUp 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+.quiz-option:nth-child(1) { animation-delay: 0.1s; }
+.quiz-option:nth-child(2) { animation-delay: 0.2s; }
+.quiz-option:nth-child(3) { animation-delay: 0.3s; }
+.quiz-option:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dark .quiz-option {
+  border-color: #404040;
+}
+
+.quiz-option:hover {
+  border-color: var(--primary-color, #F4A940);
+  background: rgba(244, 169, 64, 0.1);
+  transform: translateY(-2px);
+}
+
+.quiz-option.correct {
+  border-color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  animation: correctAnswer 0.5s ease;
+}
+
+@keyframes correctAnswer {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.quiz-option.incorrect {
+  border-color: #f44336;
+  background: rgba(244, 67, 54, 0.1);
+  animation: incorrectAnswer 0.5s ease;
+}
+
+@keyframes incorrectAnswer {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+.explanation {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: rgba(244, 169, 64, 0.1);
+  border-left: 4px solid var(--primary-color, #F4A940);
+  animation: expandIn 0.4s ease-out;
+}
+
+@keyframes expandIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95);
+    transform-origin: top;
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+}
+
+.quiz-result {
+  text-align: center;
+  animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.quiz-score {
+  font-size: 2rem;
+  color: var(--primary-color, #F4A940);
+  margin: 1rem 0;
+  animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.quiz-message {
+  margin: 1rem 0;
+  font-size: 1.2rem;
+  animation: fadeIn 0.5s ease-out;
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
+}
+
+.try-again-btn {
+  background: var(--primary-color, #F4A940);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+  animation-delay: 0.5s;
+  animation-fill-mode: both;
+}
+
+.try-again-btn:hover {
+  background: #e59835;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(244, 169, 64, 0.2);
+}
+
+.try-again-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+  .bitcoin-quiz-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  
+  .quiz-question {
+    font-size: 1.1rem;
+  }
+}
+
+.difficulty-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.difficulty-buttons button {
+  padding: 1.2rem;
+  border: 2px solid var(--primary-color, #F4A940);
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.difficulty-buttons button:hover {
+  background: rgba(244, 169, 64, 0.1);
+  transform: translateY(-2px);
+}
+
+.quiz-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: center;
+  animation: fadeIn 0.5s ease-out;
+  animation-delay: 0.3s;
+  animation-fill-mode: both;
+}
+
+.share-score-btn {
+  background: #1DA1F2;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-out;
+  animation-delay: 0.5s;
+  animation-fill-mode: both;
+}
+
+.share-score-btn:hover {
+  background: #1991db;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(29, 161, 242, 0.2);
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: var(--primary-color, #F4A940);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.next-button {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto 0;
+  padding: 1rem 2rem;
+  background: var(--primary-color, #F4A940);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.next-button:hover {
+  background: #e59835;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(244, 169, 64, 0.2);
+}
+
+.next-button:active {
+  transform: translateY(0);
+} 

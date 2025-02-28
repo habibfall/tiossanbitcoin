@@ -74,8 +74,8 @@
 .price-box {
   background-color: #ffffff;
   border-radius: 10px;
-  padding: 8rem 6rem;
-  max-width: 1400px;
+  padding: 4rem 3rem;
+  max-width: 350px;
   width: 95%;
   margin: 0 auto;
   box-shadow: 0 2px 10px rgba(247, 147, 26, 0.15);
@@ -85,7 +85,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .dark .price-box {
@@ -1081,14 +1081,12 @@ input,
   }
 
   .price-box {
-    padding: 4rem 2rem;
     width: 90%;
   }
 }
 
 @media (max-width: 480px) {
   .price-box {
-    padding: 3rem 1.5rem;
     width: 95%;
   }
 

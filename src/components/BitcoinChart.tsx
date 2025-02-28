@@ -164,7 +164,6 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
 
       const config = getEndpointConfig();
       
-      // For all timeframes, we'll calculate the total percentage change
       const response = await fetch(
         `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
       );
@@ -174,6 +173,11 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
       }
 
       const data = await response.json();
+      
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('Invalid data format from Binance API');
+      }
+
       const usdToFcfa = 655.957;
       
       // Calculate the total percentage change for the period
@@ -182,7 +186,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
       const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
       
       // Process the data with proper timestamps and FCFA conversion
-      const processedData = data.map((item, index) => {
+      const processedData = data.map((item) => {
         const timestamp = parseInt(item[0]);
         const closePrice = parseFloat(item[4]) * usdToFcfa;
         

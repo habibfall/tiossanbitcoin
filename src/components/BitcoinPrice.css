@@ -1,12 +1,13 @@
 .bitcoin-price-container {
-  background: rgba(26, 26, 26, 0.95);
+  width: 150%;
+  max-width: 1600px;
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 16px;
-  padding: 1.25rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 2.5rem 4rem;
+  margin: 2rem auto;
   backdrop-filter: blur(10px);
-  width: 75%;
-  max-width: 800px;
-  margin: 1rem auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;

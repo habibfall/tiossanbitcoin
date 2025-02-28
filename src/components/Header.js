@@ -2,8 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from './ThemeToggle';
 import '../styles/Header.css';
-import tiossanLogo from '../assets/images/tiossan.png';
-import bitcoinDefaultImage from '../assets/images/bitcoin-default.png';
 
 const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) => {
   const { isDarkMode } = useTheme();
@@ -104,7 +102,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
           }}
         >
           <img 
-            src={tiossanLogo}
+            src={`${process.env.PUBLIC_URL}/assets/images/tiossan.png`}
             alt="Tiossan Logo" 
             style={{ 
               height: '100%',
@@ -115,7 +113,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             onError={(e) => {
               console.error('Failed to load logo:', e);
               e.target.onerror = null;
-              e.target.src = bitcoinDefaultImage;
+              e.target.src = `${process.env.PUBLIC_URL}/assets/images/bitcoin-default.png`;
             }}
           />
         </button>

@@ -233,7 +233,7 @@ const newsTranslations = {
   }
 };
 
-const defaultImage = `${process.env.PUBLIC_URL}/assets/images/bitcoin-default.png`;
+const defaultImage = '/static/images/bitcoin-default.png';
 
 // Curated news translations
 const curatedNews = {
@@ -564,7 +564,7 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src={`${process.env.PUBLIC_URL}/assets/images/heart-of-cheetah.jpg`}
+                  src="/static/images/heart-of-cheetah.jpg"
                   alt="Heart of a Cheetah Book"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -580,7 +580,7 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src={`${process.env.PUBLIC_URL}/assets/images/bitcoin-standard.jpg`}
+                  src="/static/images/bitcoin-standard.jpg"
                   alt="The Bitcoin Standard Book"
                   onError={(e) => {
                     e.target.onerror = null;
@@ -596,7 +596,7 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src={`${process.env.PUBLIC_URL}/assets/images/matt-kratte.jpg`}
+                  src="/static/images/matt-kratte.jpg"
                   alt="Matt Kratter Book"
                   onError={(e) => {
                     e.target.onerror = null;

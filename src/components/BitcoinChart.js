@@ -326,7 +326,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
             };
           case '1y':
             return {
-              interval: '1d', // Changed from 1w to 1d for better data granularity
+              interval: '1d',
               limit: 365,
               startTime: Date.now() - 365 * 24 * 60 * 60 * 1000
             };
@@ -340,53 +340,77 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       };
 
       const config = getEndpointConfig();
-      const response = await fetch(
-        `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch price data');
-      }
-
-      const data = await response.json();
       
-      // Convert USDT price to FCFA
-      const usdToFcfa = 655.957;
-      
-      // Process the data with proper timestamps and FCFA conversion
-      const processedData = data.map((item, index, array) => {
-        const timestamp = item[0];
-        const closePrice = parseFloat(item[4]) * usdToFcfa;
-        
-        // Calculate percentage change based on timeframe
-        let percentChange;
-        if (timeframe === '1y') {
-          // For yearly view, calculate change from the start of the period
-          const startPrice = parseFloat(array[0][4]) * usdToFcfa;
-          percentChange = ((closePrice - startPrice) / startPrice) * 100;
-        } else {
-          // For other timeframes, calculate change from previous point
-          const prevPrice = index > 0 ? parseFloat(array[index - 1][4]) * usdToFcfa : closePrice;
-          percentChange = ((closePrice - prevPrice) / prevPrice) * 100;
+      // For 1-year view, we'll use two API calls to get better data
+      if (timeframe === '1y') {
+        const [currentResponse, yearStartResponse] = await Promise.all([
+          fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=1`),
+          fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=365&startTime=${config.startTime}`)
+        ]);
+
+        if (!currentResponse.ok || !yearStartResponse.ok) {
+          throw new Error('Failed to fetch price data');
         }
+
+        const [currentData, yearData] = await Promise.all([
+          currentResponse.json(),
+          yearStartResponse.json()
+        ]);
+
+        const usdToFcfa = 655.957;
         
-        return {
-          timestamp,
-          price: Math.round(closePrice),
-          percentChange: Number(percentChange.toFixed(2))
-        };
-      });
+        // Get current and year start prices
+        const currentPrice = parseFloat(currentData[0][4]) * usdToFcfa;
+        const yearStartPrice = parseFloat(yearData[0][4]) * usdToFcfa;
+        
+        // Calculate year-to-date percentage change
+        const yearToDateChange = ((currentPrice - yearStartPrice) / yearStartPrice) * 100;
 
-      // Calculate overall trend for color determination
-      const startPrice = processedData[0]?.price || 0;
-      const endPrice = processedData[processedData.length - 1]?.price || 0;
-      const overallTrend = endPrice - startPrice;
+        // Process the year data
+        const processedData = yearData.map((item, index) => {
+          const timestamp = item[0];
+          const closePrice = parseFloat(item[4]) * usdToFcfa;
+          
+          return {
+            timestamp,
+            price: Math.round(closePrice),
+            percentChange: yearToDateChange // Use the same YTD change for consistent coloring
+          };
+        });
 
-      // Add overall trend to each data point
-      return processedData.map(point => ({
-        ...point,
-        trend: overallTrend
-      }));
+        return processedData;
+
+      } else {
+        // Regular timeframe handling
+        const response = await fetch(
+          `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch price data');
+        }
+
+        const data = await response.json();
+        const usdToFcfa = 655.957;
+        
+        // Process the data with proper timestamps and FCFA conversion
+        const processedData = data.map((item, index, array) => {
+          const timestamp = item[0];
+          const closePrice = parseFloat(item[4]) * usdToFcfa;
+          
+          // Calculate percentage change from previous point
+          const prevPrice = index > 0 ? parseFloat(array[index - 1][4]) * usdToFcfa : closePrice;
+          const percentChange = ((closePrice - prevPrice) / prevPrice) * 100;
+          
+          return {
+            timestamp,
+            price: Math.round(closePrice),
+            percentChange: Number(percentChange.toFixed(2))
+          };
+        });
+
+        return processedData;
+      }
 
     } catch (error) {
       console.error('Error fetching price data:', error);
@@ -746,13 +770,13 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 type="monotone"
                 dataKey="price"
                 stroke="none"
-                fill={`url(#${chartData[0]?.trend >= 0 ? 'greenGradient' : 'redGradient'})`}
+                fill={`url(#${(timeframe === '1y' ? chartData[0]?.percentChange : chartData[chartData.length - 1]?.percentChange) >= 0 ? 'greenGradient' : 'redGradient'})`}
                 fillOpacity={1}
               />
               <Line
                 type="monotone"
                 dataKey="price"
-                stroke={chartData[0]?.trend >= 0 ? '#22c55e' : '#ef4444'}
+                stroke={(timeframe === '1y' ? chartData[0]?.percentChange : chartData[chartData.length - 1]?.percentChange) >= 0 ? '#22c55e' : '#ef4444'}
                 strokeWidth={2.5}
                 dot={false}
                 activeDot={false}

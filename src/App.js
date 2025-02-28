@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import './App.css';
 import './styles/theme.css';
 import BitcoinChart from './components/BitcoinChart';
@@ -81,39 +81,12 @@ function AppContent() {
     }
   };
 
-  // Calculate price change percentage
-  const calculatePriceChange = (currentPrice, historicalPrices, period) => {
-    if (!historicalPrices.length) return 0;
-    
-    const now = Date.now();
-    let timeAgo;
-    
-    switch (period) {
-      case '24h':
-        timeAgo = now - (24 * 60 * 60 * 1000);
-        break;
-      case '7d':
-        timeAgo = now - (7 * 24 * 60 * 60 * 1000);
-        break;
-      case '30d':
-        timeAgo = now - (30 * 24 * 60 * 60 * 1000);
-        break;
-      default:
-        timeAgo = now - (24 * 60 * 60 * 1000);
-    }
-    
-    const oldPrice = historicalPrices.find(p => p.timestamp >= timeAgo)?.price || currentPrice;
-    const percentChange = ((currentPrice - oldPrice) / oldPrice) * 100;
-    return Number(percentChange.toFixed(2));
-  };
-
-  // Fetch Bitcoin price from Binance API
-  const fetchBitcoinPrice = async (retryCount = 0) => {
+  // Memoize the fetchBitcoinPrice function
+  const fetchBitcoinPrice = useCallback(async (retryCount = 0) => {
     try {
       setFetchError(null);
       console.log('Fetching Bitcoin price from Binance...');
       
-      // Fetch current price and 24h stats
       const [priceResponse, dayStatsResponse, klinesResponse] = await Promise.all([
         fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT', { timeout: 5000 }),
         fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT', { timeout: 5000 }),
@@ -135,12 +108,10 @@ function AppContent() {
         const usdToFcfa = 655.957;
         const priceInFcfa = Math.round(currentPrice * usdToFcfa);
         
-        // Get historical closing prices
-        const closePrices = klinesData.map(kline => parseFloat(kline[4])); // 4th element is closing price
+        const closePrices = klinesData.map(kline => parseFloat(kline[4]));
         const sevenDaysAgo = closePrices[closePrices.length - 8] || currentPrice;
         const thirtyDaysAgo = closePrices[0] || currentPrice;
         
-        // Calculate price changes
         const change24h = parseFloat(dayStats.priceChangePercent);
         const change7d = ((currentPrice - sevenDaysAgo) / sevenDaysAgo) * 100;
         const change30d = ((currentPrice - thirtyDaysAgo) / thirtyDaysAgo) * 100;
@@ -171,39 +142,35 @@ function AppContent() {
       console.error('Error fetching Bitcoin price:', error);
       setFetchError(error.message);
       
-      // Implement exponential backoff for retries
       if (retryCount < 3) {
-        const retryDelay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+        const retryDelay = Math.pow(2, retryCount) * 1000;
         console.log(`Retrying in ${retryDelay}ms...`);
         await new Promise(resolve => setTimeout(resolve, retryDelay));
         return fetchBitcoinPrice(retryCount + 1);
       }
       
-      // Don't clear existing price on error if we already have data
       if (isInitialLoad) {
         setBitcoinPrice(null);
         setPriceChange(null);
       }
       throw error;
     }
-  };
+  }, [timeframe, isInitialLoad]);
 
-  // Validate price change values
-  const validatePriceChange = (value) => {
+  // Memoize the validatePriceChange function
+  const validatePriceChange = useCallback((value) => {
     if (typeof value !== 'number' || isNaN(value)) {
       return 0;
     }
     return Number(value.toFixed(2));
-  };
+  }, []);
 
-  // Update price change when timeframe changes
   useEffect(() => {
     if (priceChanges[timeframe] !== undefined) {
       setPriceChange(validatePriceChange(priceChanges[timeframe]));
     }
   }, [timeframe, priceChanges, validatePriceChange]);
 
-  // Set up periodic price updates with proper cleanup
   useEffect(() => {
     let isMounted = true;
     
@@ -219,16 +186,15 @@ function AppContent() {
     };
 
     updatePrice();
-    const interval = setInterval(updatePrice, 600000); // 10 minutes
+    const interval = setInterval(updatePrice, 600000);
     
     return () => {
       isMounted = false;
       clearInterval(interval);
       console.log('Cleaning up price update interval');
     };
-  }, [fetchBitcoinPrice]); // Add fetchBitcoinPrice to dependencies
+  }, [fetchBitcoinPrice]);
 
-  // Close language menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (languageMenuRef.current && !languageMenuRef.current.contains(event.target)) {

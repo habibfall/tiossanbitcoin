@@ -131,7 +131,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
               className="language-toggle"
               onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
             >
-              {languageNames[language]}
+              {language}
               <svg
                 width="12"
                 height="12"
@@ -155,7 +155,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
 
             {isLanguageMenuOpen && (
               <div className="language-menu">
-                {Object.entries(languageNames).map(([key, value]) => (
+                {['french', 'wolof', 'english'].map((key) => (
                   <button
                     key={key}
                     className={`language-option ${language === key ? 'active' : ''}`}
@@ -164,7 +164,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
                       setIsLanguageMenuOpen(false);
                     }}
                   >
-                    {value}
+                    {languageNames[key]}
                   </button>
                 ))}
               </div>

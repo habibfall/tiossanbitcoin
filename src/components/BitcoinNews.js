@@ -237,18 +237,18 @@ const curatedNews = {
       headline: 'Renversement potentiel du prix du Bitcoin au milieu de sorties de 3,4 milliards de dollars des ETF',
       summary: 'Au milieu d\'importantes sorties de fonds des ETF Bitcoin, les analystes sont divisés sur le potentiel d\'un renversement du marché, suggérant la prudence aux investisseurs...',
       source: 'CoinDesk',
-      image: '/bitcoin-default.png',
+      image: '/static/images/bitcoin-default.png',
       sourceUrl: 'https://www.coindesk.com/markets/2024/03/21/bitcoin-etf-outflows-hit-record-34b-as-grayscale-selling-continues/',
-      fallbackImage: '/bitcoin-default.png'
+      fallbackImage: '/static/images/bitcoin-default.png'
     },
     {
       id: 'curated-2',
       headline: 'Le Salvador continue de profiter de sa stratégie Bitcoin',
       summary: 'Le pays d\'Amérique centrale voit des résultats positifs de son adoption du Bitcoin comme monnaie légale, avec une augmentation du tourisme et des investissements...',
       source: 'Bitcoin Magazine',
-      image: '/bitcoin-default.png',
+      image: '/static/images/bitcoin-default.png',
       sourceUrl: 'https://bitcoinmagazine.com/el-salvador-bitcoin-news',
-      fallbackImage: '/bitcoin-default.png'
+      fallbackImage: '/static/images/bitcoin-default.png'
     }
   ],
   wolof: [
@@ -257,18 +257,18 @@ const curatedNews = {
       headline: 'Walbatiku potentiel prix Bitcoin ci biir génne 3,4 milliard dollar yi ETF',
       summary: 'Ci biir génne xaalis yu bare yi ETF Bitcoin, analystes yi bokkulañu ci walbatiku potentiel marché bi, di wonee teey ngir investisseurs yi...',
       source: 'CoinDesk',
-      image: '/bitcoin-default.png',
+      image: '/static/images/bitcoin-default.png',
       sourceUrl: 'https://www.coindesk.com/markets/2024/03/21/bitcoin-etf-outflows-hit-record-34b-as-grayscale-selling-continues/',
-      fallbackImage: '/bitcoin-default.png'
+      fallbackImage: '/static/images/bitcoin-default.png'
     },
     {
       id: 'curated-2',
       headline: 'Salvador di continuer jariñu ci stratégie Bitcoin',
       summary: 'Réew bi ci Amérique centrale gis na risultat yu baax ci adoption Bitcoin bi, ak yokku turism ak investissement yi...',
       source: 'Bitcoin Magazine',
-      image: '/bitcoin-default.png',
+      image: '/static/images/bitcoin-default.png',
       sourceUrl: 'https://bitcoinmagazine.com/el-salvador-bitcoin-news',
-      fallbackImage: '/bitcoin-default.png'
+      fallbackImage: '/static/images/bitcoin-default.png'
     }
   ]
 };
@@ -393,7 +393,7 @@ const BitcoinNews = ({ language = 'french' }) => {
         image: item.imageurl,
         sourceUrl: item.url,
         source: item.source,
-        fallbackImage: '/bitcoin-default.png'
+        fallbackImage: '/static/images/bitcoin-default.png'
       }));
       
       // Update cache
@@ -491,7 +491,7 @@ const BitcoinNews = ({ language = 'french' }) => {
                   alt={item.headline}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/bitcoin-default.png';
+                    e.target.src = '/static/images/bitcoin-default.png';
                   }}
                 />
               </div>
@@ -558,11 +558,11 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src={'/heart-of-cheetah.jpg'}
-                  alt="The Heart of a Cheetah"
+                  src={'/static/images/heart-of-cheetah.jpg'}
+                  alt="Heart of a Cheetah Book"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/bitcoin-default.png';
+                    e.target.src = '/static/images/bitcoin-default.png';
                   }}
                 />
               </div>
@@ -574,11 +574,11 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src={'/bitcoin-standard.jpg'}
-                  alt="The Bitcoin Standard"
+                  src={'/static/images/bitcoin-standard.jpg'}
+                  alt="The Bitcoin Standard Book"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/bitcoin-default.png';
+                    e.target.src = '/static/images/bitcoin-default.png';
                   }}
                 />
               </div>
@@ -590,11 +590,11 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src={'/matt-kratte.jpg'}
-                  alt="A Beginner's Guide To Bitcoin"
+                  src={'/static/images/matt-kratte.jpg'}
+                  alt="Matt Kratter Book"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/bitcoin-default.png';
+                    e.target.src = '/static/images/bitcoin-default.png';
                   }}
                 />
               </div>

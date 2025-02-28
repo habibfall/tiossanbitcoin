@@ -101,7 +101,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
           }}
         >
           <img 
-            src={process.env.PUBLIC_URL + '/images/tiossan.png'} 
+            src="/static/images/tiossan.png"
             alt="Tiossan Logo" 
             style={{ 
               height: '40px',
@@ -112,7 +112,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             }}
             onError={(e) => {
               e.target.onerror = null;
-              e.target.src = process.env.PUBLIC_URL + '/images/bitcoin-default.png';
+              e.target.src = "/static/images/bitcoin-default.png";
             }}
           />
         </button>

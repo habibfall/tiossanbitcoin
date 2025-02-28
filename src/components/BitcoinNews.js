@@ -2,11 +2,11 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import './BitcoinNews.css';
 import OptimizedImage from './OptimizedImage';
+
+// Import book cover images
 import heartOfCheetahImage from '../assets/images/heart-of-cheetah.jpg';
 import bitcoinStandardImage from '../assets/images/bitcoin-standard.jpg';
-import mattKratteImage from '../assets/images/matt-kratter.jpg';
-import { bitcoinTerms } from '../data/bitcoinTerms';
-import { text } from '../data/translations';
+import mattKratteImage from '../assets/images/matt-kratte.jpg';
 
 const englishTerms = [
   {
@@ -36,6 +36,65 @@ const englishTerms = [
   }
 ];
 
+const bitcoinTerms = {
+  french: [
+    {
+      term: "Lightning Network",
+      definition: "Un protocole de paiement de 'seconde couche' qui fonctionne sur Bitcoin, permettant des transactions instantanées à très faibles frais.",
+      example: "En utilisant le Lightning Network, vous pouvez envoyer du Bitcoin aussi facilement qu'un message texte !"
+    },
+    {
+      term: "Portefeuille",
+      definition: "Un outil numérique qui vous permet de stocker, envoyer et recevoir du Bitcoin en toute sécurité.",
+      example: "Votre portefeuille Bitcoin est comme un compte bancaire numérique que vous contrôlez entièrement."
+    },
+    {
+      term: "Bloc",
+      definition: "Un ensemble de transactions Bitcoin qui est ajouté à la blockchain toutes les 10 minutes en moyenne.",
+      example: "Lorsque vous envoyez du Bitcoin, votre transaction est incluse dans un bloc avec d'autres transactions."
+    },
+    {
+      term: "Pair-à-Pair (P2P)",
+      definition: "Échange direct entre deux personnes sans intermédiaire ni autorité centrale.",
+      example: "Le trading P2P de Bitcoin vous permet d'acheter du Bitcoin directement auprès d'autres personnes de votre communauté."
+    },
+    {
+      term: "Clé Privée",
+      definition: "Un code secret qui prouve que vous possédez votre Bitcoin et vous permet de le dépenser.",
+      example: "Gardez votre clé privée en sécurité et ne la partagez jamais - c'est comme le mot de passe de votre Bitcoin !"
+    }
+  ],
+  wolof: [
+    {
+      term: "Lightning Network",
+      definition: "Protokol paiement bu 'ñaareel' bi dox ci kaw Bitcoin, di tax nga mën def transaction yu gaaw te frais yi néew.",
+      example: "Soo jëfandikoo Lightning Network, mën nga yonnee Bitcoin ni message!"
+    },
+    {
+      term: "Portefeuille",
+      definition: "Jumtukaay numérik bi lay may nga denc, yonnee ak jot Bitcoin ci kaarange.",
+      example: "Sa portefeuille Bitcoin mel na ni compte banque numérik boo kontrole sa bopp."
+    },
+    {
+      term: "Bloc",
+      definition: "Ndajee transaction Bitcoin yi ñuy yokk ci blockchain bi lu nekk 10 minutes.",
+      example: "Boo yonneey Bitcoin, sa transaction dañu koy boole ak yeneen transaction yi ci biir bloc."
+    },
+    {
+      term: "Nit-ak-Nit (P2P)",
+      definition: "Échange direct diggante ñaari nit te kenn du ci dugal boppam.",
+      example: "Trading P2P Bitcoin day tax nga mën jënd Bitcoin direktement ak nit ñi ci sa gox."
+    },
+    {
+      term: "Caabi bu Sutura",
+      definition: "Code secret bi lay won ni yaa moom Bitcoin bi te mën ko jëfandikoo.",
+      example: "Dencal sa caabi bu sutura bu baax te bul ko jox kenn - mel na ni mot de passe sa Bitcoin!"
+    }
+  ],
+  english: englishTerms
+};
+
+// Common Bitcoin news translations
 const newsTranslations = {
   french: {
     // Markets and Trading
@@ -176,17 +235,52 @@ const newsTranslations = {
   }
 };
 
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
-const FETCH_TIMEOUT = 10000; // 10 seconds
-
 const BitcoinNews = ({ language = 'french' }) => {
   const { isDarkMode } = useTheme();
+  const [currentTerm, setCurrentTerm] = useState(null);
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newsCache, setNewsCache] = useState({});
   const [lastFetchTime, setLastFetchTime] = useState(null);
-  const [currentTerm, setCurrentTerm] = useState(null);
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
+  const FETCH_TIMEOUT = 10000; // 10 seconds timeout
+
+  const text = {
+    french: {
+      sectionTitle: "Actualités Bitcoin",
+      termOfDay: "⚡ Terme Bitcoin du Jour",
+      loading: "Chargement des Actualités Bitcoin...",
+      error: "Échec du chargement des actualités. Veuillez réessayer plus tard.",
+      timeout: "Le chargement a pris trop de temps. Veuillez réessayer.",
+      readMore: "Lire plus",
+      resourcesTitle: "Ressources Bitcoin",
+      videosTitle: "Vidéos Éducatives",
+      booksTitle: "Livres Recommandés"
+    },
+    wolof: {
+      sectionTitle: "Xibaar yi ci Bitcoin",
+      termOfDay: "⚡ Baat Bitcoin bu Tey",
+      loading: "Xibaar yi Bitcoin yay ñëw...",
+      error: "Xibaar yi jotuwuñu. Jéemaatal ëllëg.",
+      timeout: "Xibaar yi yéex nañu lool. Jéemaatal.",
+      readMore: "Gënal jàng",
+      resourcesTitle: "Njàngat yi ci Bitcoin",
+      videosTitle: "Vidéo yi ngir Jàng",
+      booksTitle: "Téere yi ñu Tektal"
+    },
+    english: {
+      sectionTitle: "Bitcoin News",
+      termOfDay: "⚡ Bitcoin Term of the Day",
+      loading: "Loading Bitcoin News...",
+      error: "Failed to load news. Please try again later.",
+      timeout: "Request timed out. Please try again.",
+      readMore: "Read more",
+      resourcesTitle: "Bitcoin Resources",
+      videosTitle: "Educational Videos",
+      booksTitle: "Recommended Books"
+    }
+  };
 
   // Pre-compile translations for better performance
   const translationMap = useMemo(() => {
@@ -284,7 +378,7 @@ const BitcoinNews = ({ language = 'french' }) => {
       }
       setLoading(false);
     }
-  }, [language, newsCache, lastFetchTime, text, CACHE_DURATION, FETCH_TIMEOUT]);
+  }, [language, newsCache, lastFetchTime, text]);
 
   useEffect(() => {
     // Set term of the day
@@ -299,7 +393,7 @@ const BitcoinNews = ({ language = 'french' }) => {
     // Set up periodic refresh
     const refreshInterval = setInterval(fetchNews, CACHE_DURATION);
     return () => clearInterval(refreshInterval);
-  }, [language, fetchNews, CACHE_DURATION]);
+  }, [language, fetchNews]);
 
   if (loading) {
     return (
@@ -426,14 +520,7 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <OptimizedImage
-                  src={heartOfCheetahImage}
-                  alt="Heart of a Cheetah Book"
-                  loading="lazy"
-                  className="book-image"
-                  width={300}
-                  height={450}
-                />
+                <img src={heartOfCheetahImage} alt="Heart of a Cheetah Book" />
               </div>
               <h4>The Heart of a Cheetah</h4>
               <p className="book-author">Magatte Wade</p>
@@ -442,14 +529,7 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <OptimizedImage
-                  src={bitcoinStandardImage}
-                  alt="The Bitcoin Standard Book"
-                  loading="lazy"
-                  className="book-image"
-                  width={300}
-                  height={450}
-                />
+                <img src={bitcoinStandardImage} alt="The Bitcoin Standard Book" />
               </div>
               <h4>The Bitcoin Standard</h4>
               <p className="book-author">Saifedean Ammous</p>
@@ -458,14 +538,7 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <OptimizedImage
-                  src={mattKratteImage}
-                  alt="Matt Kratter Book"
-                  loading="lazy"
-                  className="book-image"
-                  width={300}
-                  height={450}
-                />
+                <img src={mattKratteImage} alt="Matt Kratter Book" />
               </div>
               <h4>A Beginner's Guide To Bitcoin</h4>
               <p className="book-author">Matthew R. Kratter</p>

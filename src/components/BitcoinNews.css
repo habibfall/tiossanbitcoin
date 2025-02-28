@@ -251,11 +251,7 @@
     padding: 1rem;
   }
 
-  .news-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
+  .news-grid,
   .video-grid {
     grid-template-columns: 1fr;
     gap: 2rem;

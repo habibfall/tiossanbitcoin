@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from './ThemeToggle';
-import OptimizedImage from './OptimizedImage';
 import '../styles/Header.css';
-import './BitcoinNews.css';
 
 const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) => {
   const { isDarkMode } = useTheme();
@@ -103,7 +101,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             height: '40px'
           }}
         >
-          <OptimizedImage 
+          <img 
             src="/static/images/tiossan.png"
             alt="Tiossan Logo" 
             style={{ 
@@ -112,7 +110,6 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
               display: 'block',
               filter: isDarkMode ? 'invert(1)' : 'none'
             }}
-            priority={true}
             onError={(e) => {
               console.error('Failed to load logo:', e);
               e.target.onerror = null;
@@ -131,7 +128,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
               className="language-toggle"
               onClick={() => setIsLanguageMenuOpen(!isLanguageMenuOpen)}
             >
-              {language}
+              {languageNames[language]}
               <svg
                 width="12"
                 height="12"
@@ -155,7 +152,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
 
             {isLanguageMenuOpen && (
               <div className="language-menu">
-                {['french', 'wolof', 'english'].map((key) => (
+                {Object.entries(languageNames).map(([key, value]) => (
                   <button
                     key={key}
                     className={`language-option ${language === key ? 'active' : ''}`}
@@ -164,7 +161,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
                       setIsLanguageMenuOpen(false);
                     }}
                   >
-                    {languageNames[key]}
+                    {value}
                   </button>
                 ))}
               </div>

@@ -217,7 +217,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
   const [timeframe, setTimeframe] = useState('24h');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [chartData, setChartData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isLive, setIsLive] = useState(false);
   const [dataCache, setDataCache] = useState({});
@@ -299,6 +299,62 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
     return [Math.floor(min - padding), Math.ceil(max + padding)];
   }, []);
 
+  const fetchPriceData = async (timeframe) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Get the appropriate Binance API endpoint and interval based on timeframe
+      const getEndpointConfig = () => {
+        switch (timeframe) {
+          case '24h':
+            return {
+              interval: '1h',
+              limit: 24,
+              startTime: Date.now() - 24 * 60 * 60 * 1000
+            };
+          case '7d':
+            return {
+              interval: '1d',
+              limit: 7,
+              startTime: Date.now() - 7 * 24 * 60 * 60 * 1000
+            };
+          case '30d':
+            return {
+              interval: '1d',
+              limit: 30,
+              startTime: Date.now() - 30 * 24 * 60 * 60 * 1000
+            };
+          case '1y':
+            return {
+              interval: '1w',
+              limit: 52,
+              startTime: Date.now() - 365 * 24 * 60 * 60 * 1000
+            };
+        }
+      };
+
+      const config = getEndpointConfig();
+      const response = await fetch(
+        `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch price data');
+      }
+
+      const data = await response.json();
+      return data.map(item => ({
+        timestamp: item[0],
+        price: parseFloat(item[4])
+      }));
+    } catch (error) {
+      console.error('Error fetching price data:', error);
+      setError(error.message);
+      return [];
+    }
+  };
+
   const updateChartData = useCallback(async (newTimeframe) => {
     try {
       setIsLoading(true);
@@ -322,7 +378,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [isCacheValid, dataCache, calculateYAxisDomain, fetchPriceData]);
+  }, [isCacheValid, dataCache, calculateYAxisDomain]);
 
   const text = {
     french: {
@@ -357,98 +413,6 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
     }
   };
   
-  const fetchPriceData = async (timeframe) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      // Get the appropriate Binance API endpoint and interval based on timeframe
-      const getEndpointConfig = () => {
-        switch (timeframe) {
-          case '24h':
-            return {
-              interval: '1h',
-              limit: 24,
-              startTime: Date.now() - 24 * 60 * 60 * 1000
-            };
-          case '7d':
-            return {
-              interval: '1d',
-              limit: 7,
-              startTime: Date.now() - 7 * 24 * 60 * 60 * 1000
-            };
-          case '30d':
-            return {
-              interval: '1d',
-              limit: 30,
-              startTime: Date.now() - 30 * 24 * 60 * 60 * 1000
-            };
-          case '1y':
-            return {
-              interval: '1w',
-              limit: 52,
-              startTime: Date.now() - 365 * 24 * 60 * 60 * 1000
-            };
-          default:
-            return {
-              interval: '1h',
-              limit: 24,
-              startTime: Date.now() - 24 * 60 * 60 * 1000
-            };
-        }
-      };
-
-      const config = getEndpointConfig();
-      const endpoint = `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`;
-
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        throw new Error('Failed to fetch price data');
-      }
-
-      const data = await response.json();
-      const usdToFcfa = 655.957; // CFA Franc exchange rate
-
-      // Transform the Binance kline data into our required format
-      // Binance kline format: [openTime, open, high, low, close, volume, closeTime, ...]
-      const transformedData = data.map((kline) => {
-        const timestamp = kline[0];
-        const price = parseFloat(kline[4]); // Using closing price
-        const date = new Date(timestamp);
-        const priceInFcfa = price * usdToFcfa;
-        
-        return {
-          timestamp,
-          date: formatDate(date, timeframe),
-          price: priceInFcfa,
-          priceDiff: 0, // Will be calculated below
-          isKeyPoint: shouldShowKeyPoint(date, timeframe)
-        };
-      });
-
-      // Calculate price differences
-      for (let i = 1; i < transformedData.length; i++) {
-        transformedData[i].priceDiff = transformedData[i].price - transformedData[i-1].price;
-      }
-
-      // Calculate overall trend
-      const trend = ((transformedData[transformedData.length - 1].price - transformedData[0].price) / transformedData[0].price) * 100;
-      
-      setChartData(transformedData.map(point => ({ ...point, trend })));
-      setIsLoading(false);
-      setIsLive(true);
-
-    } catch (error) {
-      console.error('Error fetching price data:', error);
-      setError('Failed to fetch price data. Using fallback data.');
-      // Use mock data as fallback
-      const mockData = generateMockData(timeframe);
-      setChartData(mockData);
-      setIsLoading(false);
-      setIsLive(false);
-    }
-  };
-
   // Effect for timeframe changes
   useEffect(() => {
     setIsTransitioning(true);

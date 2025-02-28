@@ -558,11 +558,11 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src="/images/heart-of-cheetah.jpg" 
+                  src="https://raw.githubusercontent.com/habibfall/tiossanbitcoin/main/public/images/heart-of-cheetah.jpg" 
                   alt="The Heart of a Cheetah"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/images/bitcoin-default.png';
+                    e.target.src = 'https://raw.githubusercontent.com/habibfall/tiossanbitcoin/main/public/images/bitcoin-default.png';
                   }}
                 />
               </div>
@@ -574,11 +574,11 @@ const BitcoinNews = ({ language = 'french' }) => {
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
                 <img 
-                  src="/images/bitcoin-standard.jpg"
+                  src="https://raw.githubusercontent.com/habibfall/tiossanbitcoin/main/public/images/bitcoin-standard.jpg"
                   alt="The Bitcoin Standard"
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = '/images/bitcoin-default.png';
+                    e.target.src = 'https://raw.githubusercontent.com/habibfall/tiossanbitcoin/main/public/images/bitcoin-default.png';
                   }}
                 />
               </div>

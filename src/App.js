@@ -76,57 +76,85 @@ function AppContent() {
     }
   };
 
-  // Fetch Bitcoin price from CoinGecko API with retry mechanism
+  // Fetch Bitcoin price from CoinGecko API with retry mechanism and fallback
   const fetchBitcoinPrice = async (retryCount = 0) => {
     try {
       setFetchError(null);
       console.log('Fetching Bitcoin price...');
       
-      const response = await fetch(
-        'https://api.coingecko.com/api/v3/coins/bitcoin?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false',
-        { timeout: 10000 } // 10 second timeout
-      );
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      // Try CoinGecko first
+      try {
+        const response = await fetch(
+          'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd',
+          { 
+            timeout: 5000,
+            headers: {
+              'Accept': 'application/json'
+            }
+          }
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.bitcoin && data.bitcoin.usd) {
+            // Convert USD to FCFA
+            const usdToFcfa = 655.957;
+            const priceInFcfa = Math.round(data.bitcoin.usd * usdToFcfa);
+            
+            // Update state
+            const now = new Date();
+            setBitcoinPrice(priceInFcfa);
+            setLastUpdated(now);
+            setIsInitialLoad(false);
+            
+            // Trigger price update animation
+            setIsPriceUpdating(true);
+            setTimeout(() => setIsPriceUpdating(false), 800);
+            
+            return {
+              price: priceInFcfa,
+              timestamp: now
+            };
+          }
+        }
+        throw new Error('CoinGecko API failed');
+      } catch (error) {
+        console.log('CoinGecko API failed, trying Binance fallback...');
+        
+        // Fallback to Binance API
+        const binanceResponse = await fetch(
+          'https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT',
+          { timeout: 5000 }
+        );
+        
+        if (!binanceResponse.ok) {
+          throw new Error('Binance API failed');
+        }
+        
+        const binanceData = await binanceResponse.json();
+        if (binanceData.price) {
+          // Convert USD to FCFA
+          const usdToFcfa = 655.957;
+          const priceInFcfa = Math.round(parseFloat(binanceData.price) * usdToFcfa);
+          
+          // Update state
+          const now = new Date();
+          setBitcoinPrice(priceInFcfa);
+          setLastUpdated(now);
+          setIsInitialLoad(false);
+          
+          // Trigger price update animation
+          setIsPriceUpdating(true);
+          setTimeout(() => setIsPriceUpdating(false), 800);
+          
+          return {
+            price: priceInFcfa,
+            timestamp: now
+          };
+        }
       }
       
-      const data = await response.json();
-      console.log('Received data:', data);
-      
-      if (!data.market_data || typeof data.market_data.current_price.usd !== 'number') {
-        throw new Error('Invalid data format received from API');
-      }
-      
-      // Convert USD to FCFA (use a consistent exchange rate)
-      const usdToFcfa = 655.957;
-      const priceInFcfa = Math.round(data.market_data.current_price.usd * usdToFcfa);
-      
-      // Store all relevant price changes with proper validation
-      const changes = {
-        '24h': validatePriceChange(data.market_data.price_change_percentage_24h),
-        '7d': validatePriceChange(data.market_data.price_change_percentage_7d),
-        '30d': validatePriceChange(data.market_data.price_change_percentage_30d),
-        '1y': validatePriceChange(data.market_data.price_change_percentage_1y)
-      };
-      
-      // Update state atomically to prevent visual inconsistencies
-      const now = new Date();
-      setBitcoinPrice(priceInFcfa);
-      setPriceChanges(changes);
-      setPriceChange(changes[timeframe]);
-      setLastUpdated(now);
-      setIsInitialLoad(false);
-      
-      // Trigger price update animation
-      setIsPriceUpdating(true);
-      setTimeout(() => setIsPriceUpdating(false), 800);
-      
-      return {
-        price: priceInFcfa,
-        changes,
-        timestamp: now
-      };
+      throw new Error('All APIs failed');
     } catch (error) {
       console.error('Error fetching Bitcoin price:', error);
       setFetchError(error.message);

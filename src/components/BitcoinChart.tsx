@@ -30,10 +30,10 @@ const ChartContainer = styled.div`
   margin-top: 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
-  width: 75%;
-  max-width: 800px;
-  margin: 1rem auto;
-  height: 400px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  min-height: 500px;
   position: relative;
   
   .timeframe-buttons {
@@ -92,9 +92,9 @@ const ChartWrapper = styled.div`
 `;
 
 const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [timeframe, setTimeframe] = useState('1y');
+  const [timeframe, setTimeframe] = useState('24h');
   const [chartData, setChartData] = useState([]);
   const [yAxisDomain, setYAxisDomain] = useState(['auto', 'auto']);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -124,9 +124,6 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
 
   const fetchPriceData = async (timeframe) => {
     try {
-      setIsLoading(true);
-      setError(null);
-      
       const getEndpointConfig = () => {
         switch (timeframe) {
           case '24h':
@@ -164,7 +161,6 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
 
       const config = getEndpointConfig();
       
-      // For all timeframes, we'll calculate the total percentage change
       const response = await fetch(
         `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
       );
@@ -174,32 +170,32 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
       }
 
       const data = await response.json();
+      
+      if (!data || data.length === 0) {
+        throw new Error('No price data available');
+      }
+
       const usdToFcfa = 655.957;
       
       // Calculate the total percentage change for the period
-      const startPrice = parseFloat(data[0][1]) * usdToFcfa; // Open price of first candle
-      const endPrice = parseFloat(data[data.length - 1][4]) * usdToFcfa; // Close price of last candle
+      const startPrice = parseFloat(data[0][1]) * usdToFcfa;
+      const endPrice = parseFloat(data[data.length - 1][4]) * usdToFcfa;
       const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
       
-      // Process the data with proper timestamps and FCFA conversion
-      const processedData = data.map((item) => {
-        const timestamp = parseInt(item[0]);
-        const closePrice = parseFloat(item[4]) * usdToFcfa;
-        
-        return {
-          timestamp,
-          price: Math.round(closePrice),
-          percentChange: Number(totalPercentChange.toFixed(2)) // Format to 2 decimal places
-        };
-      });
+      const processedData = data.map((item) => ({
+        timestamp: parseInt(item[0]),
+        price: Math.round(parseFloat(item[4]) * usdToFcfa),
+        percentChange: Number(totalPercentChange.toFixed(2))
+      }));
+
+      if (processedData.length === 0) {
+        throw new Error('Failed to process price data');
+      }
 
       return processedData;
     } catch (error) {
       console.error('Error fetching price data:', error);
-      setError(error.message);
-      return [];
-    } finally {
-      setIsLoading(false);
+      throw error;
     }
   };
 
@@ -241,19 +237,18 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
 
   const updateChartData = useCallback(async () => {
     try {
-      setIsLoading(true);
       const data = await fetchPriceData(timeframe);
       setChartData(data);
       setYAxisDomain(calculateYAxisDomain(data));
       
       if (onTimeframeChange && data.length > 0) {
-        // Get the total percentage change from the last data point
         const percentChange = data[data.length - 1].percentChange;
         onTimeframeChange(timeframe, percentChange);
       }
+      setError(null);
     } catch (error) {
-      console.error('Error updating chart data:', error);
       setError(error.message);
+      setChartData([]);
     } finally {
       setIsLoading(false);
     }

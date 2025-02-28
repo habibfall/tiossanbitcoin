@@ -78,7 +78,7 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
   width: 100%;
-  max-width: 700px;
+  max-width: 595px;
   margin: 2rem auto;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -103,7 +103,7 @@
   gap: 0.5rem;
   margin: 2rem 0;
   line-height: 1.2;
-  position: relative;
+  flex-wrap: nowrap;
 }
 
 .price span {
@@ -114,14 +114,11 @@
   font-size: 1.5rem !important;
   color: #aaa;
   margin-left: 0.5rem;
+  margin-right: 1rem;
   font-weight: 500;
 }
 
 .price-change {
-  position: absolute;
-  right: -80px;
-  top: 50%;
-  transform: translateY(-50%);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -130,6 +127,8 @@
   font-weight: 600;
   font-size: 1.5rem;
   min-width: 120px;
+  position: relative;
+  top: 0.2rem;
 }
 
 .price-change.positive {
@@ -173,6 +172,7 @@
   .price-box {
     padding: 2rem;
     margin: 1rem;
+    width: 95%;
   }
 
   .price-box h2 {
@@ -181,15 +181,54 @@
 
   .price {
     font-size: clamp(2rem, 6vw, 3.5rem);
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
   }
 
   .currency {
     font-size: 1.2rem !important;
+    margin-right: 0.5rem;
   }
 
   .price-change {
     font-size: 1.2rem;
     padding: 0.5rem 1rem;
+    min-width: auto;
+    margin-top: 0.5rem;
+  }
+
+  .quiz-container {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .question-container h2 {
+    font-size: 1.2rem;
+  }
+
+  .quiz-button {
+    padding: 12px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .price-box {
+    padding: 1.5rem;
+  }
+
+  .price {
+    font-size: clamp(1.8rem, 5vw, 2.5rem);
+  }
+
+  .currency {
+    font-size: 1rem !important;
+  }
+
+  .price-change {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
   }
 }
 
@@ -1084,46 +1123,6 @@ input,
   background-color: #f97316;
 }
 
-@media (max-width: 768px) {
-  .quiz-container {
-    padding: 15px;
-    margin: 10px;
-  }
-
-  .question-container h2 {
-    font-size: 1.2rem;
-  }
-
-  .quiz-button {
-    padding: 12px 15px;
-  }
-
-  .price-box {
-    width: 90%;
-  }
-}
-
-@media (max-width: 480px) {
-  .price-box {
-    width: 95%;
-  }
-
-  .price {
-    font-size: clamp(2.5rem, 7vw, 3.5rem);
-  }
-
-  .price .currency {
-    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
-    margin-left: 0.5rem;
-  }
-
-  .price-change {
-    padding: 0.3rem 0.8rem;
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
-  }
-}
-
 @media (min-width: 481px) and (max-width: 768px) {
   .price-box {
     padding: 1.75rem;
@@ -1164,4 +1163,5 @@ input,
 
 .dark .news-container:hover {
   border-color: rgba(247, 147, 26, 0.3);
+}
 }

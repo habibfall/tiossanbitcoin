@@ -106,8 +106,13 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             style={{ 
               height: '40px',
               width: 'auto',
-              filter: isDarkMode ? 'brightness(0) invert(1)' : 'brightness(0.8)'
-            }} 
+              filter: isDarkMode ? 'brightness(0) invert(1)' : 'none',
+              opacity: isDarkMode ? 1 : 0.8
+            }}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = '/images/bitcoin-default.png';
+            }}
           />
         </button>
         

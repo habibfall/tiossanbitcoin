@@ -303,7 +303,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
     try {
       setIsLoading(true);
       setError(null);
-
+      
       // Get the appropriate Binance API endpoint and interval based on timeframe
       const getEndpointConfig = () => {
         switch (timeframe) {
@@ -315,8 +315,8 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
             };
           case '7d':
             return {
-              interval: '1d',
-              limit: 7,
+              interval: '4h',
+              limit: 42, // 7 days * 6 (4-hour intervals per day)
               startTime: Date.now() - 7 * 24 * 60 * 60 * 1000
             };
           case '30d':
@@ -331,6 +331,12 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
               limit: 52,
               startTime: Date.now() - 365 * 24 * 60 * 60 * 1000
             };
+          default:
+            return {
+              interval: '1h',
+              limit: 24,
+              startTime: Date.now() - 24 * 60 * 60 * 1000
+            };
         }
       };
 
@@ -344,14 +350,34 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       }
 
       const data = await response.json();
-      return data.map(item => ({
-        timestamp: item[0],
-        price: parseFloat(item[4])
-      }));
+      
+      // Convert USDT price to FCFA
+      const usdToFcfa = 655.957;
+      
+      // Process the data with proper timestamps and FCFA conversion
+      const processedData = data.map((item, index, array) => {
+        const timestamp = item[0];
+        const closePrice = parseFloat(item[4]) * usdToFcfa;
+        const prevPrice = index > 0 ? parseFloat(array[index - 1][4]) * usdToFcfa : closePrice;
+        const priceDiff = closePrice - prevPrice;
+        const percentChange = ((closePrice - prevPrice) / prevPrice) * 100;
+        
+        return {
+          timestamp,
+          price: Math.round(closePrice),
+          priceDiff,
+          percentChange: Number(percentChange.toFixed(2)),
+          isKeyPoint: index % (timeframe === '24h' ? 4 : timeframe === '7d' ? 6 : timeframe === '30d' ? 5 : 4) === 0
+        };
+      });
+
+      return processedData;
     } catch (error) {
       console.error('Error fetching price data:', error);
       setError(error.message);
       return [];
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -535,13 +561,12 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       const priceValue = payload[0].value;
-      const priceDiff = payload[0].payload.priceDiff;
+      const percentChange = payload[0].payload.percentChange;
       const timestamp = payload[0].payload.timestamp;
-      const priceColor = priceDiff >= 0 ? '#22c55e' : '#ef4444';
-      const arrowIcon = priceDiff >= 0 ? '↗' : '↘';
+      const priceColor = percentChange >= 0 ? '#22c55e' : '#ef4444';
+      const arrowIcon = percentChange >= 0 ? '↗' : '↘';
       
       const date = new Date(timestamp);
-      const now = new Date();
       
       // Format the timestamp based on timeframe
       const formattedTime = (() => {
@@ -603,11 +628,11 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
               { maximumFractionDigits: 0 }
             ).format(priceValue)} FCFA
             <span style={{ 
-              fontSize: '16px',
+              fontSize: '14px',
               color: priceColor,
-              marginLeft: 'auto'
+              marginLeft: '8px'
             }}>
-              {arrowIcon}
+              {percentChange >= 0 ? '+' : ''}{percentChange.toFixed(2)}% {arrowIcon}
             </span>
           </p>
         </motion.div>
@@ -623,7 +648,10 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
           <button
             key={tf.value}
             className={`timeframe-button ${timeframe === tf.value ? 'active' : ''}`}
-            onClick={() => updateChartData(tf.value)}
+            onClick={() => {
+              setTimeframe(tf.value);
+              updateChartData(tf.value);
+            }}
             disabled={isLoading}
           >
             {text[language].timeRanges[tf.value]}
@@ -669,8 +697,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 ticks={getTickValues(chartData)}
                 tick={{ 
                   fontSize: 12, 
-                  fill: "transparent",
-                  opacity: 0.8,
+                  fill: isDarkMode ? '#b3b3b3' : '#666',
                   fontFamily: 'JetBrains Mono'
                 }}
                 interval={0}
@@ -703,13 +730,13 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 type="monotone"
                 dataKey="price"
                 stroke="none"
-                fill={`url(#${chartData[0]?.trend >= 0 ? 'greenGradient' : 'redGradient'})`}
+                fill={`url(#${chartData[chartData.length - 1]?.percentChange >= 0 ? 'greenGradient' : 'redGradient'})`}
                 fillOpacity={1}
               />
               <Line
                 type="monotone"
                 dataKey="price"
-                stroke={chartData[0]?.trend >= 0 ? '#22c55e' : '#ef4444'}
+                stroke={chartData[chartData.length - 1]?.percentChange >= 0 ? '#22c55e' : '#ef4444'}
                 strokeWidth={2.5}
                 dot={false}
                 activeDot={{
@@ -718,22 +745,21 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                   strokeWidth: 2,
                   fill: (props) => {
                     const { payload } = props;
-                    return payload.priceDiff >= 0 ? '#22c55e' : '#ef4444';
+                    return payload.percentChange >= 0 ? '#22c55e' : '#ef4444';
                   }
                 }}
                 animationDuration={750}
                 animationEasing="cubic-bezier(0.4, 0, 0.2, 1)"
               />
-              {/* Add dots at key points */}
               {chartData.map((point, index) => {
                 if (point.isKeyPoint) {
                   return (
                     <ReferenceDot
-                      key={`${index}-${point.date}`}
-                      x={point.date}
+                      key={`${index}-${point.timestamp}`}
+                      x={point.timestamp}
                       y={point.price}
                       r={4}
-                      fill={point.priceDiff >= 0 ? '#22c55e' : '#ef4444'}
+                      fill={point.percentChange >= 0 ? '#22c55e' : '#ef4444'}
                       stroke={isDarkMode ? '#2d2d2d' : '#ffffff'}
                       strokeWidth={2}
                     />

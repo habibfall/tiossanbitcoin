@@ -315,7 +315,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
           case '7d':
             return {
               interval: '4h',
-              limit: 42, // 7 days * 6 (4-hour intervals per day)
+              limit: 42,
               startTime: Date.now() - 7 * 24 * 60 * 60 * 1000
             };
           case '30d':
@@ -326,8 +326,8 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
             };
           case '1y':
             return {
-              interval: '1w',
-              limit: 52,
+              interval: '1d', // Changed from 1w to 1d for better data granularity
+              limit: 365,
               startTime: Date.now() - 365 * 24 * 60 * 60 * 1000
             };
           default:
@@ -357,19 +357,37 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       const processedData = data.map((item, index, array) => {
         const timestamp = item[0];
         const closePrice = parseFloat(item[4]) * usdToFcfa;
-        const prevPrice = index > 0 ? parseFloat(array[index - 1][4]) * usdToFcfa : closePrice;
-        const priceDiff = closePrice - prevPrice;
-        const percentChange = ((closePrice - prevPrice) / prevPrice) * 100;
+        
+        // Calculate percentage change based on timeframe
+        let percentChange;
+        if (timeframe === '1y') {
+          // For yearly view, calculate change from the start of the period
+          const startPrice = parseFloat(array[0][4]) * usdToFcfa;
+          percentChange = ((closePrice - startPrice) / startPrice) * 100;
+        } else {
+          // For other timeframes, calculate change from previous point
+          const prevPrice = index > 0 ? parseFloat(array[index - 1][4]) * usdToFcfa : closePrice;
+          percentChange = ((closePrice - prevPrice) / prevPrice) * 100;
+        }
         
         return {
           timestamp,
           price: Math.round(closePrice),
-          priceDiff,
           percentChange: Number(percentChange.toFixed(2))
         };
       });
 
-      return processedData;
+      // Calculate overall trend for color determination
+      const startPrice = processedData[0]?.price || 0;
+      const endPrice = processedData[processedData.length - 1]?.price || 0;
+      const overallTrend = endPrice - startPrice;
+
+      // Add overall trend to each data point
+      return processedData.map(point => ({
+        ...point,
+        trend: overallTrend
+      }));
+
     } catch (error) {
       console.error('Error fetching price data:', error);
       setError(error.message);
@@ -728,13 +746,13 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 type="monotone"
                 dataKey="price"
                 stroke="none"
-                fill={`url(#${chartData[chartData.length - 1]?.percentChange >= 0 ? 'greenGradient' : 'redGradient'})`}
+                fill={`url(#${chartData[0]?.trend >= 0 ? 'greenGradient' : 'redGradient'})`}
                 fillOpacity={1}
               />
               <Line
                 type="monotone"
                 dataKey="price"
-                stroke={chartData[chartData.length - 1]?.percentChange >= 0 ? '#22c55e' : '#ef4444'}
+                stroke={chartData[0]?.trend >= 0 ? '#22c55e' : '#ef4444'}
                 strokeWidth={2.5}
                 dot={false}
                 activeDot={false}

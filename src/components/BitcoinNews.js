@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import './BitcoinNews.css';
+import OptimizedImage from './OptimizedImage';
 
 const englishTerms = [
   {
@@ -67,7 +68,7 @@ const bitcoinTerms = {
     {
       term: "Portefeuille",
       definition: "Jumtukaay numérik bi lay may nga denc, yonnee ak jot Bitcoin ci kaarange.",
-      example: "Sa portefeuille Bitcoin mel na ni compte banque numérique boo kontrole sa bopp."
+      example: "Sa portefeuille Bitcoin mel na ni compte banque numérik boo kontrole sa bopp."
     },
     {
       term: "Bloc",
@@ -229,7 +230,11 @@ const newsTranslations = {
   }
 };
 
-const defaultImage = process.env.PUBLIC_URL + '/static/images/bitcoin-default.png';
+// Update image paths to use absolute URLs
+const defaultImage = 'https://raw.githubusercontent.com/habibfall/bitcoin-tiossan/main/public/images/bitcoin-default.png';
+const heartOfCheetahImage = 'https://raw.githubusercontent.com/habibfall/bitcoin-tiossan/main/public/images/heart-of-cheetah.jpg';
+const bitcoinStandardImage = 'https://raw.githubusercontent.com/habibfall/bitcoin-tiossan/main/public/images/bitcoin-standard.jpg';
+const mattKratteImage = 'https://raw.githubusercontent.com/habibfall/bitcoin-tiossan/main/public/images/matt-kratte.jpg';
 
 // Curated news translations
 const curatedNews = {
@@ -484,29 +489,25 @@ const BitcoinNews = ({ language = 'french' }) => {
 
       {/* News Grid */}
       <div className="news-grid">
-        {news.map(item => (
-          <div key={item.id} className="news-card">
-            <a href={item.sourceUrl} target="_blank" rel="noopener noreferrer" className="news-link">
-              <div className="news-image">
-                <img 
-                  src={item.image} 
-                  alt={item.headline}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = defaultImage;
-                  }}
-                />
+        {curatedNews[language].map((news) => (
+          <div key={news.id} className="news-card">
+            <OptimizedImage
+              src={news.image}
+              alt={news.headline}
+              width={400}
+              height={225}
+              className="news-image"
+            />
+            <div className="news-content">
+              <h3>{news.headline}</h3>
+              <p>{news.summary}</p>
+              <div className="news-footer">
+                <span className="news-source">{news.source}</span>
+                <a href={news.sourceUrl} target="_blank" rel="noopener noreferrer" className="read-more">
+                  {language === 'french' ? 'Lire plus' : language === 'wolof' ? 'Gëna jàng' : 'Read more'}
+                </a>
               </div>
-              <div className="news-content">
-                <div className="news-meta">
-                  <span className="news-date">{item.date}</span>
-                  <span className="news-source">{item.source}</span>
-                </div>
-                <h3>{item.headline}</h3>
-                <p>{item.summary}</p>
-                <span className="read-more">{text[language].readMore}</span>
-              </div>
-            </a>
+            </div>
           </div>
         ))}
       </div>
@@ -558,63 +559,42 @@ const BitcoinNews = ({ language = 'french' }) => {
         <div className="books-grid">
           <div className="book-card">
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
-              <div className="book-cover">
-                <img 
-                  src={process.env.PUBLIC_URL + '/static/images/heart-of-cheetah.jpg'}
-                  alt="Heart of a Cheetah Book"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    objectFit: 'cover'
-                  }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = defaultImage;
-                  }}
-                />
-              </div>
+              <OptimizedImage
+                src={heartOfCheetahImage}
+                alt="Heart of a Cheetah Book"
+                width={200}
+                height={300}
+                className="book-cover"
+                priority={true}
+              />
               <h4>The Heart of a Cheetah</h4>
               <p className="book-author">Magatte Wade</p>
             </a>
           </div>
           <div className="book-card">
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
-              <div className="book-cover">
-                <img 
-                  src={process.env.PUBLIC_URL + '/static/images/bitcoin-standard.jpg'}
-                  alt="The Bitcoin Standard Book"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    objectFit: 'cover'
-                  }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = defaultImage;
-                  }}
-                />
-              </div>
+              <OptimizedImage
+                src={bitcoinStandardImage}
+                alt="The Bitcoin Standard Book"
+                width={200}
+                height={300}
+                className="book-cover"
+                priority={true}
+              />
               <h4>The Bitcoin Standard</h4>
               <p className="book-author">Saifedean Ammous</p>
             </a>
           </div>
           <div className="book-card">
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
-              <div className="book-cover">
-                <img 
-                  src={process.env.PUBLIC_URL + '/static/images/matt-kratte.jpg'}
-                  alt="Matt Kratter Book"
-                  style={{
-                    width: '100%',
-                    height: 'auto',
-                    objectFit: 'cover'
-                  }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = defaultImage;
-                  }}
-                />
-              </div>
+              <OptimizedImage
+                src={mattKratteImage}
+                alt="Matt Kratter Book"
+                width={200}
+                height={300}
+                className="book-cover"
+                priority={true}
+              />
               <h4>A Beginner's Guide To Bitcoin</h4>
               <p className="book-author">Matthew R. Kratter</p>
             </a>

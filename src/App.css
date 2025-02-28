@@ -94,7 +94,7 @@
 
 .price {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(8rem, 20vw, 12rem);
+  font-size: clamp(16rem, 40vw, 24rem);
   font-weight: 700;
   color: #F7931A;
   display: flex;
@@ -118,7 +118,7 @@
   margin-right: 0.5rem;
   font-weight: 500;
   align-self: flex-start;
-  margin-top: 1rem;
+  margin-top: 2rem;
 }
 
 .price-change {
@@ -178,12 +178,12 @@
 
 @media (max-width: 768px) {
   .price {
-    font-size: clamp(5rem, 16vw, 9rem);
+    font-size: clamp(10rem, 32vw, 18rem);
   }
 
   .currency {
     font-size: 1.5rem !important;
-    margin-top: 0.75rem;
+    margin-top: 1.5rem;
   }
 
   .price-box {
@@ -216,12 +216,12 @@
 
 @media (max-width: 480px) {
   .price {
-    font-size: clamp(4rem, 14vw, 7rem);
+    font-size: clamp(8rem, 28vw, 14rem);
   }
 
   .currency {
     font-size: 1.2rem !important;
-    margin-top: 0.5rem;
+    margin-top: 1rem;
   }
 
   .price-box {

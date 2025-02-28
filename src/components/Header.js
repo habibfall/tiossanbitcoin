@@ -97,20 +97,21 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             cursor: 'pointer',
             padding: 0,
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
+            height: '40px'
           }}
         >
           <img 
             src="/tiossan.png"
             alt="Tiossan Logo" 
             style={{ 
-              height: '40px',
+              height: '100%',
               width: 'auto',
-              filter: isDarkMode ? 'brightness(0) invert(1)' : 'brightness(0)',
-              opacity: 1,
-              transition: 'filter 0.3s ease'
+              display: 'block',
+              filter: isDarkMode ? 'invert(1)' : 'none'
             }}
             onError={(e) => {
+              console.error('Failed to load logo:', e);
               e.target.onerror = null;
               e.target.src = "/bitcoin-default.png";
             }}

@@ -234,7 +234,7 @@ const newsTranslations = {
   }
 };
 
-const defaultImage = '/static/images/bitcoin-default.png';
+const defaultImage = '/default.png';
 
 // Curated news translations
 const curatedNews = {
@@ -564,11 +564,14 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <Image 
+                <img 
                   src="/static/images/heart-of-cheetah.jpg"
                   alt="Heart of a Cheetah Book"
-                  width={200}
-                  height={300}
+                  style={{
+                    width: '200px',
+                    height: '300px',
+                    objectFit: 'cover'
+                  }}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = defaultImage;
@@ -582,11 +585,14 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <Image 
+                <img 
                   src="/static/images/bitcoin-standard.jpg"
                   alt="The Bitcoin Standard Book"
-                  width={200}
-                  height={300}
+                  style={{
+                    width: '200px',
+                    height: '300px',
+                    objectFit: 'cover'
+                  }}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = defaultImage;
@@ -600,11 +606,14 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <Image 
+                <img 
                   src="/static/images/matt-kratte.jpg"
                   alt="Matt Kratter Book"
-                  width={200}
-                  height={300}
+                  style={{
+                    width: '200px',
+                    height: '300px',
+                    objectFit: 'cover'
+                  }}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = defaultImage;

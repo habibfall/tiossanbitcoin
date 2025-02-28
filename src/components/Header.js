@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from './ThemeToggle';
-import Image from 'next/image';
 import '../styles/Header.css';
 
 const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) => {
@@ -102,18 +101,19 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             height: '40px'
           }}
         >
-          <Image 
-            src="/static/images/tiossan.png"
-            alt="Tiossan Logo"
-            width={40}
-            height={40}
+          <img 
+            src="/logo.png"
+            alt="Tiossan Logo" 
             style={{ 
+              height: '40px',
+              width: 'auto',
+              display: 'block',
               filter: isDarkMode ? 'invert(1)' : 'none'
             }}
             onError={(e) => {
               console.error('Failed to load logo:', e);
               e.target.onerror = null;
-              e.target.src = "/static/images/bitcoin-default.png";
+              e.target.src = "/default.png";
             }}
           />
         </button>

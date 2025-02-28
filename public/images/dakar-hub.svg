@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="400" version="1.1" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#f7931a"/>
+  <g fill="#ffffff">
+    <circle cx="400" cy="200" r="80"/>
+    <text x="400" y="180" text-anchor="middle" font-size="24" font-family="Arial">Bitcoin Hub</text>
+    <text x="400" y="220" text-anchor="middle" font-size="20" font-family="Arial">Dakar</text>
+  </g>
+</svg> 

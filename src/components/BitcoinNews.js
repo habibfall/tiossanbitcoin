@@ -230,11 +230,11 @@ const newsTranslations = {
   }
 };
 
-// Update image paths to use absolute URLs
-const defaultImage = 'https://raw.githubusercontent.com/habibfall/bitcoin-tiossan/main/public/images/bitcoin-default.png';
-const heartOfCheetahImage = 'https://raw.githubusercontent.com/habibfall/bitcoin-tiossan/main/public/images/heart-of-cheetah.jpg';
-const bitcoinStandardImage = 'https://raw.githubusercontent.com/habibfall/bitcoin-tiossan/main/public/images/bitcoin-standard.jpg';
-const mattKratteImage = 'https://raw.githubusercontent.com/habibfall/bitcoin-tiossan/main/public/images/matt-kratte.jpg';
+// Update image paths to use imported assets
+const defaultImage = '/static/images/bitcoin-default.png';
+const heartOfCheetahImage = '/static/images/heart-of-cheetah.jpg';
+const bitcoinStandardImage = '/static/images/bitcoin-standard.jpg';
+const mattKratteImage = '/static/images/matt-kratte.jpg';
 
 // Curated news translations
 const curatedNews = {

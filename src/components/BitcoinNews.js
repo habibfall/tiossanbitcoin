@@ -3,6 +3,11 @@ import { useTheme } from '../context/ThemeContext';
 import './BitcoinNews.css';
 import OptimizedImage from './OptimizedImage';
 
+// Import book cover images
+import heartOfCheetahImage from '../assets/images/heart-of-cheetah.jpg';
+import bitcoinStandardImage from '../assets/images/bitcoin-standard.jpg';
+import mattKratteImage from '../assets/images/matt-kratte.jpg';
+
 const englishTerms = [
   {
     term: "Lightning Network",
@@ -230,56 +235,6 @@ const newsTranslations = {
   }
 };
 
-// Update image paths to use imported assets
-const defaultImage = '/static/images/bitcoin-default.png';
-const heartOfCheetahImage = '/static/images/heart-of-cheetah.jpg';
-const bitcoinStandardImage = '/static/images/bitcoin-standard.jpg';
-const mattKratteImage = '/static/images/matt-kratte.jpg';
-
-// Curated news translations
-const curatedNews = {
-  french: [
-    {
-      id: 'curated-1',
-      headline: 'Renversement potentiel du prix du Bitcoin au milieu de sorties de 3,4 milliards de dollars des ETF',
-      summary: 'Au milieu d\'importantes sorties de fonds des ETF Bitcoin, les analystes sont divisés sur le potentiel d\'un renversement du marché, suggérant la prudence aux investisseurs...',
-      source: 'CoinDesk',
-      image: defaultImage,
-      sourceUrl: 'https://www.coindesk.com/markets/2024/03/21/bitcoin-etf-outflows-hit-record-34b-as-grayscale-selling-continues/',
-      fallbackImage: defaultImage
-    },
-    {
-      id: 'curated-2',
-      headline: 'Le Salvador continue de profiter de sa stratégie Bitcoin',
-      summary: 'Le pays d\'Amérique centrale voit des résultats positifs de son adoption du Bitcoin comme monnaie légale, avec une augmentation du tourisme et des investissements...',
-      source: 'Bitcoin Magazine',
-      image: defaultImage,
-      sourceUrl: 'https://bitcoinmagazine.com/el-salvador-bitcoin-news',
-      fallbackImage: defaultImage
-    }
-  ],
-  wolof: [
-    {
-      id: 'curated-1',
-      headline: 'Walbatiku potentiel prix Bitcoin ci biir génne 3,4 milliard dollar yi ETF',
-      summary: 'Ci biir génne xaalis yu bare yi ETF Bitcoin, analystes yi bokkulañu ci walbatiku potentiel marché bi, di wonee teey ngir investisseurs yi...',
-      source: 'CoinDesk',
-      image: defaultImage,
-      sourceUrl: 'https://www.coindesk.com/markets/2024/03/21/bitcoin-etf-outflows-hit-record-34b-as-grayscale-selling-continues/',
-      fallbackImage: defaultImage
-    },
-    {
-      id: 'curated-2',
-      headline: 'Salvador di continuer jariñu ci stratégie Bitcoin',
-      summary: 'Réew bi ci Amérique centrale gis na risultat yu baax ci adoption Bitcoin bi, ak yokku turism ak investissement yi...',
-      source: 'Bitcoin Magazine',
-      image: defaultImage,
-      sourceUrl: 'https://bitcoinmagazine.com/el-salvador-bitcoin-news',
-      fallbackImage: defaultImage
-    }
-  ]
-};
-
 const BitcoinNews = ({ language = 'french' }) => {
   const { isDarkMode } = useTheme();
   const [currentTerm, setCurrentTerm] = useState(null);
@@ -352,7 +307,6 @@ const BitcoinNews = ({ language = 'french' }) => {
     return translatedWords.join(' ');
   }, [translationMap]);
 
-  // Fetch and combine news with caching
   const fetchNews = useCallback(async () => {
     try {
       // Check cache first
@@ -363,7 +317,7 @@ const BitcoinNews = ({ language = 'french' }) => {
         return;
       }
 
-      // Create an AbortController for timeout
+      setLoading(true);
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
@@ -381,36 +335,37 @@ const BitcoinNews = ({ language = 'french' }) => {
       const data = await response.json();
       
       const last24Hours = Date.now() - (24 * 60 * 60 * 1000);
-      const recentNews = data.Data
-        .filter(item => item.published_on * 1000 > last24Hours)
+      const newsItems = data.Data
+        .filter(item => 
+          item.published_on * 1000 > last24Hours && 
+          item.imageurl && 
+          item.imageurl.startsWith('http')
+        )
         .sort((a, b) => b.published_on - a.published_on)
-        .slice(0, 3);
-
-      const translatedNews = recentNews.map(item => ({
-        id: item.id,
-        headline: language === 'english' ? item.title : translateNewsText(item.title, language),
-        summary: language === 'english' ? 
-          (item.body.length > 150 ? item.body.substring(0, 150) + '...' : item.body) :
-          translateNewsText(item.body.substring(0, 150) + '...', language),
-        date: new Date(item.published_on * 1000).toLocaleDateString(
-          language === 'french' ? 'fr-FR' : 
-          language === 'wolof' ? 'fr-SN' : 'en-US',
-          { day: 'numeric', month: 'short' }
-        ),
-        image: item.imageurl,
-        sourceUrl: item.url,
-        source: item.source,
-        fallbackImage: defaultImage
-      }));
+        .slice(0, 3)
+        .map(item => ({
+          id: item.id,
+          headline: item.title,
+          summary: item.body.length > 150 ? item.body.substring(0, 150) + '...' : item.body,
+          date: new Date(item.published_on * 1000).toLocaleDateString(
+            language === 'french' ? 'fr-FR' : 
+            language === 'wolof' ? 'fr-SN' : 'en-US',
+            { day: 'numeric', month: 'short' }
+          ),
+          image: item.imageurl,
+          sourceUrl: item.url,
+          source: item.source_info?.name || item.source
+        }));
       
       // Update cache
       setNewsCache(prev => ({
         ...prev,
-        [language]: translatedNews
+        [language]: newsItems
       }));
       setLastFetchTime(now);
-      setNews(translatedNews);
+      setNews(newsItems);
       setLoading(false);
+      setError(null);
     } catch (err) {
       console.error('Error fetching news:', err);
       if (err.name === 'AbortError') {
@@ -418,13 +373,12 @@ const BitcoinNews = ({ language = 'french' }) => {
       } else {
         setError(text[language].error);
       }
-      // Use cached data if available when error occurs
       if (newsCache[language]) {
         setNews(newsCache[language]);
       }
       setLoading(false);
     }
-  }, [language, translateNewsText, newsCache, lastFetchTime]);
+  }, [language, newsCache, lastFetchTime, text]);
 
   useEffect(() => {
     // Set term of the day
@@ -489,26 +443,32 @@ const BitcoinNews = ({ language = 'french' }) => {
 
       {/* News Grid */}
       <div className="news-grid">
-        {curatedNews[language].map((news) => (
-          <div key={news.id} className="news-card">
+        {news.map((item) => (
+          <a 
+            key={item.id} 
+            href={item.sourceUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="news-card"
+          >
             <OptimizedImage
-              src={news.image}
-              alt={news.headline}
+              src={item.image}
+              alt={item.headline}
+              className="news-image"
               width={400}
               height={225}
-              className="news-image"
             />
             <div className="news-content">
-              <h3>{news.headline}</h3>
-              <p>{news.summary}</p>
+              <h3>{translateNewsText(item.headline, language)}</h3>
+              <p>{translateNewsText(item.summary, language)}</p>
               <div className="news-footer">
-                <span className="news-source">{news.source}</span>
-                <a href={news.sourceUrl} target="_blank" rel="noopener noreferrer" className="read-more">
+                <span className="news-source">{item.source}</span>
+                <span className="read-more">
                   {language === 'french' ? 'Lire plus' : language === 'wolof' ? 'Gëna jàng' : 'Read more'}
-                </a>
+                </span>
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
 
@@ -518,7 +478,7 @@ const BitcoinNews = ({ language = 'french' }) => {
         
         {/* Videos Section */}
         <h3 className="subsection-title">{text[language].videosTitle || "Educational Videos"}</h3>
-        <div className="video-grid">
+        <div className="video-grid" style={{ marginTop: '2rem', marginBottom: '4rem' }}>
           <div className="video-container">
             <iframe
               width="100%"
@@ -555,46 +515,31 @@ const BitcoinNews = ({ language = 'french' }) => {
         </div>
 
         {/* Books Section */}
-        <h3 className="subsection-title">{text[language].booksTitle || "Recommended Books"}</h3>
+        <h3 className="subsection-title" style={{ marginTop: '2rem' }}>{text[language].booksTitle || "Recommended Books"}</h3>
         <div className="books-grid">
           <div className="book-card">
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
-              <OptimizedImage
-                src={heartOfCheetahImage}
-                alt="Heart of a Cheetah Book"
-                width={200}
-                height={300}
-                className="book-cover"
-                priority={true}
-              />
+              <div className="book-cover">
+                <img src={heartOfCheetahImage} alt="Heart of a Cheetah Book" priority={true} />
+              </div>
               <h4>The Heart of a Cheetah</h4>
               <p className="book-author">Magatte Wade</p>
             </a>
           </div>
           <div className="book-card">
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
-              <OptimizedImage
-                src={bitcoinStandardImage}
-                alt="The Bitcoin Standard Book"
-                width={200}
-                height={300}
-                className="book-cover"
-                priority={true}
-              />
+              <div className="book-cover">
+                <img src={bitcoinStandardImage} alt="The Bitcoin Standard Book" priority={true} />
+              </div>
               <h4>The Bitcoin Standard</h4>
               <p className="book-author">Saifedean Ammous</p>
             </a>
           </div>
           <div className="book-card">
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
-              <OptimizedImage
-                src={mattKratteImage}
-                alt="Matt Kratter Book"
-                width={200}
-                height={300}
-                className="book-cover"
-                priority={true}
-              />
+              <div className="book-cover">
+                <img src={mattKratteImage} alt="Matt Kratter Book" priority={true} />
+              </div>
               <h4>A Beginner's Guide To Bitcoin</h4>
               <p className="book-author">Matthew R. Kratter</p>
             </a>

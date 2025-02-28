@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from './ThemeToggle';
+import Image from 'next/image';
 import '../styles/Header.css';
 
 const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) => {
@@ -101,13 +102,12 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             height: '40px'
           }}
         >
-          <img 
+          <Image 
             src="/static/images/tiossan.png"
-            alt="Tiossan Logo" 
+            alt="Tiossan Logo"
+            width={40}
+            height={40}
             style={{ 
-              height: '100%',
-              width: 'auto',
-              display: 'block',
               filter: isDarkMode ? 'invert(1)' : 'none'
             }}
             onError={(e) => {

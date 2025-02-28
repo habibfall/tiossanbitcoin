@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useTheme } from '../context/ThemeContext';
+import Image from 'next/image';
 import './BitcoinNews.css';
 import bitcoinDefaultImage from '../assets/images/bitcoin-default.png';
 import heartOfCheetahImage from '../assets/images/heart-of-cheetah.jpg';
@@ -563,9 +564,11 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <img 
+                <Image 
                   src="/static/images/heart-of-cheetah.jpg"
                   alt="Heart of a Cheetah Book"
+                  width={200}
+                  height={300}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = defaultImage;
@@ -579,9 +582,11 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <img 
+                <Image 
                   src="/static/images/bitcoin-standard.jpg"
                   alt="The Bitcoin Standard Book"
+                  width={200}
+                  height={300}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = defaultImage;
@@ -595,9 +600,11 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <img 
+                <Image 
                   src="/static/images/matt-kratte.jpg"
                   alt="Matt Kratter Book"
+                  width={200}
+                  height={300}
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = defaultImage;

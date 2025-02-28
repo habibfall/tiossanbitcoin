@@ -520,7 +520,7 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <OptimizedImage src="/static/images/heart-of-cheetah.jpg" alt="Heart of a Cheetah Book" priority={true} />
+                <img src={heartOfCheetahImage} alt="Heart of a Cheetah Book" priority={true} />
               </div>
               <h4>The Heart of a Cheetah</h4>
               <p className="book-author">Magatte Wade</p>
@@ -529,7 +529,7 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <OptimizedImage src="/static/images/bitcoin-standard.jpg" alt="The Bitcoin Standard Book" priority={true} />
+                <img src={bitcoinStandardImage} alt="The Bitcoin Standard Book" priority={true} />
               </div>
               <h4>The Bitcoin Standard</h4>
               <p className="book-author">Saifedean Ammous</p>
@@ -538,7 +538,7 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <OptimizedImage src="/static/images/matt-kratte.jpg" alt="Matt Kratter Book" priority={true} />
+                <img src={mattKratteImage} alt="Matt Kratter Book" priority={true} />
               </div>
               <h4>A Beginner's Guide To Bitcoin</h4>
               <p className="book-author">Matthew R. Kratter</p>

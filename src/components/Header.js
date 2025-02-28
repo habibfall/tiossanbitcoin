@@ -3,6 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from './ThemeToggle';
 import OptimizedImage from './OptimizedImage';
 import '../styles/Header.css';
+import './BitcoinNews.css';
 
 const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) => {
   const { isDarkMode } = useTheme();

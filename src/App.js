@@ -214,6 +214,11 @@ function AppContent() {
     setIsLanguageMenuOpen(false);
   };
 
+  const handleTimeframeChange = useCallback((newTimeframe, newPercentChange) => {
+    setTimeframe(newTimeframe);
+    setPriceChange(newPercentChange);
+  }, []);
+
   return (
     <div className={`app ${isDarkMode ? 'dark' : ''}`}>
       {isDarkMode && (
@@ -263,7 +268,7 @@ function AppContent() {
                 }).replace(':', 'h') : '--h--'}
               </p>
             </div>
-            <BitcoinChart language={language} onTimeframeChange={setTimeframe} />
+            <BitcoinChart language={language} onTimeframeChange={handleTimeframeChange} />
           </>
         )}
 

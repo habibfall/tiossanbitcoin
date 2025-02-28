@@ -482,10 +482,23 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
   // Effect for timeframe changes
   useEffect(() => {
     setIsTransitioning(true);
-    updateChartData(timeframe);
-    if (onTimeframeChange) {
-      onTimeframeChange(timeframe);
-    }
+    const updateData = async () => {
+      const data = await updateChartData(timeframe);
+      if (onTimeframeChange && data && data.length > 0) {
+        // For 1-year view, use the YTD change stored in percentChange
+        // For other timeframes, calculate the total change from start to end
+        let changePercent;
+        if (timeframe === '1y') {
+          changePercent = data[0].percentChange;
+        } else {
+          const startPrice = data[0].price;
+          const endPrice = data[data.length - 1].price;
+          changePercent = ((endPrice - startPrice) / startPrice) * 100;
+        }
+        onTimeframeChange(timeframe, Number(changePercent.toFixed(2)));
+      }
+    };
+    updateData();
     const timer = setTimeout(() => setIsTransitioning(false), 300);
     return () => clearTimeout(timer);
   }, [timeframe, updateChartData, onTimeframeChange]);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -224,8 +224,8 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
   const [lastFetchTime, setLastFetchTime] = useState({});
   const [yAxisDomain, setYAxisDomain] = useState(['auto', 'auto']);
 
-  // Cache validation duration based on timeframe
-  const getCacheTimeout = (tf) => {
+  // Memoize helper functions
+  const getCacheTimeout = useCallback((tf) => {
     switch (tf) {
       case '24h': return 1 * 60 * 1000; // 1 minute
       case '7d': return 5 * 60 * 1000; // 5 minutes
@@ -233,61 +233,96 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       case '1y': return 30 * 60 * 1000; // 30 minutes
       default: return 5 * 60 * 1000;
     }
-  };
+  }, []);
 
-  // Check if cached data is still valid
-  const isCacheValid = (tf) => {
+  const isCacheValid = useCallback((tf) => {
     const now = Date.now();
     const lastFetch = lastFetchTime[tf];
     if (!lastFetch) return false;
     return now - lastFetch < getCacheTimeout(tf);
-  };
+  }, [lastFetchTime, getCacheTimeout]);
 
-  // Interpolate missing data points
-  const interpolateData = (data) => {
-    if (data.length < 2) return data;
+  const formatDate = useCallback((date, timeframe) => {
+    switch (timeframe) {
+      case '24h':
+        return date.toLocaleTimeString(
+          language === 'french' ? 'fr-FR' : 
+          language === 'wolof' ? 'fr-SN' : 'en-US',
+          { hour: '2-digit', minute: '2-digit', hour12: false }
+        ).replace(':', 'h');
+      case '7d':
+        return date.toLocaleDateString(
+          language === 'french' ? 'fr-FR' : 
+          language === 'wolof' ? 'fr-SN' : 'en-US',
+          { weekday: 'short', day: '2-digit', month: '2-digit' }
+        );
+      case '30d':
+        return date.toLocaleDateString(
+          language === 'french' ? 'fr-FR' : 
+          language === 'wolof' ? 'fr-SN' : 'en-US',
+          { day: '2-digit', month: 'short' }
+        );
+      case '1y':
+        return date.toLocaleDateString(
+          language === 'french' ? 'fr-FR' : 
+          language === 'wolof' ? 'fr-SN' : 'en-US',
+          { month: 'short', year: 'numeric' }
+        );
+      default:
+        return date.toLocaleDateString();
+    }
+  }, [language]);
+
+  const shouldShowKeyPoint = useCallback((date, timeframe) => {
+    switch (timeframe) {
+      case '24h':
+        return date.getHours() % 4 === 0;
+      case '7d':
+        return true; // Show all daily points
+      case '30d':
+        return date.getDate() % 5 === 0;
+      case '1y':
+        return true; // Show all monthly points
+      default:
+        return false;
+    }
+  }, []);
+
+  const calculateYAxisDomain = useCallback((data) => {
+    if (!data || data.length === 0) return ['auto', 'auto'];
     
-    const interpolated = [];
-    for (let i = 0; i < data.length - 1; i++) {
-      interpolated.push(data[i]);
-      
-      const timeDiff = data[i + 1].timestamp - data[i].timestamp;
-      const expectedInterval = getExpectedInterval(timeframe);
-      
-      if (timeDiff > expectedInterval * 1.5) {
-        const steps = Math.floor(timeDiff / expectedInterval) - 1;
-        const priceDiff = data[i + 1].price - data[i].price;
-        const timeStep = timeDiff / (steps + 1);
-        
-        for (let j = 1; j <= steps; j++) {
-          const timestamp = data[i].timestamp + timeStep * j;
-          const price = data[i].price + (priceDiff * j) / (steps + 1);
-          
-          interpolated.push({
-            timestamp,
-            date: formatDate(new Date(timestamp), timeframe),
-            price,
-            priceDiff: price - data[i].price,
-            isKeyPoint: false,
-            isInterpolated: true
-          });
-        }
-      }
-    }
-    interpolated.push(data[data.length - 1]);
-    return interpolated;
-  };
+    const prices = data.map(d => d.price);
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    const padding = (max - min) * 0.1;
+    
+    return [Math.floor(min - padding), Math.ceil(max + padding)];
+  }, []);
 
-  // Get expected interval between data points based on timeframe
-  const getExpectedInterval = (tf) => {
-    switch (tf) {
-      case '24h': return 60 * 60 * 1000; // 1 hour
-      case '7d': return 24 * 60 * 60 * 1000; // 1 day
-      case '30d': return 24 * 60 * 60 * 1000; // 1 day
-      case '1y': return 30 * 24 * 60 * 60 * 1000; // ~1 month
-      default: return 60 * 60 * 1000;
+  const updateChartData = useCallback(async (newTimeframe) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      
+      if (isCacheValid(newTimeframe) && dataCache[newTimeframe]) {
+        setChartData(dataCache[newTimeframe]);
+        setYAxisDomain(calculateYAxisDomain(dataCache[newTimeframe]));
+        setIsLoading(false);
+        return;
+      }
+
+      const data = await fetchPriceData(newTimeframe);
+      setDataCache(prev => ({ ...prev, [newTimeframe]: data }));
+      setLastFetchTime(prev => ({ ...prev, [newTimeframe]: Date.now() }));
+      setChartData(data);
+      setYAxisDomain(calculateYAxisDomain(data));
+    } catch (err) {
+      console.error('Error updating chart data:', err);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [isCacheValid, dataCache, calculateYAxisDomain, fetchPriceData]);
 
   const text = {
     french: {
@@ -414,105 +449,27 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
     }
   };
 
-  const formatDate = (date, timeframe) => {
-    switch (timeframe) {
-      case '24h':
-        return date.toLocaleTimeString(
-          language === 'french' ? 'fr-FR' : 
-          language === 'wolof' ? 'fr-SN' : 'en-US',
-          { hour: '2-digit', minute: '2-digit', hour12: false }
-        ).replace(':', 'h');
-      case '7d':
-        return date.toLocaleDateString(
-          language === 'french' ? 'fr-FR' : 
-          language === 'wolof' ? 'fr-SN' : 'en-US',
-          { weekday: 'short', day: '2-digit', month: '2-digit' }
-        );
-      case '30d':
-        return date.toLocaleDateString(
-          language === 'french' ? 'fr-FR' : 
-          language === 'wolof' ? 'fr-SN' : 'en-US',
-          { day: '2-digit', month: 'short' }
-        );
-      case '1y':
-        return date.toLocaleDateString(
-          language === 'french' ? 'fr-FR' : 
-          language === 'wolof' ? 'fr-SN' : 'en-US',
-          { month: 'short', year: 'numeric' }
-        );
-      default:
-        return date.toLocaleDateString();
-    }
-  };
-
-  const shouldShowKeyPoint = (date, timeframe) => {
-    switch (timeframe) {
-      case '24h':
-        return date.getHours() % 4 === 0;
-      case '7d':
-        return true; // Show all daily points
-      case '30d':
-        return date.getDate() % 5 === 0;
-      case '1y':
-        return true; // Show all monthly points
-      default:
-        return false;
-    }
-  };
-
-  // Update chart data when timeframe changes
-  const updateChartData = async (newTimeframe) => {
-    setIsTransitioning(true);
-    setTimeframe(newTimeframe);
-    setIsLoading(true);
-    
-    if (onTimeframeChange) {
-      onTimeframeChange(newTimeframe);
-    }
-
-    try {
-      const data = await fetchPriceData(newTimeframe);
-      if (data) {
-        const interpolatedData = interpolateData(data);
-        const domain = calculateYAxisDomain(interpolatedData);
-        setYAxisDomain(domain);
-        setChartData(interpolatedData);
-        setDataCache(prev => ({ ...prev, [newTimeframe]: interpolatedData }));
-        setLastFetchTime(prev => ({ ...prev, [newTimeframe]: Date.now() }));
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-      setIsTransitioning(false);
-    }
-  };
-
-  // Calculate consistent Y-axis domain
-  const calculateYAxisDomain = (data) => {
-    if (!data || data.length === 0) return ['auto', 'auto'];
-    
-    const prices = data.map(d => d.price);
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
-    const padding = (max - min) * 0.1;
-    
-    return [Math.floor(min - padding), Math.ceil(max + padding)];
-  };
-
-  // Initial data fetch and refresh setup
+  // Effect for timeframe changes
   useEffect(() => {
-    fetchPriceData(timeframe);
-    
-    // Set up periodic refresh every 10 minutes
-    const refreshInterval = setInterval(() => {
-      if (timeframe === '24h') {
-        fetchPriceData(timeframe);
-      }
-    }, 600000); // 10 minutes in milliseconds
+    setIsTransitioning(true);
+    updateChartData(timeframe);
+    if (onTimeframeChange) {
+      onTimeframeChange(timeframe);
+    }
+    const timer = setTimeout(() => setIsTransitioning(false), 300);
+    return () => clearTimeout(timer);
+  }, [timeframe, updateChartData, onTimeframeChange]);
 
-    return () => clearInterval(refreshInterval);
-  }, [timeframe]);
+  // Effect for live updates
+  useEffect(() => {
+    if (!isLive) return;
+
+    const interval = setInterval(() => {
+      updateChartData(timeframe);
+    }, getCacheTimeout(timeframe));
+
+    return () => clearInterval(interval);
+  }, [isLive, timeframe, updateChartData, getCacheTimeout]);
 
   const timeframes = [
     { label: '24h', value: '24h' },

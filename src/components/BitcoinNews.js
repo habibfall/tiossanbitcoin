@@ -378,7 +378,7 @@ const BitcoinNews = ({ language = 'french' }) => {
       }
       setLoading(false);
     }
-  }, [language, newsCache, lastFetchTime, text]);
+  }, [language, newsCache, lastFetchTime, text, CACHE_DURATION, FETCH_TIMEOUT]);
 
   useEffect(() => {
     // Set term of the day
@@ -393,7 +393,7 @@ const BitcoinNews = ({ language = 'french' }) => {
     // Set up periodic refresh
     const refreshInterval = setInterval(fetchNews, CACHE_DURATION);
     return () => clearInterval(refreshInterval);
-  }, [language, fetchNews]);
+  }, [language, fetchNews, CACHE_DURATION]);
 
   if (loading) {
     return (
@@ -520,7 +520,14 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://magattewade.com/book" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <img src={heartOfCheetahImage} alt="Heart of a Cheetah Book" priority={true} />
+                <OptimizedImage
+                  src={heartOfCheetahImage}
+                  alt="Heart of a Cheetah Book"
+                  loading="lazy"
+                  className="book-image"
+                  width={300}
+                  height={450}
+                />
               </div>
               <h4>The Heart of a Cheetah</h4>
               <p className="book-author">Magatte Wade</p>
@@ -529,7 +536,14 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <img src={bitcoinStandardImage} alt="The Bitcoin Standard Book" priority={true} />
+                <OptimizedImage
+                  src={bitcoinStandardImage}
+                  alt="The Bitcoin Standard Book"
+                  loading="lazy"
+                  className="book-image"
+                  width={300}
+                  height={450}
+                />
               </div>
               <h4>The Bitcoin Standard</h4>
               <p className="book-author">Saifedean Ammous</p>
@@ -538,7 +552,14 @@ const BitcoinNews = ({ language = 'french' }) => {
           <div className="book-card">
             <a href="https://www.amazon.ca/Beginners-Guide-Bitcoin-Matthew-Kratter/dp/B08RRKNNBK" target="_blank" rel="noopener noreferrer" className="book-link">
               <div className="book-cover">
-                <img src={mattKratteImage} alt="Matt Kratter Book" priority={true} />
+                <OptimizedImage
+                  src={mattKratteImage}
+                  alt="Matt Kratter Book"
+                  loading="lazy"
+                  className="book-image"
+                  width={300}
+                  height={450}
+                />
               </div>
               <h4>A Beginner's Guide To Bitcoin</h4>
               <p className="book-author">Matthew R. Kratter</p>

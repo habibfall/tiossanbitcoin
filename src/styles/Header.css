@@ -324,4 +324,36 @@
   .burger-menu.open .burger-line:nth-child(3) {
     transform: translateY(-9px) rotate(-45deg);
   }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.optimized-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.optimized-image.loading {
+  opacity: 0;
+}
+
+.image-placeholder {
+  background: #f0f0f0;
+  animation: pulse 1.5s infinite;
 } 

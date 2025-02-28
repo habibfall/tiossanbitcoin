@@ -199,9 +199,9 @@ function AppContent() {
   // Update price change when timeframe changes
   useEffect(() => {
     if (priceChanges[timeframe] !== undefined) {
-      setPriceChange(priceChanges[timeframe]);
+      setPriceChange(validatePriceChange(priceChanges[timeframe]));
     }
-  }, [timeframe, priceChanges]);
+  }, [timeframe, priceChanges, validatePriceChange]);
 
   // Set up periodic price updates with proper cleanup
   useEffect(() => {
@@ -211,7 +211,6 @@ function AppContent() {
       try {
         const data = await fetchBitcoinPrice();
         if (isMounted) {
-          // State updates are handled within fetchBitcoinPrice
           console.log('Price updated successfully:', data);
         }
       } catch (error) {
@@ -219,19 +218,15 @@ function AppContent() {
       }
     };
 
-    // Initial fetch
     updatePrice();
-    
-    // Set up interval for updates
     const interval = setInterval(updatePrice, 600000); // 10 minutes
     
-    // Cleanup function
     return () => {
       isMounted = false;
       clearInterval(interval);
       console.log('Cleaning up price update interval');
     };
-  }, []); // Empty dependency array for initial setup only
+  }, [fetchBitcoinPrice]); // Add fetchBitcoinPrice to dependencies
 
   // Close language menu when clicking outside
   useEffect(() => {

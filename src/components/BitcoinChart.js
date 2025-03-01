@@ -749,7 +749,11 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 tickFormatter={formatXAxis}
                 ticks={getTickValues(chartData)}
                 stroke="#666"
-                tick={false}
+                tick={timeframe === '30d' || timeframe === '1y' ? false : {
+                  fontSize: 12,
+                  fill: isDarkMode ? '#b3b3b3' : '#666',
+                  fontFamily: 'JetBrains Mono'
+                }}
                 axisLine={{ stroke: isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)" }}
               />
               <YAxis 

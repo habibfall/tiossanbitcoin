@@ -177,6 +177,13 @@
 }
 
 @media (max-width: 768px) {
+  .price-box {
+    width: 90%;
+    max-width: none;
+    padding: 2rem 1rem;
+    margin: 1.5rem auto;
+  }
+
   .price {
     font-size: clamp(10rem, 32vw, 18rem);
   }
@@ -184,10 +191,6 @@
   .currency {
     font-size: 1.5rem !important;
     margin-top: 1.5rem;
-  }
-
-  .price-box {
-    padding: 2rem 1.5rem;
   }
 
   .price-box h2 {
@@ -215,6 +218,12 @@
 }
 
 @media (max-width: 480px) {
+  .price-box {
+    width: 95%;
+    padding: 1.5rem 0.75rem;
+    margin: 1rem auto;
+  }
+
   .price {
     font-size: clamp(8rem, 28vw, 14rem);
   }
@@ -222,10 +231,6 @@
   .currency {
     font-size: 1.2rem !important;
     margin-top: 1rem;
-  }
-
-  .price-box {
-    padding: 1.5rem 1rem;
   }
 
   .price-change {

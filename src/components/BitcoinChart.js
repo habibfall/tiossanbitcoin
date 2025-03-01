@@ -754,7 +754,11 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
               />
               <YAxis 
                 domain={yAxisDomain}
-                tickFormatter={(value) => `${(value / 1000000).toFixed(1)}M`}
+                tickFormatter={(value) => {
+                  const num = (value / 1000000).toFixed(1);
+                  // Pad with spaces to ensure consistent width
+                  return num.padStart(4, ' ') + 'M';
+                }}
                 tick={{ 
                   fontSize: 12, 
                   fill: isDarkMode ? '#b3b3b3' : '#666',
@@ -762,6 +766,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 }}
                 axisLine={false}
                 tickLine={false}
+                width={65}
               />
               <Tooltip 
                 content={<CustomTooltip />}

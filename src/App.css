@@ -72,7 +72,7 @@
 }
 
 .price-box {
-  background: rgba(26, 26, 26, 0.95);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
   padding: 3rem 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
@@ -81,7 +81,7 @@
   max-width: 595px;
   margin: 2rem auto;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .price-box h2 {
@@ -104,7 +104,7 @@
 
 /* Dark mode specific styles */
 .dark .price-box {
-  background: rgba(26, 26, 26, 0.95);
+  background: rgba(33, 33, 33, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -168,15 +168,15 @@
 
 /* Dark mode styles */
 .dark .price-change.positive {
-  background: transparent;
+  background: rgba(46, 204, 113, 0.15);
   color: #2ecc71;
-  border: 1px solid #2ecc71;
+  border: 1px solid rgba(46, 204, 113, 0.3);
 }
 
 .dark .price-change.negative {
-  background: transparent;
+  background: rgba(255, 107, 107, 0.15);
   color: #ff6b6b;
-  border: 1px solid #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
 }
 
 .update-time {

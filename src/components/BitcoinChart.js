@@ -748,17 +748,9 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                 dataKey="timestamp"
                 tickFormatter={formatXAxis}
                 ticks={getTickValues(chartData)}
-                tick={{ 
-                  fontSize: 12, 
-                  fill: isDarkMode ? '#b3b3b3' : '#666',
-                  fontFamily: 'JetBrains Mono'
-                }}
-                interval={0}
+                stroke="#666"
+                tick={false}
                 axisLine={{ stroke: isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)" }}
-                tickLine={false}
-                allowDataOverflow={true}
-                textAnchor="middle"
-                height={50}
               />
               <YAxis 
                 domain={yAxisDomain}

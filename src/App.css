@@ -1314,3 +1314,8 @@ input,
 .dark .news-container:hover {
   border-color: rgba(247, 147, 26, 0.3);
 }
+
+/* Hide x-axis text in charts */
+.recharts-xAxis .recharts-cartesian-axis-tick-value {
+  display: none;
+}

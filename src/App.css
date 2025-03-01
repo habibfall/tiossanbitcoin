@@ -92,6 +92,26 @@
   text-align: center;
 }
 
+/* Light mode specific styles */
+.app:not(.dark) .price-box {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.app:not(.dark) .price-box h2 {
+  color: #333333;
+}
+
+/* Dark mode specific styles */
+.dark .price-box {
+  background: rgba(26, 26, 26, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .price-box h2 {
+  color: #ffffff;
+}
+
 .price {
   font-family: 'Inter', sans-serif;
   font-size: clamp(16rem, 40vw, 24rem);
@@ -147,6 +167,19 @@
   background: rgba(235, 87, 87, 0.1);
   color: #ff6b6b;
   border: 1px solid rgba(235, 87, 87, 0.2);
+}
+
+/* Dark mode specific styles for percentage change */
+.dark .price-change.positive {
+  background: rgba(39, 174, 96, 0.2);
+  color: #2ecc71;
+  border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.dark .price-change.negative {
+  background: rgba(235, 87, 87, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(235, 87, 87, 0.3);
 }
 
 .update-time {

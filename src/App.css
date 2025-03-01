@@ -74,19 +74,19 @@
 .price-box {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
-  padding: 2.5rem;
+  padding: 1.875rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
   width: 100%;
   max-width: 595px;
-  margin: 2rem auto;
+  margin: 1.5rem auto;
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-height: 400px;
+  min-height: 300px;
 }
 
 .price-box h2 {
@@ -120,7 +120,7 @@
 
 .price {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(14rem, 35vw, 20rem);
+  font-size: clamp(12rem, 32vw, 18rem);
   font-weight: 700;
   color: #F7931A;
   display: flex;
@@ -129,7 +129,7 @@
   gap: 0.25rem;
   margin: 0;
   padding: 0;
-  line-height: 1;
+  line-height: 0.9;
   flex-wrap: nowrap;
   width: 100%;
 }
@@ -141,11 +141,11 @@
 .currency {
   font-size: 2rem !important;
   color: #aaa;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  margin-left: 0.375rem;
+  margin-right: 0.375rem;
   font-weight: 500;
   align-self: flex-start;
-  margin-top: 1.5rem;
+  margin-top: 1.125rem;
 }
 
 .price-change {
@@ -219,18 +219,18 @@
   .price-box {
     width: 90%;
     max-width: none;
-    padding: 2rem;
-    margin: 1.5rem auto;
-    min-height: 350px;
+    padding: 1.5rem;
+    margin: 1.125rem auto;
+    min-height: 262.5px;
   }
 
   .price {
-    font-size: clamp(8rem, 28vw, 14rem);
+    font-size: clamp(6rem, 25vw, 12rem);
   }
 
   .currency {
     font-size: 1.5rem !important;
-    margin-top: 1rem;
+    margin-top: 0.75rem;
   }
 
   .price-box h2 {
@@ -260,18 +260,18 @@
 @media (max-width: 480px) {
   .price-box {
     width: 95%;
-    padding: 1.5rem;
-    margin: 1rem auto;
-    min-height: 300px;
+    padding: 1.125rem;
+    margin: 0.75rem auto;
+    min-height: 225px;
   }
 
   .price {
-    font-size: clamp(6rem, 24vw, 12rem);
+    font-size: clamp(4.5rem, 21vw, 10rem);
   }
 
   .currency {
     font-size: 1.2rem !important;
-    margin-top: 0.75rem;
+    margin-top: 0.5625rem;
   }
 
   .price-change {

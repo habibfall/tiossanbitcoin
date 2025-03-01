@@ -152,8 +152,6 @@
   min-width: 70px;
   margin-left: 0.5rem;
   white-space: nowrap;
-  position: relative;
-  overflow: visible;
 }
 
 .price-change.positive {
@@ -168,12 +166,17 @@
   border: 1px solid rgba(255, 107, 107, 0.2);
 }
 
-/* Remove any dark mode overrides to ensure consistency */
-.dark .price-change.positive,
+/* Dark mode styles */
+.dark .price-change.positive {
+  background: transparent;
+  color: #2ecc71;
+  border: 1px solid #2ecc71;
+}
+
 .dark .price-change.negative {
-  background: inherit;
-  color: inherit;
-  border: inherit;
+  background: transparent;
+  color: #ff6b6b;
+  border: 1px solid #ff6b6b;
 }
 
 .update-time {

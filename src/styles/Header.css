@@ -278,72 +278,90 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
+  .app {
+    padding-top: 60px;
+  }
+
   .header {
     height: 60px;
+    padding: 0;
   }
 
   .header-content {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
     justify-content: space-between;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .header-logo {
     padding-right: 0;
     margin-right: 0;
+    flex-shrink: 0;
   }
 
   .header-logo img {
     height: 28px;
+    width: auto;
   }
 
   .header-tabs {
     display: none;
-    position: static;
-    transform: none;
   }
 
   .header-controls {
     padding-left: 0;
     margin-left: 0;
     gap: 0.5rem;
+    flex-shrink: 0;
   }
 
   .burger-menu {
     display: flex;
     margin-left: 0.5rem;
+    width: 20px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .burger-line {
+    height: 1.5px;
   }
 
   .mobile-menu {
     display: block;
+    top: 60px;
+    max-height: calc(100vh - 60px);
+    overflow-y: auto;
   }
 
   .theme-toggle {
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-size: 12px;
+    border-width: 1px;
   }
 
   .language-toggle {
-    padding: 6px 12px;
+    padding: 6px 10px;
     font-size: 12px;
-    min-width: 100px;
+    min-width: 90px;
+    border-width: 1px;
   }
 
-  .burger-menu.open .burger-line:nth-child(1) {
-    transform: translateY(9px) rotate(45deg);
+  .language-menu {
+    max-height: 200px;
+    overflow-y: auto;
   }
 
-  .burger-menu.open .burger-line:nth-child(2) {
-    opacity: 0;
-  }
-
-  .burger-menu.open .burger-line:nth-child(3) {
-    transform: translateY(-9px) rotate(-45deg);
+  .language-option {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
   .header-content {
-    padding: 0 0.75rem;
+    padding: 0 0.5rem;
   }
 
   .header-logo img {
@@ -356,15 +374,47 @@
 
   .theme-toggle {
     padding: 4px 8px;
+    font-size: 11px;
   }
 
   .language-toggle {
     padding: 4px 8px;
-    min-width: 90px;
+    font-size: 11px;
+    min-width: 80px;
   }
 
   .burger-menu {
     margin-left: 0.35rem;
+    width: 18px;
+    height: 14px;
+  }
+
+  .burger-line {
+    height: 1.25px;
+  }
+
+  .mobile-menu {
+    padding: 0.75rem;
+  }
+
+  .mobile-menu .header-tab {
+    padding: 0.75rem;
+    font-size: 14px;
+  }
+
+  .theme-toggle,
+  .language-toggle,
+  .header-tab {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .language-menu {
+    max-height: 180px;
+    width: 100%;
+    left: 0;
+    right: 0;
   }
 }
 
@@ -398,4 +448,16 @@
 .image-placeholder {
   background: #f0f0f0;
   animation: pulse 1.5s infinite;
+}
+
+/* Add smooth transitions for responsive changes */
+.header,
+.header-content,
+.header-logo,
+.header-logo img,
+.burger-menu,
+.theme-toggle,
+.language-toggle,
+.mobile-menu {
+  transition: all 0.3s ease;
 } 

@@ -74,7 +74,7 @@
 .price-box {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
-  padding: 1.125rem;
+  padding: 1.125rem 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
   width: 100%;
@@ -124,7 +124,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0;
 }
 
 .price {
@@ -228,7 +228,7 @@
   .price-box {
     width: 90%;
     max-width: none;
-    padding: 0.9rem;
+    padding: 0.9rem 1.5rem;
     margin: 0.675rem auto;
     min-height: 157.5px;
     gap: 0.576rem;
@@ -273,7 +273,7 @@
 @media (max-width: 480px) {
   .price-box {
     width: 95%;
-    padding: 0.675rem;
+    padding: 0.675rem 1rem;
     margin: 0.45rem auto;
     min-height: 135px;
     gap: 0.432rem;

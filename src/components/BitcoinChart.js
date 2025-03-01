@@ -293,9 +293,17 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
     const prices = data.map(d => d.price);
     const min = Math.min(...prices);
     const max = Math.max(...prices);
-    const padding = (max - min) * 0.1;
     
-    return [Math.floor(min - padding), Math.ceil(max + padding)];
+    // Calculate a nice interval that's divisible by 1M for better readability
+    const range = max - min;
+    const roughInterval = range / 5; // We want about 5 intervals
+    const interval = Math.ceil(roughInterval / 1000000) * 1000000; // Round up to nearest million
+    
+    // Calculate the min and max bounds that are divisible by our interval
+    const lowerBound = Math.floor(min / interval) * interval;
+    const upperBound = Math.ceil(max / interval) * interval;
+    
+    return [lowerBound, upperBound];
   }, []);
 
   const fetchPriceData = async (timeframe) => {
@@ -758,18 +766,25 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
                   // Format to millions with 1 decimal place
                   const millions = (value / 1000000).toFixed(1);
                   // Ensure consistent width by padding with spaces
-                  // Add extra space after the number for better spacing from the axis
                   return `${millions.padStart(5, ' ')}M `;
                 }}
                 tick={{ 
                   fontSize: 12, 
                   fill: isDarkMode ? '#b3b3b3' : '#666',
                   fontFamily: 'JetBrains Mono',
-                  dx: -5 // Adjust position slightly to the left
+                  dx: -5
                 }}
                 axisLine={false}
                 tickLine={false}
-                width={75} // Increased width to accommodate consistent spacing
+                width={75}
+                // Add interval to ensure equal spacing
+                interval={0} // Show all ticks
+                ticks={(() => {
+                  if (!chartData || chartData.length === 0) return [];
+                  const [min, max] = yAxisDomain;
+                  const interval = (max - min) / 5;
+                  return Array.from({ length: 6 }, (_, i) => min + interval * i);
+                })()}
               />
               <Tooltip 
                 content={<CustomTooltip />}

@@ -85,8 +85,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
+  justify-content: space-between;
+  min-height: 400px;
 }
 
 .price-box h2 {
@@ -128,7 +128,7 @@
   justify-content: center;
   gap: 0.25rem;
   margin: 0;
-  padding: 1rem 0;
+  padding: 0;
   line-height: 1;
   flex-wrap: nowrap;
   width: 100%;
@@ -221,12 +221,11 @@
     max-width: none;
     padding: 2rem;
     margin: 1.5rem auto;
-    gap: 1rem;
+    min-height: 350px;
   }
 
   .price {
     font-size: clamp(8rem, 28vw, 14rem);
-    padding: 0.75rem 0;
   }
 
   .currency {
@@ -263,12 +262,11 @@
     width: 95%;
     padding: 1.5rem;
     margin: 1rem auto;
-    gap: 0.75rem;
+    min-height: 300px;
   }
 
   .price {
     font-size: clamp(6rem, 24vw, 12rem);
-    padding: 0.5rem 0;
   }
 
   .currency {

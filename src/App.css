@@ -74,19 +74,19 @@
 .price-box {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 16px;
-  padding: 1.875rem;
+  padding: 1.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(10px);
   width: 100%;
   max-width: 595px;
-  margin: 1.5rem auto;
+  margin: 1.2rem auto;
   text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-height: 300px;
+  min-height: 240px;
 }
 
 .price-box h2 {
@@ -126,10 +126,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: 0.2rem;
   margin: 0;
   padding: 0;
-  line-height: 0.9;
+  line-height: 0.8;
   flex-wrap: nowrap;
   width: 100%;
 }
@@ -141,23 +141,23 @@
 .currency {
   font-size: 2rem !important;
   color: #aaa;
-  margin-left: 0.375rem;
-  margin-right: 0.375rem;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
   font-weight: 500;
   align-self: flex-start;
-  margin-top: 1.125rem;
+  margin-top: 0.9rem;
 }
 
 .price-change {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25rem 0.6rem;
+  padding: 0.2rem 0.48rem;
   border-radius: 12px;
   font-weight: 600;
   font-size: 0.9rem;
   min-width: 70px;
-  margin-left: 0.5rem;
+  margin-left: 0.4rem;
   white-space: nowrap;
 }
 
@@ -219,9 +219,9 @@
   .price-box {
     width: 90%;
     max-width: none;
-    padding: 1.5rem;
-    margin: 1.125rem auto;
-    min-height: 262.5px;
+    padding: 1.2rem;
+    margin: 0.9rem auto;
+    min-height: 210px;
   }
 
   .price {
@@ -260,9 +260,9 @@
 @media (max-width: 480px) {
   .price-box {
     width: 95%;
-    padding: 1.125rem;
-    margin: 0.75rem auto;
-    min-height: 225px;
+    padding: 0.9rem;
+    margin: 0.6rem auto;
+    min-height: 180px;
   }
 
   .price {

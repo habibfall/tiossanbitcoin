@@ -86,7 +86,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-height: 360px;
+  min-height: 324px;
 }
 
 .price-box h2 {
@@ -221,7 +221,7 @@
     max-width: none;
     padding: 2rem;
     margin: 1.5rem auto;
-    min-height: 315px;
+    min-height: 283px;
   }
 
   .price {
@@ -262,7 +262,7 @@
     width: 95%;
     padding: 1.5rem;
     margin: 1rem auto;
-    min-height: 270px;
+    min-height: 243px;
   }
 
   .price {

@@ -154,19 +154,26 @@
   white-space: nowrap;
   position: relative;
   overflow: visible;
-  border-width: 1px;
 }
 
 .price-change.positive {
-  background: rgba(39, 174, 96, 0.1);
+  background: rgba(46, 204, 113, 0.1);
   color: #2ecc71;
-  border: 1px solid rgba(39, 174, 96, 0.2);
+  border: 1px solid rgba(46, 204, 113, 0.2);
 }
 
 .price-change.negative {
-  background: rgba(235, 87, 87, 0.1);
+  background: rgba(255, 107, 107, 0.1);
   color: #ff6b6b;
-  border: 1px solid rgba(235, 87, 87, 0.2);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+/* Remove any dark mode overrides to ensure consistency */
+.dark .price-change.positive,
+.dark .price-change.negative {
+  background: inherit;
+  color: inherit;
+  border: inherit;
 }
 
 .update-time {

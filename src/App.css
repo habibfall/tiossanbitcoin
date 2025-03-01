@@ -86,14 +86,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.8rem;
+  gap: 0.72rem;
   min-height: 180px;
 }
 
 .price-box h2 {
   font-size: 2rem;
   font-weight: 600;
-  margin: 0 0 0.4rem 0;
+  margin: 0 0 0.36rem 0;
   padding: 0;
   text-align: center;
   width: 100%;
@@ -128,7 +128,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.15rem;
-  margin: 0 0 0.4rem 0;
+  margin: 0 0 0.36rem 0;
   padding: 0;
   line-height: 0.6;
   flex-wrap: nowrap;
@@ -158,7 +158,7 @@
   font-weight: 600;
   font-size: 0.9rem;
   min-width: 70px;
-  margin: 0 0 0.4rem 0.3rem;
+  margin: 0 0 0.36rem 0.27rem;
   white-space: nowrap;
 }
 
@@ -223,12 +223,12 @@
     padding: 0.9rem;
     margin: 0.675rem auto;
     min-height: 157.5px;
-    gap: 0.64rem;
+    gap: 0.576rem;
   }
 
   .price {
     font-size: clamp(6rem, 25vw, 12rem);
-    margin: 0 0 0.32rem 0;
+    margin: 0 0 0.288rem 0;
   }
 
   .currency {
@@ -238,14 +238,14 @@
 
   .price-box h2 {
     font-size: 1.75rem;
-    margin: 0 0 0.32rem 0;
+    margin: 0 0 0.288rem 0;
   }
 
   .price-change {
     font-size: 0.85rem;
     padding: 0.2rem 0.5rem;
     min-width: 60px;
-    margin: 0 0 0.32rem 0.3rem;
+    margin: 0 0 0.288rem 0.27rem;
   }
 
   .quiz-container {
@@ -268,12 +268,12 @@
     padding: 0.675rem;
     margin: 0.45rem auto;
     min-height: 135px;
-    gap: 0.48rem;
+    gap: 0.432rem;
   }
 
   .price {
     font-size: clamp(4.5rem, 21vw, 10rem);
-    margin: 0 0 0.24rem 0;
+    margin: 0 0 0.216rem 0;
   }
 
   .currency {
@@ -285,12 +285,12 @@
     font-size: 0.8rem;
     padding: 0.15rem 0.4rem;
     min-width: 55px;
-    margin: 0 0 0.24rem 0.3rem;
+    margin: 0 0 0.216rem 0.27rem;
   }
 
   .price-box h2 {
     font-size: 1.5rem;
-    margin: 0 0 0.24rem 0;
+    margin: 0 0 0.216rem 0;
   }
 }
 

@@ -119,6 +119,14 @@
   color: #ffffff;
 }
 
+.price-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 1rem;
+}
+
 .price {
   font-family: 'Inter', sans-serif;
   font-size: clamp(12rem, 32vw, 18rem);
@@ -128,11 +136,10 @@
   align-items: center;
   justify-content: center;
   gap: 0.15rem;
-  margin: 0 0 0.36rem 0;
+  margin: 0;
   padding: 0;
   line-height: 0.6;
   flex-wrap: nowrap;
-  width: 100%;
 }
 
 .price span {
@@ -158,8 +165,9 @@
   font-weight: 600;
   font-size: 0.9rem;
   min-width: 70px;
-  margin: 0 0.27rem 0.36rem 0.27rem;
+  margin: 0;
   white-space: nowrap;
+  align-self: center;
 }
 
 .price-change.positive {

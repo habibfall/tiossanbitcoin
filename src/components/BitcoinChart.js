@@ -755,18 +755,21 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
               <YAxis 
                 domain={yAxisDomain}
                 tickFormatter={(value) => {
-                  const num = (value / 1000000).toFixed(1);
-                  // Pad with spaces to ensure consistent width
-                  return num.padStart(4, ' ') + 'M';
+                  // Format to millions with 1 decimal place
+                  const millions = (value / 1000000).toFixed(1);
+                  // Ensure consistent width by padding with spaces
+                  // Add extra space after the number for better spacing from the axis
+                  return `${millions.padStart(5, ' ')}M `;
                 }}
                 tick={{ 
                   fontSize: 12, 
                   fill: isDarkMode ? '#b3b3b3' : '#666',
-                  fontFamily: 'JetBrains Mono'
+                  fontFamily: 'JetBrains Mono',
+                  dx: -5 // Adjust position slightly to the left
                 }}
                 axisLine={false}
                 tickLine={false}
-                width={65}
+                width={75} // Increased width to accommodate consistent spacing
               />
               <Tooltip 
                 content={<CustomTooltip />}

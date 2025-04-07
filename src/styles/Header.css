@@ -348,11 +348,11 @@
 /* Responsive styles */
 @media (max-width: 768px) {
   .app {
-    padding-top: 60px;
+    padding-top: 65px;
   }
 
   .header {
-    height: 60px;
+    height: 65px;
     padding: 0;
   }
 
@@ -370,7 +370,7 @@
   }
 
   .header-logo img {
-    height: 30px;
+    height: 35px;
     width: auto;
   }
 
@@ -379,17 +379,20 @@
   }
 
   .header-controls {
-    padding-left: 0; /* Remove padding, rely on gap */
-    gap: 1rem; /* Adjust gap for Theme + Burger only */
+    padding-left: 0;
+    gap: 1rem;
     margin-left: auto;
   }
 
   .burger-menu {
     display: flex !important;
+    width: 26px;
+    height: 22px;
   }
 
   .burger-line {
     background-color: #666666;
+    height: 2.5px;
   }
 
   .dark .burger-line {
@@ -397,21 +400,21 @@
   }
 
   .mobile-menu {
-    top: 60px;
-    max-height: calc(100vh - 60px);
+    top: 65px;
+    max-height: calc(100vh - 65px);
     overflow-y: auto;
   }
 
   .theme-toggle {
-    padding: 6px 10px;
-    font-size: 12px;
+    padding: 7px 12px;
+    font-size: 13px;
     border-width: 1px;
   }
 
   .language-toggle {
-    padding: 6px 10px;
-    font-size: 12px;
-    min-width: 90px;
+    padding: 7px 12px;
+    font-size: 13px;
+    min-width: 100px;
     border-width: 1px;
   }
 
@@ -421,59 +424,60 @@
   }
 
   .language-option {
-    padding: 8px 12px;
-    font-size: 13px;
+    padding: 9px 14px;
+    font-size: 14px;
   }
 
   .header-logo-img {
-    height: 30px;
+    height: 35px;
   }
 }
 
 @media (max-width: 480px) {
   .header-content {
-    padding: 0 0.5rem;
+    padding: 0 0.75rem;
   }
 
   .header-logo img {
-    height: 24px;
+    height: 30px;
   }
 
   .header-controls {
-    gap: 0.75rem; /* Adjust gap for Theme + Burger only */
+    gap: 0.85rem;
     flex-shrink: 1;
-    padding-left: 0; /* Remove padding */
+    padding-left: 0;
   }
 
   .theme-toggle {
-    padding: 4px 6px;
-    font-size: 11px;
+    padding: 5px 8px;
+    font-size: 12px;
   }
 
   .language-toggle {
-    padding: 4px 6px;
-    font-size: 11px;
+    padding: 5px 8px;
+    font-size: 12px;
     min-width: auto;
   }
 
   .burger-menu {
-    margin-left: 0; /* Remove specific margin */
-    width: 20px;
-    height: 16px;
+    margin-left: 0;
+    width: 22px;
+    height: 18px;
     flex-shrink: 0;
   }
 
   .burger-line {
-    height: 1.25px;
+    height: 2px;
   }
 
   .mobile-menu {
-    padding: 0.75rem;
+    padding: 0.85rem;
   }
 
   .mobile-menu .header-tab {
-    padding: 0.75rem;
-    font-size: 14px;
+    padding: 0.85rem;
+    font-size: 0.95rem;
+    margin: 0.3rem 0;
   }
 
   .theme-toggle,
@@ -492,7 +496,7 @@
   }
 
   .header-logo-img {
-    height: 28px;
+    height: 30px;
   }
 }
 

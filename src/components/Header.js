@@ -129,6 +129,14 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
 
   // Determine if we are in mobile view based on window width (check if width is > 0)
   const isMobileView = windowWidth > 0 && windowWidth <= MOBILE_BREAKPOINT;
+
+  // --- DEBUGGING LOGS --- 
+  console.log('[Header] Received language prop:', language);
+  // console.log('[Header] Received text prop:', text); // Log full object if needed, might be large
+  console.log('[Header] text object for current language:', text?.[language]);
+  console.log('[Header] Price tab translation:', text?.[language]?.priceTab);
+  // --- END DEBUGGING LOGS ---
+
   // Avoid rendering anything until windowWidth is properly set
   if (windowWidth === 0) {
     return null; // Or a loading state for the header

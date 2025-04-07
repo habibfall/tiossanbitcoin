@@ -163,21 +163,7 @@
 
 /* Styles for language options specifically within mobile menu */
 .mobile-language-options {
-  padding: 1rem 0; /* Add padding around the language section */
-}
-
-.mobile-menu-label {
-  display: block;
-  padding: 0 1rem; /* Match tab padding */
-  margin-bottom: 0.5rem;
-  font-size: 0.8rem;
-  color: #888; /* Subdued color */
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.dark .mobile-menu-label {
-  color: rgba(255, 255, 255, 0.5);
+  padding: 0.5rem 0 1rem 0; /* Reduced top padding, kept bottom padding */
 }
 
 .language-option-mobile {

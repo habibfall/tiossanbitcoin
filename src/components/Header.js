@@ -244,10 +244,9 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             <nav className="mobile-nav-tabs">
               {renderTabs()}
             </nav>
-            <hr className="mobile-menu-divider" /> { /* Add a visual separator */}
+            <hr className="mobile-menu-divider" />
             <div className="mobile-language-options" role="menu">
-              <span className="mobile-menu-label">{text?.[language]?.languageLabel ?? 'Language'}</span>
-              {renderLanguageOptions(true)} {/* Render mobile options */}
+              {renderLanguageOptions(true)} {/* Render mobile options directly */}
             </div>
           </>
         )}

@@ -162,18 +162,31 @@
 }
 
 /* Styles for language options specifically within mobile menu */
+.mobile-language-section {
+  display: flex; /* Align icon and options horizontally */
+  align-items: center; /* Center items vertically */
+  padding: 0.5rem 1rem 1rem 1rem; /* Padding around the whole section */
+}
+
+.mobile-language-icon {
+  font-size: 1.2rem; /* Adjust icon size */
+  margin-right: 0.75rem; /* Space between icon and buttons */
+  line-height: 1; /* Ensure proper vertical alignment */
+}
+
 .mobile-language-options {
-  padding: 0.5rem 0 1rem 0; /* Reduced top padding, kept bottom padding */
+  padding: 0; /* Remove previous padding, handled by parent */
+  flex-grow: 1; /* Allow options container to take remaining space */
 }
 
 .language-option-mobile {
   display: block;
   width: 100%;
   text-align: left;
-  padding: 0.75rem 1rem; /* Slightly less padding than tabs */
+  padding: 0.6rem 1rem; /* Adjusted padding for buttons */
   margin: 0.1rem 0;
-  border-radius: 8px;
-  font-size: 0.95rem; /* Match tab font size */
+  border-radius: 6px; /* Slightly smaller radius */
+  font-size: 0.9rem; /* Slightly smaller font */
   background: transparent;
   border: none;
   color: #666666; /* Match tab color */

@@ -311,67 +311,65 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       setIsLoading(true);
       setError(null);
       
-      // Get the appropriate Coinbase API endpoint and granularity based on timeframe
+      // Get the appropriate endpoint config based on timeframe
       const getEndpointConfig = () => {
         switch (timeframe) {
           case '24h':
             return {
-              granularity: 3600, // 1 hour intervals
-              startTime: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+              endpoint: 'histohour',
+              limit: 24,
+              aggregate: 1
             };
           case '7d':
             return {
-              granularity: 21600, // 6 hour intervals (adjusted from 4h to get better data)
-              startTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+              endpoint: 'histoday',
+              limit: 7,
+              aggregate: 1
             };
           case '30d':
             return {
-              granularity: 86400, // 1 day intervals
-              startTime: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
+              endpoint: 'histoday',
+              limit: 30,
+              aggregate: 1
             };
           case '1y':
             return {
-              granularity: 86400, // 1 day intervals
-              startTime: new Date(Date.now() - 370 * 24 * 60 * 60 * 1000).toISOString() // Added a few extra days for better data coverage
+              endpoint: 'histoday',
+              limit: 365,
+              aggregate: 1
             };
           default:
             return {
-              granularity: 3600,
-              startTime: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+              endpoint: 'histohour',
+              limit: 24,
+              aggregate: 1
             };
         }
       };
 
       const config = getEndpointConfig();
-      const endTime = new Date().toISOString();
       
-      // Add a small delay to ensure we get the latest data
       const response = await fetch(
-        `https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=${config.granularity}&start=${config.startTime}&end=${endTime}`,
-        {
-          headers: {
-            'Accept': 'application/json',
-            'Cache-Control': 'no-cache'
-          }
-        }
+        `https://min-api.cryptocompare.com/data/v2/${config.endpoint}?fsym=BTC&tsym=USD&limit=${config.limit}&aggregate=${config.aggregate}`
       );
 
       if (!response.ok) {
         throw new Error('Failed to fetch price data');
       }
 
-      const data = await response.json();
+      const result = await response.json();
       
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('Invalid data format from Coinbase API');
+      if (!result.Data || !result.Data.Data || !Array.isArray(result.Data.Data)) {
+        throw new Error('Invalid data format from API');
       }
 
+      const data = result.Data.Data;
       const usdToFcfa = 655.957;
       
-      // Coinbase candle format: [timestamp, open, high, low, close, volume]
-      const processedData = data.reverse().map((candle) => {
-        const timestamp = candle[0] * 1000; // Convert to milliseconds
-        const closePrice = parseFloat(candle[4]) * usdToFcfa;
+      // Process the data
+      const processedData = data.map((item) => {
+        const timestamp = item.time * 1000; // Convert to milliseconds
+        const closePrice = item.close * usdToFcfa;
         
         return {
           timestamp,
@@ -381,15 +379,19 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       });
 
       // Calculate percentage changes
-      const startPrice = processedData[0].price;
-      const endPrice = processedData[processedData.length - 1].price;
-      const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
+      if (processedData.length > 0) {
+        const startPrice = processedData[0].price;
+        const endPrice = processedData[processedData.length - 1].price;
+        const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
 
-      // Apply the total percent change to all points for consistent coloring
-      return processedData.map(point => ({
-        ...point,
-        percentChange: totalPercentChange
-      }));
+        // Apply the total percent change to all points for consistent coloring
+        return processedData.map(point => ({
+          ...point,
+          percentChange: totalPercentChange
+        }));
+      }
+
+      return processedData;
 
     } catch (error) {
       console.error('Error fetching price data:', error);

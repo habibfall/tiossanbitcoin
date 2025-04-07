@@ -107,6 +107,26 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
     </>
   );
 
+  // Function to render language options (can be used in dropdown or mobile menu)
+  const renderLanguageOptions = (isMobile = false) => (
+    <>
+      {Object.entries(languageNames).map(([key, value]) => (
+        <button
+          key={key}
+          role={isMobile ? "menuitem" : undefined}
+          className={`language-option ${language === key ? 'active' : ''} ${isMobile ? 'language-option-mobile' : ''}`}
+          onClick={() => {
+            onLanguageChange(key);
+            setIsLanguageMenuOpen(false); // Close desktop dropdown
+            if (isMobile) setIsMobileMenuOpen(false); // Close mobile menu too
+          }}
+        >
+          {value}
+        </button>
+      ))}
+    </>
+  );
+
   // Determine if we are in mobile view based on window width (check if width is > 0)
   const isMobileView = windowWidth > 0 && windowWidth <= MOBILE_BREAKPOINT;
   // Avoid rendering anything until windowWidth is properly set
@@ -150,57 +170,47 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
         )}
 
         <div className="header-controls">
-          {/* Language Dropdown - Ensure it's always rendered (conditionally show menu) */}
-          <div className="language-dropdown" ref={languageMenuRef}>
-             <button
-               className="language-toggle"
-               onClick={() => setIsLanguageMenuOpen(prev => !prev)}
-               aria-haspopup="true"
-               aria-expanded={isLanguageMenuOpen}
-             >
-               {languageNames[language] ?? 'Language'}
-               {/* Restored SVG */}
-               <svg 
-                 width="12"
-                 height="12"
-                 viewBox="0 0 12 12"
-                 fill="none"
-                 xmlns="http://www.w3.org/2000/svg"
-                 style={{
-                   marginLeft: '8px', // Add some space
-                   transform: isLanguageMenuOpen ? 'rotate(180deg)' : 'rotate(0)',
-                   transition: 'transform 0.2s ease'
-                 }}
+          {/* Language Dropdown - RENDER ONLY ON DESKTOP */}
+          {!isMobileView && (
+            <div className="language-dropdown" ref={languageMenuRef}>
+               <button
+                 className="language-toggle"
+                 onClick={() => setIsLanguageMenuOpen(prev => !prev)}
+                 aria-haspopup="true"
+                 aria-expanded={isLanguageMenuOpen}
                >
-                 <path
-                   d="M2.5 4.5L6 8L9.5 4.5"
-                   stroke="currentColor"
-                   strokeWidth="1.5"
-                   strokeLinecap="round"
-                   strokeLinejoin="round"
-                 />
-               </svg>
-             </button>
-             {isLanguageMenuOpen && (
-               <div className="language-menu" role="menu">
-                 {Object.entries(languageNames).map(([key, value]) => (
-                   <button
-                     key={key}
-                     role="menuitem"
-                     className={`language-option ${language === key ? 'active' : ''}`}
-                     onClick={() => {
-                       onLanguageChange(key);
-                       setIsLanguageMenuOpen(false);
-                     }}
-                   >
-                     {value}
-                   </button>
-                 ))}
-               </div>
-             )}
-           </div>
+                 {languageNames[language] ?? 'Language'}
+                 {/* Restored SVG */}
+                 <svg 
+                   width="12"
+                   height="12"
+                   viewBox="0 0 12 12"
+                   fill="none"
+                   xmlns="http://www.w3.org/2000/svg"
+                   style={{
+                     marginLeft: '8px', // Add some space
+                     transform: isLanguageMenuOpen ? 'rotate(180deg)' : 'rotate(0)',
+                     transition: 'transform 0.2s ease'
+                   }}
+                 >
+                   <path
+                     d="M2.5 4.5L6 8L9.5 4.5"
+                     stroke="currentColor"
+                     strokeWidth="1.5"
+                     strokeLinecap="round"
+                     strokeLinejoin="round"
+                   />
+                 </svg>
+               </button>
+               {isLanguageMenuOpen && (
+                 <div className="language-menu" role="menu">
+                   {renderLanguageOptions(false)} {/* Render desktop options */}
+                 </div>
+               )}
+             </div>
+          )}
            
-           {/* Theme Toggle - Ensure it's always rendered */}
+           {/* Theme Toggle - Always render */}
            <ThemeToggle />
 
            {/* Burger Menu - Conditionally render based on JS */}
@@ -229,7 +239,18 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
         aria-hidden={!isMobileMenuOpen}
       >
         {/* Render tabs inside mobile menu only when it's open AND mobile view */}
-        {isMobileView && isMobileMenuOpen && renderTabs()}
+        {isMobileView && isMobileMenuOpen && (
+          <>
+            <nav className="mobile-nav-tabs">
+              {renderTabs()}
+            </nav>
+            <hr className="mobile-menu-divider" /> { /* Add a visual separator */}
+            <div className="mobile-language-options" role="menu">
+              <span className="mobile-menu-label">{text?.[language]?.languageLabel ?? 'Language'}</span>
+              {renderLanguageOptions(true)} {/* Render mobile options */}
+            </div>
+          </>
+        )}
       </div>
     </header>
   );

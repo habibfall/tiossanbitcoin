@@ -219,38 +219,38 @@ function AppContent() {
                 )}
               </p>
               <p className="update-time">
-                {text[language].lastUpdated} {lastUpdated ? lastUpdated.toLocaleTimeString([], { 
+                {text?.[language]?.lastUpdated ?? 'Last updated:'} {lastUpdated ? lastUpdated.toLocaleTimeString([], { 
                   hour: '2-digit', 
                   minute: '2-digit',
                   hour12: false 
                 }).replace(':', 'h') : '--h--'}
               </p>
             </div>
-            <BitcoinChart language={language} onTimeframeChange={handleTimeframeChange} />
+            <BitcoinChart language={language} text={text[language]} onTimeframeChange={handleTimeframeChange} />
           </>
         )}
 
         {activeTab === 'converter' && (
           <div className="converter-container">
-            <BitcoinConverter language={language} bitcoinPrice={bitcoinPrice} />
+            <BitcoinConverter language={language} text={text[language]} bitcoinPrice={bitcoinPrice} />
           </div>
         )}
 
         {activeTab === 'faq' && (
           <div className="faq-container">
-            <FAQ language={language} />
+            <FAQ language={language} text={text[language]} />
           </div>
         )}
 
         {activeTab === 'news' && (
           <div className="news-container">
-            <BitcoinNews language={language} />
+            <BitcoinNews language={language} text={text[language]} />
           </div>
         )}
 
         {activeTab === 'quiz' && (
           <div className="quiz-container">
-            <BitcoinQuiz language={language} />
+            <BitcoinQuiz language={language} text={text[language]} />
           </div>
         )}
       </main>

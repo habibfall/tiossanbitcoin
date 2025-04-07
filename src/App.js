@@ -9,6 +9,7 @@ import Header from './components/Header';
 import BitcoinNews from './components/BitcoinNews';
 import BitcoinQuiz from './components/BitcoinQuiz';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { text } from '../data/translations';
 
 function AppContent() {
   const { isDarkMode } = useTheme();
@@ -34,51 +35,6 @@ function AppContent() {
     french: 'Français',
     wolof: 'Wolof',
     english: 'English'
-  };
-
-  const text = {
-    french: {
-      appTitle: "Suivi du Prix Bitcoin",
-      currentPrice: "Prix actuel du Bitcoin",
-      lastUpdated: "Dernière mise à jour :",
-      selectLanguage: "Choisir la langue",
-      converter: "Convertisseur Bitcoin",
-      chart: "Graphique du prix",
-      footerRights: "© {year} Tiossan Academy par Magatte Wade. Tous droits réservés.",
-      priceTab: "Prix & Graphique",
-      converterTab: "Convertisseur",
-      faqTab: "FAQ",
-      newsTab: "Actualités",
-      quizTab: "Quiz Bitcoin"
-    },
-    wolof: {
-      appTitle: "Suivi Prix Bitcoin",
-      currentPrice: "Prix bi léegi",
-      lastUpdated: "Yeesal bi mujj:",
-      selectLanguage: "Tann làkk",
-      converter: "Shoppe Bitcoin",
-      chart: "Nataal prix bi",
-      footerRights: "© {year} Tiossan Academy ci Magatte Wade. Ay droit you kenn menul jël.",
-      priceTab: "Prix ak Nataal",
-      converterTab: "Shoppe",
-      faqTab: "FAQ",
-      newsTab: "Xibaar yi",
-      quizTab: "Jàng Bitcoin"
-    },
-    english: {
-      appTitle: "Bitcoin Price Tracker",
-      currentPrice: "Current Bitcoin Price",
-      lastUpdated: "Last updated:",
-      selectLanguage: "Select language",
-      converter: "Bitcoin Converter",
-      chart: "Price Chart",
-      footerRights: "© {year} Tiossan Academy by Magatte Wade. All rights reserved.",
-      priceTab: "Price & Chart",
-      converterTab: "Converter",
-      faqTab: "FAQ",
-      newsTab: "News",
-      quizTab: "Bitcoin Quiz"
-    }
   };
 
   // Memoize the fetchBitcoinPrice function

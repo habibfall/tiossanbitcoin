@@ -9,7 +9,7 @@ import Header from './components/Header';
 import BitcoinNews from './components/BitcoinNews';
 import BitcoinQuiz from './components/BitcoinQuiz';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
-import { text } from '../data/translations';
+import { text } from './data/translations';
 
 function AppContent() {
   const { isDarkMode } = useTheme();

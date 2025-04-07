@@ -720,101 +720,99 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
         ))}
       </div>
       
-      <div style={{ width: '100%', height: 400 }}>
-        {isLoading ? (
-          <div className="loading-container">
-            <div className="loading-spinner"></div>
-            <div className="loading-text">Loading chart data...</div>
-          </div>
-        ) : error ? (
-          <div className="error-container">
-            <div className="error-message">{error}</div>
-          </div>
-        ) : (
-          <ResponsiveContainer>
-            <LineChart 
-              data={chartData} 
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            >
-              <defs>
-                <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#22c55e" stopOpacity={0.8}/>
-                  <stop offset="100%" stopColor="#22c55e" stopOpacity={0.2}/>
-                </linearGradient>
-                <linearGradient id="redGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ef4444" stopOpacity={0.8}/>
-                  <stop offset="100%" stopColor="#ef4444" stopOpacity={0.2}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid 
-                strokeDasharray="3 3" 
-                vertical={false}
-                stroke={isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)"}
-                strokeWidth={0.5}
-              />
-              <XAxis 
-                dataKey="timestamp"
-                tickFormatter={formatXAxis}
-                ticks={getTickValues(chartData)}
-                stroke="#666"
-                tick={false}
-                axisLine={{ stroke: isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)" }}
-              />
-              <YAxis 
-                domain={yAxisDomain}
-                tickFormatter={(value) => {
-                  // Format to millions with 1 decimal place
-                  const millions = (value / 1000000).toFixed(1);
-                  // Ensure consistent width by padding with spaces
-                  return `${millions.padStart(5, ' ')}M `;
-                }}
-                tick={{ 
-                  fontSize: 12, 
-                  fill: isDarkMode ? '#b3b3b3' : '#666',
-                  fontFamily: 'JetBrains Mono',
-                  dx: -5
-                }}
-                axisLine={false}
-                tickLine={false}
-                width={75}
-                // Add interval to ensure equal spacing
-                interval={0} // Show all ticks
-                ticks={(() => {
-                  if (!chartData || chartData.length === 0) return [];
-                  const [min, max] = yAxisDomain;
-                  const interval = (max - min) / 5;
-                  return Array.from({ length: 6 }, (_, i) => min + interval * i);
-                })()}
-              />
-              <Tooltip 
-                content={<CustomTooltip />}
-                cursor={{
-                  stroke: isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)",
-                  strokeWidth: 1,
-                  strokeDasharray: "3 3"
-                }}
-              />
-              <Area
-                type="monotone"
-                dataKey="price"
-                stroke="none"
-                fill={`url(#${(timeframe === '1y' ? chartData[0]?.percentChange : chartData[chartData.length - 1]?.percentChange) >= 0 ? 'greenGradient' : 'redGradient'})`}
-                fillOpacity={1}
-              />
-              <Line
-                type="monotone"
-                dataKey="price"
-                stroke={(timeframe === '1y' ? chartData[0]?.percentChange : chartData[chartData.length - 1]?.percentChange) >= 0 ? '#22c55e' : '#ef4444'}
-                strokeWidth={2.5}
-                dot={false}
-                activeDot={false}
-                animationDuration={750}
-                animationEasing="cubic-bezier(0.4, 0, 0.2, 1)"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        )}
-      </div>
+      {isLoading ? (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <div className="loading-text">Loading chart data...</div>
+        </div>
+      ) : error ? (
+        <div className="error-container">
+          <div className="error-message">{error}</div>
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height={400}>
+          <LineChart 
+            data={chartData} 
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <defs>
+              <linearGradient id="greenGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#22c55e" stopOpacity={0.8}/>
+                <stop offset="100%" stopColor="#22c55e" stopOpacity={0.2}/>
+              </linearGradient>
+              <linearGradient id="redGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#ef4444" stopOpacity={0.8}/>
+                <stop offset="100%" stopColor="#ef4444" stopOpacity={0.2}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid 
+              strokeDasharray="3 3" 
+              vertical={false}
+              stroke={isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)"}
+              strokeWidth={0.5}
+            />
+            <XAxis 
+              dataKey="timestamp"
+              tickFormatter={formatXAxis}
+              ticks={getTickValues(chartData)}
+              stroke="#666"
+              tick={false}
+              axisLine={{ stroke: isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)" }}
+            />
+            <YAxis 
+              domain={yAxisDomain}
+              tickFormatter={(value) => {
+                // Format to millions with 1 decimal place
+                const millions = (value / 1000000).toFixed(1);
+                // Ensure consistent width by padding with spaces
+                return `${millions.padStart(5, ' ')}M `;
+              }}
+              tick={{ 
+                fontSize: 12, 
+                fill: isDarkMode ? '#b3b3b3' : '#666',
+                fontFamily: 'JetBrains Mono',
+                dx: -5
+              }}
+              axisLine={false}
+              tickLine={false}
+              width={75}
+              // Add interval to ensure equal spacing
+              interval={0} // Show all ticks
+              ticks={(() => {
+                if (!chartData || chartData.length === 0) return [];
+                const [min, max] = yAxisDomain;
+                const interval = (max - min) / 5;
+                return Array.from({ length: 6 }, (_, i) => min + interval * i);
+              })()}
+            />
+            <Tooltip 
+              content={<CustomTooltip />}
+              cursor={{
+                stroke: isDarkMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 0, 0, 0.15)",
+                strokeWidth: 1,
+                strokeDasharray: "3 3"
+              }}
+            />
+            <Area
+              type="monotone"
+              dataKey="price"
+              stroke="none"
+              fill={`url(#${(timeframe === '1y' ? chartData[0]?.percentChange : chartData[chartData.length - 1]?.percentChange) >= 0 ? 'greenGradient' : 'redGradient'})`}
+              fillOpacity={1}
+            />
+            <Line
+              type="monotone"
+              dataKey="price"
+              stroke={(timeframe === '1y' ? chartData[0]?.percentChange : chartData[chartData.length - 1]?.percentChange) >= 0 ? '#22c55e' : '#ef4444'}
+              strokeWidth={2.5}
+              dot={false}
+              activeDot={false}
+              animationDuration={750}
+              animationEasing="cubic-bezier(0.4, 0, 0.2, 1)"
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      )}
     </ChartContainer>
   );
 };

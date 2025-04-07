@@ -69,27 +69,24 @@ const ChartContainer = styled.div`
   }
 
   .loading-container {
-    height: 100%;
+    height: 400px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: ${props => props.isDarkMode ? '#b3b3b3' : '#666'};
+    background: ${props => props.isDarkMode ? 
+      'linear-gradient(to bottom, #1A1A1A, #121212)' : 
+      'linear-gradient(to bottom, #ffffff, #f8f9fa)'};
+    border-radius: 12px;
   }
 
   .loading-spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid rgba(0, 0, 0, 0.1);
+    border: 3px solid ${props => props.isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
     border-radius: 50%;
     border-top-color: #f7931a;
-    animation: spin 1s ease-in-out infinite;
-    margin-bottom: 1rem;
-  }
-
-  .loading-text {
-    font-size: 14px;
-    font-weight: 500;
+    animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    filter: drop-shadow(0 0 2px rgba(247, 147, 26, 0.2));
   }
 
   .error-container {
@@ -695,8 +692,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       
       {isLoading ? (
         <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <div className="loading-text">Loading chart data...</div>
+          <div className="loading-spinner" />
         </div>
       ) : error ? (
         <div className="error-container">

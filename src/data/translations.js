@@ -8,7 +8,8 @@ export const text = {
     readMore: "Lire plus",
     resourcesTitle: "Ressources Bitcoin",
     videosTitle: "Vidéos Éducatives",
-    booksTitle: "Livres Recommandés"
+    booksTitle: "Livres Recommandés",
+    languageLabel: "Langue"
   },
   wolof: {
     sectionTitle: "Xibaar yi ci Bitcoin",
@@ -19,7 +20,8 @@ export const text = {
     readMore: "Gënal jàng",
     resourcesTitle: "Njàngat yi ci Bitcoin",
     videosTitle: "Vidéo yi ngir Jàng",
-    booksTitle: "Téere yi ñu Tektal"
+    booksTitle: "Téere yi ñu Tektal",
+    languageLabel: "Làkk"
   },
   english: {
     sectionTitle: "Bitcoin News",
@@ -30,6 +32,7 @@ export const text = {
     readMore: "Read more",
     resourcesTitle: "Bitcoin Resources",
     videosTitle: "Educational Videos",
-    booksTitle: "Recommended Books"
+    booksTitle: "Recommended Books",
+    languageLabel: "Language"
   }
 }; 

@@ -346,7 +346,12 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       const endTime = new Date().toISOString();
       
       const response = await fetch(
-        `https://api.pro.coinbase.com/products/BTC-USD/candles?granularity=${config.granularity}&start=${config.startTime}&end=${endTime}`
+        `https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=${config.granularity}&start=${config.startTime}&end=${endTime}`,
+        {
+          headers: {
+            'Accept': 'application/json'
+          }
+        }
       );
 
       if (!response.ok) {

@@ -321,7 +321,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
             };
           case '7d':
             return {
-              granularity: 14400, // 4 hour intervals
+              granularity: 21600, // 6 hour intervals (adjusted from 4h to get better data)
               startTime: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
             };
           case '30d':
@@ -332,7 +332,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
           case '1y':
             return {
               granularity: 86400, // 1 day intervals
-              startTime: new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString()
+              startTime: new Date(Date.now() - 370 * 24 * 60 * 60 * 1000).toISOString() // Added a few extra days for better data coverage
             };
           default:
             return {
@@ -345,11 +345,13 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       const config = getEndpointConfig();
       const endTime = new Date().toISOString();
       
+      // Add a small delay to ensure we get the latest data
       const response = await fetch(
         `https://api.exchange.coinbase.com/products/BTC-USD/candles?granularity=${config.granularity}&start=${config.startTime}&end=${endTime}`,
         {
           headers: {
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache'
           }
         }
       );

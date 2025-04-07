@@ -9,7 +9,12 @@ export const text = {
     resourcesTitle: "Ressources Bitcoin",
     videosTitle: "Vidéos Éducatives",
     booksTitle: "Livres Recommandés",
-    languageLabel: "Langue"
+    languageLabel: "Langue",
+    priceTab: "Prix & Graphique",
+    converterTab: "Convertisseur",
+    faqTab: "FAQ",
+    newsTab: "Actualités",
+    quizTab: "Quiz Bitcoin"
   },
   wolof: {
     sectionTitle: "Xibaar yi ci Bitcoin",
@@ -21,7 +26,12 @@ export const text = {
     resourcesTitle: "Njàngat yi ci Bitcoin",
     videosTitle: "Vidéo yi ngir Jàng",
     booksTitle: "Téere yi ñu Tektal",
-    languageLabel: "Làkk"
+    languageLabel: "Làkk",
+    priceTab: "Prix ak Nataal",
+    converterTab: "Shoppe",
+    faqTab: "FAQ",
+    newsTab: "Xibaar yi",
+    quizTab: "Jàng Bitcoin"
   },
   english: {
     sectionTitle: "Bitcoin News",
@@ -33,6 +43,11 @@ export const text = {
     resourcesTitle: "Bitcoin Resources",
     videosTitle: "Educational Videos",
     booksTitle: "Recommended Books",
-    languageLabel: "Language"
+    languageLabel: "Language",
+    priceTab: "Price & Chart",
+    converterTab: "Converter",
+    faqTab: "FAQ",
+    newsTab: "News",
+    quizTab: "Bitcoin Quiz"
   }
 }; 

@@ -204,7 +204,7 @@ function AppContent() {
         {activeTab === 'price' && (
           <>
             <div className="price-box">
-              <h2>{text[language].currentPrice}</h2>
+              <h2>{text?.[language]?.currentPrice ?? 'Loading...'}</h2>
               <p className={`price ${isPriceUpdating ? 'price-update' : ''}`}>
                 {bitcoinPrice ? (
                   <>
@@ -255,7 +255,7 @@ function AppContent() {
         )}
       </main>
       <footer className="footer">
-        <p>{text[language].footerRights.replace('{year}', new Date().getFullYear())}</p>
+        <p>{text?.[language]?.footerRights?.replace('{year}', new Date().getFullYear()) ?? ''}</p>
       </footer>
     </div>
   );

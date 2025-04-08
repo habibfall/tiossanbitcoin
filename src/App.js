@@ -42,27 +42,27 @@ function AppContent() {
     try {
       setFetchError(null);
       
-      const [priceData, dayStats, klinesResponse] = await Promise.all([
-        fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT').then(res => res.json()),
-        fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT').then(res => res.json()),
-        fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&limit=30`).then(res => res.json())
+      const [currentPriceResponse, historyResponse] = await Promise.all([
+        fetch('https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD').then(res => res.json()),
+        fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=30').then(res => res.json())
       ]);
       
-      if (!priceData.price || !dayStats.priceChangePercent || !Array.isArray(klinesResponse)) {
-        throw new Error('Invalid data from Binance API');
+      if (!currentPriceResponse.USD || !historyResponse.Data?.Data) {
+        throw new Error('Invalid data from CryptoCompare API');
       }
       
-      const currentPrice = parseFloat(priceData.price);
+      const currentPrice = currentPriceResponse.USD;
+      const historyData = historyResponse.Data.Data;
       const usdToFcfa = 655.957;
       const priceInFcfa = Math.round(currentPrice * usdToFcfa);
       
-      const change24h = parseFloat(dayStats.priceChangePercent);
+      // Calculate percentage changes
+      const oneDayAgo = historyData[historyData.length - 2].close;
+      const sevenDaysAgo = historyData[historyData.length - 8].close;
+      const thirtyDaysAgo = historyData[0].close;
       
-      const sevenDayIndex = klinesResponse.length >= 7 ? klinesResponse.length - 7 : 0;
-      const sevenDaysAgo = parseFloat(klinesResponse[sevenDayIndex][1]);
+      const change24h = ((currentPrice - oneDayAgo) / oneDayAgo) * 100;
       const change7d = ((currentPrice - sevenDaysAgo) / sevenDaysAgo) * 100;
-      
-      const thirtyDaysAgo = parseFloat(klinesResponse[0][1]);
       const change30d = ((currentPrice - thirtyDaysAgo) / thirtyDaysAgo) * 100;
       
       const newPriceChanges = {
@@ -107,7 +107,7 @@ function AppContent() {
       }
       throw error;
     }
-  }, [timeframe, isInitialLoad, priceChanges, bitcoinPrice]);
+  }, [timeframe, isInitialLoad, priceChanges]);
 
   // Memoize the validatePriceChange function
   const validatePriceChange = useCallback((value) => {

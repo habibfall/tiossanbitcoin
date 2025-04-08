@@ -5,9 +5,6 @@ import Stars from './Stars';
 const ThemeToggle = () => {
   const { isDarkMode, toggleTheme } = useTheme();
 
-  // DEBUG: Log the theme state on render
-  console.log('[ThemeToggle Render] isDarkMode:', isDarkMode);
-
   return (
     <>
       {isDarkMode && <Stars />}

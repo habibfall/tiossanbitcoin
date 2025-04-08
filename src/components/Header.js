@@ -17,7 +17,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
   const mobileMenuRef = useRef(null);
 
   // DEBUG: Log on render
-  console.log('[Header Render] isLanguageMenuOpen:', isLanguageMenuOpen, 'isMobileView:', windowWidth <= MOBILE_BREAKPOINT);
+  // console.log('[Header Render] isLanguageMenuOpen:', isLanguageMenuOpen, 'isMobileView:', windowWidth <= MOBILE_BREAKPOINT);
 
   const languageNames = {
     french: 'Français',
@@ -119,7 +119,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
           role={isMobile ? "menuitem" : undefined}
           className={`language-option ${language === key ? 'active' : ''} ${isMobile ? 'language-option-mobile' : ''}`}
           onClick={() => {
-            console.log('[Language Select] Changing language to:', key); // DEBUG
+            // console.log('[Language Select] Changing language to:', key); // DEBUG
             onLanguageChange(key);
             setIsLanguageMenuOpen(false); // Close desktop dropdown
             if (isMobile) setIsMobileMenuOpen(false); // Close mobile menu too
@@ -135,10 +135,10 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
   const isMobileView = windowWidth > 0 && windowWidth <= MOBILE_BREAKPOINT;
 
   // --- DEBUGGING LOGS --- 
-  console.log('[Header] Received language prop:', language);
+  // console.log('[Header] Received language prop:', language);
   // console.log('[Header] Received text prop:', text); // Log full object if needed, might be large
-  console.log('[Header] text object for current language:', text?.[language]);
-  console.log('[Header] Price tab translation:', text?.[language]?.priceTab);
+  // console.log('[Header] text object for current language:', text?.[language]);
+  // console.log('[Header] Price tab translation:', text?.[language]?.priceTab);
   // --- END DEBUGGING LOGS ---
 
   // Avoid rendering anything until windowWidth is properly set
@@ -188,7 +188,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
               className="language-toggle"
               onClick={() => {
                 // DEBUG: Log button click
-                console.log('[Language Toggle Click] Current state:', isLanguageMenuOpen);
+                // console.log('[Language Toggle Click] Current state:', isLanguageMenuOpen);
                 setIsLanguageMenuOpen(prev => !prev)}
               }
               aria-haspopup="true"
@@ -213,7 +213,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
               </svg>
             </button>
             {/* DEBUG: Conditionally log menu rendering */}
-            {isLanguageMenuOpen && console.log('[Header Render] Rendering language menu')}
+            {/* {isLanguageMenuOpen && console.log('[Header Render] Rendering language menu')} */}
             {isLanguageMenuOpen && (
               <div className="language-menu" role="menu">
                 {renderLanguageOptions(false)} 

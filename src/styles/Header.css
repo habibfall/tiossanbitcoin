@@ -235,7 +235,7 @@
 }
 
 /* Individual Theme Toggle Styles */
-.theme-toggle {
+.app .theme-toggle {
   padding: 8px;
   background-color: transparent;
   border: none;
@@ -250,7 +250,7 @@
   height: 36px;
 }
 
-.theme-toggle:hover {
+.app .theme-toggle:hover {
   background-color: rgba(0, 0, 0, 0.05);
   color: var(--accent-color-light);
   transform: translateY(-1px);
@@ -263,11 +263,11 @@
 }
 */
 
-.dark .theme-toggle {
+.app.dark .theme-toggle {
   color: var(--accent-color-dark);
 }
 
-.dark .theme-toggle:hover {
+.app.dark .theme-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--accent-color-dark);
 }
@@ -344,13 +344,13 @@
   }
 
   /* Individual Mobile Theme Toggle */
-  .theme-toggle {
+  .app .theme-toggle {
     width: 32px;
     height: 32px;
     padding: 6px;
-    border: none; /* Reiterate */
+    border: none;
     border-radius: 50%;
-    font-size: inherit; /* Use inherit or 0 if needed */
+    font-size: inherit;
   }
 
   .language-menu {
@@ -451,18 +451,9 @@
     padding-left: 0;
   }
 
-  .theme-toggle {
-    padding: 5px; /* Further reduced padding */
-    /* width/height already 32px from 768px breakpoint */
-    /* Remove font-size/min-width overrides from previous attempt */
-    font-size: inherit;
-    min-width: auto;
-  }
-
-  .language-toggle {
-    padding: 5px; /* Further reduced padding */
-    /* width/height already 32px from 768px breakpoint */
-    /* Remove font-size/min-width overrides from previous attempt */
+  .app .theme-toggle,
+  .app .language-toggle {
+    padding: 5px;
     font-size: inherit;
     min-width: auto;
   }

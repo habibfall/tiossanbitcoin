@@ -199,12 +199,11 @@
   margin-right: 0.5rem;
 }
 
-/* Shared styles for header icon buttons */
-.language-toggle,
-.theme-toggle {
-  padding: 8px; /* Standardized padding */
+/* Individual Language Toggle Styles */
+.language-toggle {
+  padding: 8px;
   background-color: transparent;
-  border: none; 
+  border: none;
   color: var(--text-secondary-light);
   border-radius: 50%;
   cursor: pointer;
@@ -212,29 +211,62 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px; /* Standardized size */
+  width: 36px;
   height: 36px;
 }
 
-.language-toggle:hover,
-.theme-toggle:hover {
+.language-toggle:hover {
   background-color: rgba(0, 0, 0, 0.05);
   color: var(--text-primary-light);
   transform: translateY(-1px);
 }
 
-/* Keep globe-specific hover effect */
 .language-toggle:hover .globe-icon {
   transform: rotate(15deg);
 }
 
-/* Dark mode shared styles */
-.dark .language-toggle,
+.dark .language-toggle {
+  color: var(--text-secondary-dark);
+}
+
+.dark .language-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary-dark);
+}
+
+/* Individual Theme Toggle Styles */
+.theme-toggle {
+  padding: 8px;
+  background-color: transparent;
+  border: none;
+  color: var(--text-secondary-light);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary-light);
+  transform: translateY(-1px); /* Keep consistent hover lift */
+}
+
+/* Apply specific theme icon rotation on hover if desired - adding example */
+/* 
+.theme-toggle:hover svg {
+  transform: rotate(15deg);
+}
+*/
+
 .dark .theme-toggle {
   color: var(--text-secondary-dark);
 }
 
-.dark .language-toggle:hover,
 .dark .theme-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
   color: var(--text-primary-dark);
@@ -244,20 +276,27 @@
   transition: transform 0.3s ease;
 }
 
+/* Re-verify language menu styles */
 .language-menu {
   position: absolute;
   top: calc(100% + 0.5rem);
-  right: 0;
+  right: 0; /* Position relative to parent */
   background-color: var(--bg-secondary-light);
   border: 1px solid var(--border-color-light);
   border-radius: 8px;
   box-shadow: var(--shadow-light);
-  overflow: hidden;
-  z-index: 1100;
+  overflow: hidden; /* Keep overflow hidden on the menu itself */
+  z-index: 1100; /* Ensure high z-index */
   min-width: 140px;
   opacity: 1;
   visibility: visible;
   transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.dark .language-menu {
+  background-color: var(--bg-secondary-dark);
+  border-color: var(--border-color-dark);
+  box-shadow: var(--shadow-dark);
 }
 
 .language-option {
@@ -288,16 +327,38 @@
 
 /* Mobile styles */
 @media (max-width: 768px) {
-  /* Shared mobile styles for header icon buttons */
+  /* Remove shared mobile styles */
+  /*
   .language-toggle,
-  .theme-toggle {
-    width: 32px; /* Standardized mobile size */
+  .theme-toggle { ... }
+  */
+
+  /* Individual Mobile Language Toggle */
+  .language-toggle {
+    width: 32px;
     height: 32px;
-    padding: 6px; /* Standardized mobile padding */
-    /* Ensure other properties remain consistent */
-    border: none;
+    padding: 6px;
+    border: none; /* Reiterate */
     border-radius: 50%;
-    font-size: inherit; /* Reset font size if overriding */
+    font-size: inherit;
+  }
+
+  /* Individual Mobile Theme Toggle */
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    padding: 6px;
+    border: none; /* Reiterate */
+    border-radius: 50%;
+    font-size: inherit; /* Use inherit or 0 if needed */
+  }
+
+  .language-menu {
+    /* Inherit desktop positioning (top, right) */
+    /* Only apply mobile-specific size/scroll constraints */
+    min-width: 120px; /* Can be smaller on mobile */
+    max-height: 200px;
+    overflow-y: auto;
   }
 
   .header-controls {
@@ -365,6 +426,18 @@
 }
 
 @media (max-width: 480px) {
+  /* Remove previous separate overrides here */
+  /*
+  .theme-toggle { ... }
+  .language-toggle { ... }
+  */
+
+  .language-menu {
+    max-height: 180px;
+    overflow-y: auto;
+    /* Ensure width/left/right are NOT set here */
+  }
+
   .header-content {
     padding: 0 0.75rem;
   }
@@ -380,13 +453,18 @@
   }
 
   .theme-toggle {
-    padding: 5px 8px;
-    font-size: 12px;
+    padding: 5px; /* Further reduced padding */
+    /* width/height already 32px from 768px breakpoint */
+    /* Remove font-size/min-width overrides from previous attempt */
+    font-size: inherit;
+    min-width: auto;
   }
 
   .language-toggle {
-    padding: 5px 8px;
-    font-size: 12px;
+    padding: 5px; /* Further reduced padding */
+    /* width/height already 32px from 768px breakpoint */
+    /* Remove font-size/min-width overrides from previous attempt */
+    font-size: inherit;
     min-width: auto;
   }
 
@@ -416,11 +494,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .language-menu {
-    max-height: 180px;
-    overflow-y: auto;
   }
 
   .header-logo-img {

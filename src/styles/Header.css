@@ -239,7 +239,7 @@
   padding: 8px;
   background-color: transparent;
   border: none;
-  color: var(--text-secondary-light);
+  color: var(--accent-color-light);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -252,8 +252,8 @@
 
 .theme-toggle:hover {
   background-color: rgba(0, 0, 0, 0.05);
-  color: var(--text-primary-light);
-  transform: translateY(-1px); /* Keep consistent hover lift */
+  color: var(--accent-color-light);
+  transform: translateY(-1px);
 }
 
 /* Apply specific theme icon rotation on hover if desired - adding example */
@@ -264,12 +264,12 @@
 */
 
 .dark .theme-toggle {
-  color: var(--text-secondary-dark);
+  color: var(--accent-color-dark);
 }
 
 .dark .theme-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary-dark);
+  color: var(--accent-color-dark);
 }
 
 .globe-icon {
@@ -380,7 +380,6 @@
     padding: 0 1rem;
     justify-content: space-between;
     max-width: 100%;
-    overflow: hidden;
   }
 
   .header-logo {

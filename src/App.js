@@ -30,6 +30,7 @@ function AppContent() {
   const [fetchError, setFetchError] = useState(null);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [priceHistory, setPriceHistory] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
   const languageNames = {
     french: 'Français',
@@ -40,7 +41,11 @@ function AppContent() {
   // Memoize the fetchBitcoinPrice function
   const fetchBitcoinPrice = useCallback(async (retryCount = 0) => {
     try {
-      setFetchError(null);
+      // Only show loading state on initial load
+      if (isInitialLoad) {
+        setFetchError(null);
+      }
+      setIsFetching(true);
       
       const [currentPriceResponse, marketChartResponse] = await Promise.all([
         fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true').then(res => res.json()),
@@ -94,6 +99,7 @@ function AppContent() {
       setTimeout(() => setIsPriceUpdating(false), 800);
       
       setIsInitialLoad(false);
+      setIsFetching(false);
       
       return {
         price: priceInFcfa,
@@ -101,7 +107,9 @@ function AppContent() {
       };
     } catch (error) {
       console.error('Error fetching Bitcoin price:', error);
-      setFetchError(error.message);
+      if (isInitialLoad) {
+        setFetchError(error.message);
+      }
       
       if (retryCount < 3) {
         const retryDelay = Math.pow(2, retryCount) * 1000;
@@ -114,6 +122,7 @@ function AppContent() {
         setBitcoinPrice(null);
         setPriceChange(null);
       }
+      setIsFetching(false);
       throw error;
     }
   }, [timeframe, isInitialLoad, priceChanges]);
@@ -211,9 +220,11 @@ function AppContent() {
         {activeTab === 'price' && (
           <>
             <div className="price-box">
-              <h2>{text?.[language]?.currentPrice ?? <div className="loading-spinner" />}</h2>
+              <h2>{text?.[language]?.currentPrice ?? ''}</h2>
               <p className={`price ${isPriceUpdating ? 'price-update' : ''}`}>
-                {bitcoinPrice ? (
+                {isInitialLoad ? (
+                  <div className="loading-spinner" />
+                ) : (
                   <>
                     <span>{new Intl.NumberFormat('fr-FR').format(bitcoinPrice)}</span>
                     <span className="currency">FCFA</span>
@@ -221,8 +232,6 @@ function AppContent() {
                       {priceChange >= 0 ? '+' : ''}{priceChange ? priceChange.toFixed(2) : '0.00'}%
                     </div>
                   </>
-                ) : (
-                  <div className="loading-spinner" />
                 )}
               </p>
               <p className="update-time">

@@ -3,13 +3,15 @@ import styled from 'styled-components';
 
 const ConverterContainer = styled.div`
   width: 100%;
-  padding: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
   background: var(--bg-secondary-light);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 1.5rem;
 
   .dark & {
     background: var(--bg-secondary-dark);
@@ -19,9 +21,29 @@ const ConverterContainer = styled.div`
   h2 {
     margin: 0;
     text-align: center;
+    font-size: 1.75rem;
     background: linear-gradient(135deg, #f59e0b, #f97316);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    padding-bottom: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    gap: 1.25rem;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+    gap: 1rem;
+
+    h2 {
+      font-size: 1.25rem;
+    }
   }
 `;
 
@@ -35,26 +57,30 @@ const Form = styled.form`
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
 
   input {
     width: 100%;
-    padding: 12px;
+    padding: 16px;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    font-size: 1rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
     transition: all 0.2s;
     cursor: text;
+    font-weight: 500;
 
     &:hover {
-      border-color: rgba(245, 158, 11, 0.5);
+      border-color: #f59e0b;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
     }
 
     &:focus {
       outline: none;
       border-color: #f59e0b;
-      box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+      transform: translateY(-1px);
     }
 
     .dark & {
@@ -62,32 +88,67 @@ const InputGroup = styled.div`
       border-color: rgba(255, 255, 255, 0.1);
       color: var(--text-primary-dark);
     }
+
+    @media (max-width: 768px) {
+      padding: 14px;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      padding: 12px;
+      font-size: 0.95rem;
+    }
   }
 `;
 
 const Select = styled.select`
   width: 100%;
-  padding: 12px;
+  padding: 16px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  border-radius: 12px;
   background: white;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
+  padding-right: 2.5rem;
+  margin: 0.5rem 0;
 
   &:hover {
-    border-color: rgba(245, 158, 11, 0.5);
+    border-color: #f59e0b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
   }
 
   &:focus {
     outline: none;
     border-color: #f59e0b;
-    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    transform: translateY(-1px);
   }
 
   .dark & {
-    background: var(--bg-primary-dark);
+    background-color: var(--bg-primary-dark);
     border-color: rgba(255, 255, 255, 0.1);
     color: var(--text-primary-dark);
+  }
+
+  @media (max-width: 768px) {
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+    font-size: 0.95rem;
   }
 `;
 

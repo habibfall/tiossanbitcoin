@@ -216,7 +216,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
             {isLanguageMenuOpen && console.log('[Header Render] Rendering language menu')}
             {isLanguageMenuOpen && (
               <div className="language-menu" role="menu">
-                {renderLanguageOptions(false)} // Render desktop/mobile options based on need?
+                {renderLanguageOptions(false)} 
                 {/* NOTE: renderLanguageOptions doesn't actually use isMobile param currently */}
                 {/* If needed, can adjust options based on isMobileView state */}
               </div>

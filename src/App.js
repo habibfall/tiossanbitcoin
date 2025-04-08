@@ -233,32 +233,22 @@ function AppContent() {
 
   return (
     <div className={`app ${isDarkMode ? 'dark' : ''}`}>
-      {isDarkMode && (
-        <div className="floating-elements">
-          {[...Array(25)].map((_, i) => (
-            <div key={i} className="floating-element"></div>
-          ))}
-        </div>
-      )}
-      {!isDarkMode && (
-        <div className="bitcoin-circles">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="bitcoin-circle"></div>
-          ))}
-        </div>
-      )}
-      <Header 
+      <Header
         language={language}
-        onLanguageChange={setLanguage}
+        languageNames={languageNames}
+        isLanguageMenuOpen={isLanguageMenuOpen}
+        toggleLanguageMenu={toggleLanguageMenu}
+        selectLanguage={selectLanguage}
+        languageMenuRef={languageMenuRef}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
-        text={text}
+        setActiveTab={setActiveTab}
       />
-      <main className="price-container">
+      
+      <main>
         {activeTab === 'price' && (
-          <>
+          <div className="price-container">
             <div className="price-box">
-              <h2>{text?.[language]?.currentPrice ?? ''}</h2>
+              <h2>{text[language].currentPrice}</h2>
               <p className={`price ${isPriceUpdating ? 'price-update' : ''}`}>
                 {isInitialLoad ? (
                   <div className="loading-spinner" />
@@ -280,37 +270,40 @@ function AppContent() {
                 }).replace(':', 'h') : '--h--'}
               </p>
             </div>
-            <BitcoinChart language={language} text={text[language]} onTimeframeChange={handleTimeframeChange} />
-          </>
+            <BitcoinChart
+              language={language}
+              onTimeframeChange={(timeframe, change) => {
+                setTimeframe(timeframe);
+                setPriceChange(validatePriceChange(change));
+              }}
+            />
+          </div>
         )}
 
         {activeTab === 'converter' && (
           <div className="converter-container">
-            <BitcoinConverter language={language} text={text[language]} bitcoinPrice={bitcoinPrice} />
+            <BitcoinConverter language={language} bitcoinPrice={bitcoinPrice} />
           </div>
         )}
 
         {activeTab === 'faq' && (
           <div className="faq-container">
-            <FAQ language={language} text={text[language]} />
+            <FAQ language={language} />
           </div>
         )}
 
         {activeTab === 'news' && (
           <div className="news-container">
-            <BitcoinNews language={language} text={text[language]} />
+            <BitcoinNews language={language} />
           </div>
         )}
 
         {activeTab === 'quiz' && (
           <div className="quiz-container">
-            <BitcoinQuiz language={language} text={text[language]} />
+            <BitcoinQuiz language={language} />
           </div>
         )}
       </main>
-      <footer className="footer">
-        <p>{text?.[language]?.footerRights?.replace('{year}', new Date().getFullYear()) ?? ''}</p>
-      </footer>
     </div>
   );
 }

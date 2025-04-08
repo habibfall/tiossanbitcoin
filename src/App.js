@@ -42,28 +42,37 @@ function AppContent() {
     try {
       setFetchError(null);
       
-      const [currentPriceResponse, historyResponse] = await Promise.all([
-        fetch('https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD').then(res => res.json()),
-        fetch('https://min-api.cryptocompare.com/data/v2/histoday?fsym=BTC&tsym=USD&limit=30').then(res => res.json())
+      const [currentPriceResponse, marketChartResponse] = await Promise.all([
+        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true').then(res => res.json()),
+        fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30&interval=daily').then(res => res.json())
       ]);
       
-      if (!currentPriceResponse.USD || !historyResponse.Data?.Data) {
-        throw new Error('Invalid data from CryptoCompare API');
+      if (!currentPriceResponse.bitcoin?.usd || !marketChartResponse.prices) {
+        throw new Error('Invalid data from CoinGecko API');
       }
       
-      const currentPrice = currentPriceResponse.USD;
-      const historyData = historyResponse.Data.Data;
+      const currentPrice = currentPriceResponse.bitcoin.usd;
+      const change24h = currentPriceResponse.bitcoin.usd_24h_change;
+      const priceHistory = marketChartResponse.prices;
       const usdToFcfa = 655.957;
       const priceInFcfa = Math.round(currentPrice * usdToFcfa);
       
-      // Calculate percentage changes
-      const oneDayAgo = historyData[historyData.length - 2].close;
-      const sevenDaysAgo = historyData[historyData.length - 8].close;
-      const thirtyDaysAgo = historyData[0].close;
+      // Calculate percentage changes for 7d and 30d
+      const now = Date.now();
+      const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
+      const thirtyDaysAgo = now - (30 * 24 * 60 * 60 * 1000);
       
-      const change24h = ((currentPrice - oneDayAgo) / oneDayAgo) * 100;
-      const change7d = ((currentPrice - sevenDaysAgo) / sevenDaysAgo) * 100;
-      const change30d = ((currentPrice - thirtyDaysAgo) / thirtyDaysAgo) * 100;
+      const findClosestPrice = (timestamp) => {
+        return priceHistory.reduce((closest, [time, price]) => {
+          return Math.abs(time - timestamp) < Math.abs(closest[0] - timestamp) ? [time, price] : closest;
+        })[1];
+      };
+      
+      const sevenDayPrice = findClosestPrice(sevenDaysAgo);
+      const thirtyDayPrice = findClosestPrice(thirtyDaysAgo);
+      
+      const change7d = ((currentPrice - sevenDayPrice) / sevenDayPrice) * 100;
+      const change30d = ((currentPrice - thirtyDayPrice) / thirtyDayPrice) * 100;
       
       const newPriceChanges = {
         '24h': Number(change24h.toFixed(2)),
@@ -138,8 +147,8 @@ function AppContent() {
     };
 
     updatePrice();
-    // Update price every 30 seconds to match Binance API's update frequency
-    const interval = setInterval(updatePrice, 30000);
+    // Update price every 20 minutes
+    const interval = setInterval(updatePrice, 20 * 60 * 1000);
     
     return () => {
       isMounted = false;

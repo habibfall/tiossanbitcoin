@@ -206,22 +206,22 @@
 }
 
 @keyframes priceUpdate {
-  0% {
-    transform: scale(1);
+  0% { 
     opacity: 1;
+    transform: scale(1);
   }
   50% {
-    transform: scale(1.02);
-    opacity: 0.8;
+    opacity: 0.95;
+    transform: scale(1.01);
   }
   100% {
-    transform: scale(1);
     opacity: 1;
+    transform: scale(1);
   }
 }
 
 .price-update {
-  animation: priceUpdate 0.8s ease-in-out;
+  animation: priceUpdate 1.2s ease-in-out;
 }
 
 @media (max-width: 768px) {
@@ -1380,12 +1380,15 @@ input,
   border: 3px solid rgba(247, 147, 26, 0.1);
   border-radius: 50%;
   border-top-color: #f7931a;
-  animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   margin: 0 auto;
   filter: drop-shadow(0 0 2px rgba(247, 147, 26, 0.2));
 }
 
 @keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
   to {
     transform: rotate(360deg);
   }

@@ -226,12 +226,12 @@
 }
 
 .dark .language-toggle {
-  color: var(--text-secondary-dark);
+  color: var(--accent-color-dark);
 }
 
 .dark .language-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary-dark);
+  color: var(--accent-color-dark);
 }
 
 /* Individual Theme Toggle Styles */
@@ -239,7 +239,7 @@
   padding: 8px;
   background-color: transparent;
   border: none;
-  color: var(--accent-color-light);
+  color: var(--text-secondary-light);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -252,7 +252,7 @@
 
 .app .theme-toggle:hover {
   background-color: rgba(0, 0, 0, 0.05);
-  color: var(--accent-color-light);
+  color: var(--text-primary-light);
   transform: translateY(-1px);
 }
 

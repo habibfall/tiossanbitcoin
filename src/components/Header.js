@@ -16,6 +16,9 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
   const burgerMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
 
+  // DEBUG: Log on render
+  console.log('[Header Render] isLanguageMenuOpen:', isLanguageMenuOpen, 'isMobileView:', windowWidth <= MOBILE_BREAKPOINT);
+
   const languageNames = {
     french: 'Français',
     wolof: 'Wolof',
@@ -116,6 +119,7 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
           role={isMobile ? "menuitem" : undefined}
           className={`language-option ${language === key ? 'active' : ''} ${isMobile ? 'language-option-mobile' : ''}`}
           onClick={() => {
+            console.log('[Language Select] Changing language to:', key); // DEBUG
             onLanguageChange(key);
             setIsLanguageMenuOpen(false); // Close desktop dropdown
             if (isMobile) setIsMobileMenuOpen(false); // Close mobile menu too
@@ -182,7 +186,11 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
           <div className="language-dropdown" ref={languageMenuRef}>
             <button
               className="language-toggle"
-              onClick={() => setIsLanguageMenuOpen(prev => !prev)}
+              onClick={() => {
+                // DEBUG: Log button click
+                console.log('[Language Toggle Click] Current state:', isLanguageMenuOpen);
+                setIsLanguageMenuOpen(prev => !prev)}
+              }
               aria-haspopup="true"
               aria-expanded={isLanguageMenuOpen}
               title={languageNames[language]} // Keep the title for accessibility
@@ -204,6 +212,8 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
             </button>
+            {/* DEBUG: Conditionally log menu rendering */}
+            {isLanguageMenuOpen && console.log('[Header Render] Rendering language menu')}
             {isLanguageMenuOpen && (
               <div className="language-menu" role="menu">
                 {renderLanguageOptions(false)} // Render desktop/mobile options based on need?

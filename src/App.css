@@ -1,24 +1,9 @@
 .app {
   min-height: 100vh;
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  padding-top: 90px; /* Increased to account for the taller header */
   background: #fafafa;
-  overflow: hidden;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-/* Main content area */
-main {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 90px; /* Account for header */
-  position: relative;
 }
 
 /* Hide the old tab navigation */
@@ -44,18 +29,15 @@ main {
 .faq-container,
 .news-container,
 .quiz-container {
-  width: 100%;
-  max-width: 800px;
+  width: 95%;
+  max-width: 1400px;
   margin: 0 auto;
-  height: calc(100vh - 90px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  padding: 0.75rem;
   background: var(--bg-secondary-light);
-  border-radius: 16px;
+  border-radius: 10px;
   box-shadow: var(--shadow-light);
   border: 1px solid var(--border-color-light);
   transition: all 0.3s ease;
-  position: relative;
 }
 
 .dark .converter-container,
@@ -244,19 +226,6 @@ main {
 }
 
 @media (max-width: 768px) {
-  main {
-    padding-top: 80px;
-  }
-
-  .converter-container,
-  .faq-container,
-  .news-container,
-  .quiz-container {
-    height: calc(100vh - 80px);
-    border-radius: 0;
-    max-width: 100%;
-  }
-
   .price-box {
     width: 90%;
     max-width: none;
@@ -339,17 +308,6 @@ main {
 }
 
 @media (max-width: 480px) {
-  main {
-    padding-top: 70px;
-  }
-
-  .converter-container,
-  .faq-container,
-  .news-container,
-  .quiz-container {
-    height: calc(100vh - 70px);
-  }
-
   .price-box {
     width: 95%;
     padding: 1rem;

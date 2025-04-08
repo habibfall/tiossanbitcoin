@@ -199,10 +199,12 @@
   margin-right: 0.5rem;
 }
 
-.language-toggle {
-  padding: 7px;
+/* Shared styles for header icon buttons */
+.language-toggle,
+.theme-toggle {
+  padding: 8px; /* Standardized padding */
   background-color: transparent;
-  border: none;
+  border: none; 
   color: var(--text-secondary-light);
   border-radius: 50%;
   cursor: pointer;
@@ -210,22 +212,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
+  width: 36px; /* Standardized size */
   height: 36px;
 }
 
-.language-toggle:hover {
+.language-toggle:hover,
+.theme-toggle:hover {
   background-color: rgba(0, 0, 0, 0.05);
   color: var(--text-primary-light);
   transform: translateY(-1px);
 }
 
-.globe-icon {
-  transition: transform 0.3s ease;
-}
-
+/* Keep globe-specific hover effect */
 .language-toggle:hover .globe-icon {
   transform: rotate(15deg);
+}
+
+/* Dark mode shared styles */
+.dark .language-toggle,
+.dark .theme-toggle {
+  color: var(--text-secondary-dark);
+}
+
+.dark .language-toggle:hover,
+.dark .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary-dark);
+}
+
+.globe-icon {
+  transition: transform 0.3s ease;
 }
 
 .language-menu {
@@ -270,57 +286,18 @@
   font-weight: 500;
 }
 
-.dark .language-toggle {
-  border: none;
-  color: var(--text-secondary-dark);
-}
-
-.dark .language-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary-dark);
-}
-
-.dark .language-menu {
-  background-color: var(--bg-secondary-dark);
-  border-color: var(--border-color-dark);
-  box-shadow: var(--shadow-dark);
-}
-
-.dark .language-option {
-  color: var(--text-primary-dark);
-}
-
-.dark .language-option:hover {
-  background-color: rgba(247, 147, 26, 0.15);
-  color: var(--accent-color-dark);
-}
-
-.dark .language-option.active {
-  background-color: rgba(247, 147, 26, 0.15);
-  color: var(--accent-color-dark);
-}
-
 /* Mobile styles */
 @media (max-width: 768px) {
-  .language-toggle {
-    width: 32px;
+  /* Shared mobile styles for header icon buttons */
+  .language-toggle,
+  .theme-toggle {
+    width: 32px; /* Standardized mobile size */
     height: 32px;
-    padding: 5px;
+    padding: 6px; /* Standardized mobile padding */
+    /* Ensure other properties remain consistent */
     border: none;
     border-radius: 50%;
-    font-size: inherit;
-    min-width: auto;
-  }
-
-  .language-menu {
-    min-width: 120px;
-    max-height: 200px;
-    overflow-y: auto;
-  }
-
-  .language-option {
-    padding: 9px 14px;
-    font-size: 14px;
+    font-size: inherit; /* Reset font size if overriding */
   }
 
   .header-controls {
@@ -380,15 +357,6 @@
     top: 65px;
     max-height: calc(100vh - 65px);
     overflow-y: auto;
-  }
-
-  .theme-toggle {
-    padding: 5px;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    font-size: 0;
-    border: none;
   }
 
   .header-logo-img {

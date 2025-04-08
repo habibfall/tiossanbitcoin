@@ -190,8 +190,8 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
               {/* Modern Outline Globe Icon */}
               <svg
                 className="globe-icon"
-                width="22" // Slightly larger to match theme toggle visually
-                height="22"
+                width="20" // Match theme toggle SVG size
+                height="20" // Match theme toggle SVG size
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

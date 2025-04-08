@@ -178,58 +178,59 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
         )}
 
         <div className="header-controls">
-          {/* Language Dropdown - RENDER ONLY ON DESKTOP */}
-          {!isMobileView && (
-            <div className="language-dropdown" ref={languageMenuRef}>
-               <button
-                 className="language-toggle"
-                 onClick={() => setIsLanguageMenuOpen(prev => !prev)}
-                 aria-haspopup="true"
-                 aria-expanded={isLanguageMenuOpen}
-                 title={languageNames[language]}
-               >
-                 <svg
-                   className="globe-icon"
-                   width="22"
-                   height="22"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   stroke="currentColor"
-                   strokeWidth="2"
-                   strokeLinecap="round"
-                   strokeLinejoin="round"
-                 >
-                   <circle cx="12" cy="12" r="10" />
-                   <line x1="2" y1="12" x2="22" y2="12" />
-                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-                 </svg>
-               </button>
-               {isLanguageMenuOpen && (
-                 <div className="language-menu" role="menu">
-                   {renderLanguageOptions(false)}
-                 </div>
-               )}
-            </div>
-          )}
+          {/* Language Dropdown - Always render the toggle button */}
+          <div className="language-dropdown" ref={languageMenuRef}>
+            <button
+              className="language-toggle"
+              onClick={() => setIsLanguageMenuOpen(prev => !prev)}
+              aria-haspopup="true"
+              aria-expanded={isLanguageMenuOpen}
+              title={languageNames[language]} // Keep the title for accessibility
+            >
+              {/* Modern Outline Globe Icon */}
+              <svg
+                className="globe-icon"
+                width="22" // Slightly larger to match theme toggle visually
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+            </button>
+            {isLanguageMenuOpen && (
+              <div className="language-menu" role="menu">
+                {renderLanguageOptions(false)} // Render desktop/mobile options based on need?
+                {/* NOTE: renderLanguageOptions doesn't actually use isMobile param currently */}
+                {/* If needed, can adjust options based on isMobileView state */}
+              </div>
+            )}
+          </div>
            
-           {/* Theme Toggle - Always render */}
-           <ThemeToggle />
+          {/* Theme Toggle - Always render */}
+          <ThemeToggle />
 
-           {/* Burger Menu - Conditionally render based on JS */}
-           {isMobileView && (
-             <button
-               ref={burgerMenuRef}
-               className={`burger-menu ${isMobileMenuOpen ? 'open' : ''}`}
-               onClick={toggleMobileMenu}
-               aria-label="Toggle navigation menu"
-               aria-expanded={isMobileMenuOpen}
-               aria-controls="mobile-menu-content" 
-             >
-               <span className="burger-line"></span>
-               <span className="burger-line"></span>
-               <span className="burger-line"></span>
-             </button>
-           )}
+          {/* Burger Menu - Conditionally render based on JS */}
+          {isMobileView && (
+            <button
+              ref={burgerMenuRef}
+              className={`burger-menu ${isMobileMenuOpen ? 'open' : ''}`}
+              onClick={toggleMobileMenu}
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu-content" 
+            >
+              <span className="burger-line"></span>
+              <span className="burger-line"></span>
+              <span className="burger-line"></span>
+            </button>
+          )}
         </div>
       </div>
 

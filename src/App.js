@@ -72,21 +72,17 @@ function AppContent() {
         '1y': priceChanges['1y']
       };
 
-      // Always update the timestamp
+      // Always update the price and timestamp
       setLastUpdated(new Date());
-      
-      // Update price and trigger animation only if price has changed
-      if (bitcoinPrice !== priceInFcfa) {
-        setIsPriceUpdating(true);
-        setBitcoinPrice(priceInFcfa);
-        setPriceChanges(newPriceChanges);
-        if (timeframe !== '1y') {
-          setPriceChange(newPriceChanges[timeframe]);
-        }
-        
-        // Reset the update animation after a delay
-        setTimeout(() => setIsPriceUpdating(false), 800);
+      setIsPriceUpdating(true);
+      setBitcoinPrice(priceInFcfa);
+      setPriceChanges(newPriceChanges);
+      if (timeframe !== '1y') {
+        setPriceChange(newPriceChanges[timeframe]);
       }
+      
+      // Reset the update animation after a delay
+      setTimeout(() => setIsPriceUpdating(false), 800);
       
       setIsInitialLoad(false);
       

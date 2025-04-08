@@ -48,8 +48,18 @@ function AppContent() {
       setIsFetching(true);
       
       const [currentPriceResponse, marketChartResponse] = await Promise.all([
-        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true').then(res => res.json()),
-        fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30&interval=daily').then(res => res.json())
+        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true', {
+          cache: 'no-cache',
+          headers: {
+            'Accept': 'application/json'
+          }
+        }).then(res => res.json()),
+        fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30&interval=daily', {
+          cache: 'no-cache',
+          headers: {
+            'Accept': 'application/json'
+          }
+        }).then(res => res.json())
       ]);
       
       if (!currentPriceResponse.bitcoin?.usd || !marketChartResponse.prices) {
@@ -61,6 +71,16 @@ function AppContent() {
       const priceHistory = marketChartResponse.prices;
       const usdToFcfa = 655.957;
       const priceInFcfa = Math.round(currentPrice * usdToFcfa);
+      
+      // Only update if price has changed significantly (more than 0.1%)
+      const priceDiff = Math.abs((priceInFcfa - bitcoinPrice) / bitcoinPrice * 100);
+      if (!isInitialLoad && priceDiff < 0.1) {
+        setIsFetching(false);
+        return {
+          price: priceInFcfa,
+          timestamp: new Date()
+        };
+      }
       
       // Calculate percentage changes for 7d and 30d
       const now = Date.now();
@@ -86,17 +106,22 @@ function AppContent() {
         '1y': priceChanges['1y']
       };
 
-      // Always update the price and timestamp
-      setLastUpdated(new Date());
-      setIsPriceUpdating(true);
-      setBitcoinPrice(priceInFcfa);
-      setPriceChanges(newPriceChanges);
-      if (timeframe !== '1y') {
-        setPriceChange(newPriceChanges[timeframe]);
-      }
+      // Batch state updates to reduce renders
+      const updates = () => {
+        setLastUpdated(new Date());
+        setIsPriceUpdating(true);
+        setBitcoinPrice(priceInFcfa);
+        setPriceChanges(newPriceChanges);
+        if (timeframe !== '1y') {
+          setPriceChange(newPriceChanges[timeframe]);
+        }
+        
+        // Reset the update animation after a delay
+        setTimeout(() => setIsPriceUpdating(false), 1500);
+      };
       
-      // Reset the update animation after a delay
-      setTimeout(() => setIsPriceUpdating(false), 800);
+      // Use requestAnimationFrame for smoother updates
+      requestAnimationFrame(updates);
       
       setIsInitialLoad(false);
       setIsFetching(false);
@@ -125,7 +150,7 @@ function AppContent() {
       setIsFetching(false);
       throw error;
     }
-  }, [timeframe, isInitialLoad, priceChanges]);
+  }, [timeframe, isInitialLoad, priceChanges, bitcoinPrice]);
 
   // Memoize the validatePriceChange function
   const validatePriceChange = useCallback((value) => {
@@ -143,6 +168,7 @@ function AppContent() {
 
   useEffect(() => {
     let isMounted = true;
+    let timeoutId;
     
     const updatePrice = async () => {
       try {
@@ -155,13 +181,25 @@ function AppContent() {
       }
     };
 
+    // Initial load
     updatePrice();
+    
     // Update price every 20 minutes
-    const interval = setInterval(updatePrice, 20 * 60 * 1000);
+    const interval = setInterval(() => {
+      // Clear any pending updates
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      // Add a small random delay to prevent all clients from hitting the API at the same time
+      timeoutId = setTimeout(updatePrice, Math.random() * 5000);
+    }, 20 * 60 * 1000);
     
     return () => {
       isMounted = false;
       clearInterval(interval);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
   }, [fetchBitcoinPrice]);
 

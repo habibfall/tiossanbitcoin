@@ -133,12 +133,12 @@
   top: 70px;
   left: 0;
   right: 0;
-  background: #ffffff;
+  background: var(--bg-secondary-light);
   padding: 1rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--border-color-light);
+  box-shadow: var(--shadow-light);
   transform: translateY(-150%);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
   z-index: 999;
 }
 
@@ -148,6 +148,12 @@
   z-index: 1001;
 }
 
+.dark .mobile-menu {
+  background: var(--bg-primary-dark);
+  border-color: var(--border-color-dark);
+  box-shadow: var(--shadow-dark);
+}
+
 .mobile-menu .header-tab {
   display: block;
   width: 100%;
@@ -155,74 +161,37 @@
   padding: 1rem;
   margin: 0.25rem 0;
   border-radius: 8px;
+  color: var(--text-secondary-light);
+}
+
+.dark .mobile-menu .header-tab {
+  color: var(--text-secondary-dark);
+}
+
+.dark .mobile-menu .header-tab:hover {
+  color: var(--text-primary-dark);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .mobile-menu .header-tab.active {
+  color: var(--accent-color-dark);
+  font-weight: 600;
 }
 
 /* Styles for language options specifically within mobile menu */
-.mobile-language-section {
-  display: flex; /* Align icon and options horizontally */
-  align-items: center; /* Center items vertically */
-  padding: 0.5rem 1rem 1rem 1rem; /* Padding around the whole section */
-}
-
-.mobile-language-icon {
-  font-size: 1.2rem; /* Adjust icon size */
-  margin-right: 0.75rem; /* Space between icon and buttons */
-  line-height: 1; /* Ensure proper vertical alignment */
-}
-
-.mobile-language-options {
-  padding: 0; /* Remove previous padding, handled by parent */
-  flex-grow: 1; /* Allow options container to take remaining space */
-}
-
-.language-option-mobile {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: 0.6rem 1rem; /* Adjusted padding for buttons */
-  margin: 0.1rem 0;
-  border-radius: 6px; /* Slightly smaller radius */
-  font-size: 0.9rem; /* Slightly smaller font */
-  background: transparent;
-  border: none;
-  color: #666666; /* Match tab color */
-  cursor: pointer;
-}
-
-.language-option-mobile:hover {
-  background: rgba(0, 0, 0, 0.05); /* Match tab hover */
-  color: #333333;
-}
-
-.language-option-mobile.active {
-  color: #f7931a; /* Match active tab color */
-  font-weight: 600;
-  background: rgba(247, 147, 26, 0.05); /* Subtle active background */
-}
-
-.dark .language-option-mobile {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.dark .language-option-mobile:hover {
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.dark .language-option-mobile.active {
-  color: #f7931a;
-  background: rgba(247, 147, 26, 0.1); 
-}
-
-.mobile-menu-divider {
-  border: none;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 1rem 0;
-}
-
-.dark .mobile-menu-divider {
-  border-top-color: rgba(255, 255, 255, 0.1);
-}
+/*
+.mobile-language-section { ... }
+.mobile-language-icon { ... }
+.mobile-language-options { ... }
+.language-option-mobile { ... }
+.language-option-mobile:hover { ... }
+.language-option-mobile.active { ... }
+.dark .language-option-mobile { ... }
+.dark .language-option-mobile:hover { ... }
+.dark .language-option-mobile.active { ... }
+.mobile-menu-divider { ... }
+.dark .mobile-menu-divider { ... }
+*/
 
 /* Language dropdown styles */
 .language-dropdown {

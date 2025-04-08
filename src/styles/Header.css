@@ -226,18 +226,19 @@
 }
 
 .dark .language-toggle {
-  color: var(--accent-color-dark);
+  color: var(--text-primary-dark);
+  background-color: transparent;
 }
 
 .dark .language-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: var(--accent-color-dark);
+  color: var(--text-primary-dark);
 }
 
 /* Individual Theme Toggle Styles */
 .app .theme-toggle {
   padding: 8px;
-  background-color: transparent;
+  background-color: var(--accent-color-light);
   border: none;
   color: var(--text-secondary-light);
   border-radius: 50%;
@@ -251,25 +252,19 @@
 }
 
 .app .theme-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-  color: var(--text-primary-light);
+  background-color: color-mix(in srgb, var(--accent-color-light) 90%, black);
+  color: var(--text-secondary-light);
   transform: translateY(-1px);
 }
 
-/* Apply specific theme icon rotation on hover if desired - adding example */
-/* 
-.theme-toggle:hover svg {
-  transform: rotate(15deg);
-}
-*/
-
 .app.dark .theme-toggle {
-  color: var(--accent-color-dark);
+  background-color: var(--accent-color-dark);
+  color: var(--text-primary-dark);
 }
 
 .app.dark .theme-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: var(--accent-color-dark);
+  background-color: color-mix(in srgb, var(--accent-color-dark) 90%, white);
+  color: var(--text-primary-dark);
 }
 
 .globe-icon {
@@ -338,9 +333,6 @@
     width: 32px;
     height: 32px;
     padding: 6px;
-    border: none; /* Reiterate */
-    border-radius: 50%;
-    font-size: inherit;
   }
 
   /* Individual Mobile Theme Toggle */
@@ -348,9 +340,6 @@
     width: 32px;
     height: 32px;
     padding: 6px;
-    border: none;
-    border-radius: 50%;
-    font-size: inherit;
   }
 
   .language-menu {
@@ -454,8 +443,6 @@
   .app .theme-toggle,
   .app .language-toggle {
     padding: 5px;
-    font-size: inherit;
-    min-width: auto;
   }
 
   .burger-menu {

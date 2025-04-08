@@ -142,6 +142,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
   const [inputCurrency, setInputCurrency] = useState('BTC');
   const [conversions, setConversions] = useState({
     BTC: null,
+    SAT: null,
     FCFA: null,
     EUR: null,
     USD: null,
@@ -161,6 +162,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
       amount: "Montant",
       currencies: {
         BTC: "Bitcoin",
+        SAT: "Satoshi (1/100,000,000 BTC)",
         FCFA: "Franc CFA",
         EUR: "Euro",
         USD: "Dollar US",
@@ -172,6 +174,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
       amount: "Lim",
       currencies: {
         BTC: "Bitcoin",
+        SAT: "Satoshi (1/100,000,000 BTC)",
         FCFA: "Franc CFA",
         EUR: "Euro",
         USD: "Dollar US",
@@ -183,6 +186,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
       amount: "Amount",
       currencies: {
         BTC: "Bitcoin",
+        SAT: "Satoshi (1/100,000,000 BTC)",
         FCFA: "CFA Franc",
         EUR: "Euro",
         USD: "US Dollar",
@@ -198,6 +202,8 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
       // Convert input to BTC first
       if (inputCurrency === 'BTC') {
         btcAmount = parseFloat(amount);
+      } else if (inputCurrency === 'SAT') {
+        btcAmount = parseFloat(amount) / 100000000; // Convert satoshis to BTC
       } else {
         btcAmount = parseFloat(amount) / exchangeRates[inputCurrency];
       }
@@ -205,6 +211,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
       // Then convert BTC to all currencies
       setConversions({
         BTC: btcAmount,
+        SAT: btcAmount * 100000000, // Convert BTC to satoshis
         FCFA: btcAmount * exchangeRates.FCFA,
         EUR: btcAmount * exchangeRates.EUR,
         USD: btcAmount * exchangeRates.USD,
@@ -213,6 +220,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
     } else {
       setConversions({
         BTC: null,
+        SAT: null,
         FCFA: null,
         EUR: null,
         USD: null,
@@ -225,8 +233,8 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
     if (value === null) return '-';
     
     const formatter = new Intl.NumberFormat(language === 'french' ? 'fr-FR' : 'en-US', {
-      minimumFractionDigits: currency === 'BTC' ? 8 : 2,
-      maximumFractionDigits: currency === 'BTC' ? 8 : 2,
+      minimumFractionDigits: currency === 'BTC' ? 8 : (currency === 'SAT' ? 0 : 2),
+      maximumFractionDigits: currency === 'BTC' ? 8 : (currency === 'SAT' ? 0 : 2),
     });
     
     return `${formatter.format(value)} ${currency}`;

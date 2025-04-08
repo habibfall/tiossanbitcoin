@@ -186,36 +186,45 @@ const Header = ({ language, onLanguageChange, activeTab, onTabChange, text }) =>
                  onClick={() => setIsLanguageMenuOpen(prev => !prev)}
                  aria-haspopup="true"
                  aria-expanded={isLanguageMenuOpen}
+                 title={languageNames[language]}
                >
-                 {languageNames[language] ?? 'Language'}
-                 {/* Restored SVG */}
                  <svg 
-                   width="12"
-                   height="12"
-                   viewBox="0 0 12 12"
-                   fill="none"
+                   width="20" 
+                   height="20" 
+                   viewBox="0 0 24 24" 
+                   fill="none" 
                    xmlns="http://www.w3.org/2000/svg"
-                   style={{
-                     marginLeft: '8px', // Add some space
-                     transform: isLanguageMenuOpen ? 'rotate(180deg)' : 'rotate(0)',
-                     transition: 'transform 0.2s ease'
-                   }}
+                   className="globe-icon"
                  >
-                   <path
-                     d="M2.5 4.5L6 8L9.5 4.5"
-                     stroke="currentColor"
-                     strokeWidth="1.5"
-                     strokeLinecap="round"
+                   <path 
+                     d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
+                     stroke="currentColor" 
+                     strokeWidth="2" 
+                     strokeLinecap="round" 
+                     strokeLinejoin="round"
+                   />
+                   <path 
+                     d="M2 12H22" 
+                     stroke="currentColor" 
+                     strokeWidth="2" 
+                     strokeLinecap="round" 
+                     strokeLinejoin="round"
+                   />
+                   <path 
+                     d="M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z" 
+                     stroke="currentColor" 
+                     strokeWidth="2" 
+                     strokeLinecap="round" 
                      strokeLinejoin="round"
                    />
                  </svg>
                </button>
                {isLanguageMenuOpen && (
                  <div className="language-menu" role="menu">
-                   {renderLanguageOptions(false)} {/* Render desktop options */}
+                   {renderLanguageOptions(false)}
                  </div>
                )}
-             </div>
+            </div>
           )}
            
            {/* Theme Toggle - Always render */}

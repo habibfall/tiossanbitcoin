@@ -1,5 +1,7 @@
 export const text = {
   french: {
+    currentPrice: "Prix Actuel du Bitcoin",
+    lastUpdated: "Dernière mise à jour:",
     sectionTitle: "Actualités Bitcoin",
     termOfDay: "⚡ Terme Bitcoin du Jour",
     loading: "Chargement des Actualités Bitcoin...",
@@ -17,6 +19,8 @@ export const text = {
     quizTab: "Quiz Bitcoin"
   },
   wolof: {
+    currentPrice: "Prix Bitcoin bi Tey",
+    lastUpdated: "Dernière mise à jour:",
     sectionTitle: "Xibaar yi ci Bitcoin",
     termOfDay: "⚡ Baat Bitcoin bu Tey",
     loading: "Xibaar yi Bitcoin yay ñëw...",
@@ -34,6 +38,8 @@ export const text = {
     quizTab: "Jàng Bitcoin"
   },
   english: {
+    currentPrice: "Current Bitcoin Price",
+    lastUpdated: "Last updated:",
     sectionTitle: "Bitcoin News",
     termOfDay: "⚡ Bitcoin Term of the Day",
     loading: "Loading Bitcoin News...",

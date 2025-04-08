@@ -72,7 +72,10 @@ function AppContent() {
         '1y': priceChanges['1y']
       };
 
-      // Only update if price has actually changed
+      // Always update the timestamp
+      setLastUpdated(new Date());
+      
+      // Update price and trigger animation only if price has changed
       if (bitcoinPrice !== priceInFcfa) {
         setIsPriceUpdating(true);
         setBitcoinPrice(priceInFcfa);
@@ -80,7 +83,6 @@ function AppContent() {
         if (timeframe !== '1y') {
           setPriceChange(newPriceChanges[timeframe]);
         }
-        setLastUpdated(new Date());
         
         // Reset the update animation after a delay
         setTimeout(() => setIsPriceUpdating(false), 800);
@@ -140,8 +142,8 @@ function AppContent() {
     };
 
     updatePrice();
-    // Update price every 10 seconds instead of every minute
-    const interval = setInterval(updatePrice, 10000);
+    // Update price every 30 seconds to match Binance API's update frequency
+    const interval = setInterval(updatePrice, 30000);
     
     return () => {
       isMounted = false;
@@ -204,7 +206,7 @@ function AppContent() {
         {activeTab === 'price' && (
           <>
             <div className="price-box">
-              <h2>{text?.[language]?.currentPrice ?? 'Loading...'}</h2>
+              <h2>{text?.[language]?.currentPrice ?? <div className="loading-spinner" />}</h2>
               <p className={`price ${isPriceUpdating ? 'price-update' : ''}`}>
                 {bitcoinPrice ? (
                   <>
@@ -215,7 +217,7 @@ function AppContent() {
                     </div>
                   </>
                 ) : (
-                  <span className="price">Loading...</span>
+                  <div className="loading-spinner" />
                 )}
               </p>
               <p className="update-time">

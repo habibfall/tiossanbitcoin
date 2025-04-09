@@ -180,11 +180,6 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
 
       const usdToFcfa = 655.957;
       
-      // Calculate the total percentage change for the period
-      const startPrice = parseFloat(data[0][1]) * usdToFcfa; // Open price of first candle
-      const endPrice = parseFloat(data[data.length - 1][4]) * usdToFcfa; // Close price of last candle
-      const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
-      
       // Process the data with proper timestamps and FCFA conversion
       const processedData = data.map((item) => {
         const timestamp = parseInt(item[0]);
@@ -192,10 +187,22 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
         
         return {
           timestamp,
-          price: Math.round(closePrice),
-          percentChange: totalPercentChange // Use the total period change for consistent coloring
+          price: Math.round(closePrice)
         };
       });
+
+      // Calculate the total percentage change for the period
+      if (processedData.length > 0) {
+        const startPrice = processedData[0].price;
+        const endPrice = processedData[processedData.length - 1].price;
+        const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
+
+        // Add the percentage change to each data point
+        return processedData.map(point => ({
+          ...point,
+          percentChange: totalPercentChange
+        }));
+      }
 
       return processedData;
     } catch (error) {

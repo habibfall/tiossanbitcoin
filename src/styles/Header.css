@@ -225,6 +225,17 @@
   transform: rotate(15deg);
 }
 
+/* Add active state to reset the tilt when not being interacted with */
+.language-toggle:active .globe-icon {
+  transform: rotate(15deg);
+}
+
+/* Reset the tilt when not in hover or active state */
+.language-toggle .globe-icon {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}
+
 .dark .language-toggle {
   color: rgba(255, 255, 255, 0.7);
 }
@@ -338,6 +349,15 @@
     border-radius: 50%;
     font-size: inherit;
     background-color: rgba(0, 0, 0, 0.05); /* Add permanent background on mobile */
+  }
+  
+  /* Ensure the globe icon resets properly on mobile */
+  .language-toggle .globe-icon {
+    transform: rotate(0deg);
+  }
+  
+  .language-toggle:active .globe-icon {
+    transform: rotate(15deg);
   }
   
   .dark .language-toggle {

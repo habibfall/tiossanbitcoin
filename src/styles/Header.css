@@ -236,7 +236,13 @@
 
 /* Individual Theme Toggle Styles */
 .app .theme-toggle {
-  color: var(--text-secondary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
 }
 
 .app .theme-toggle:hover {

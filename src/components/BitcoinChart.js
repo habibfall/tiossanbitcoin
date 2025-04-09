@@ -370,18 +370,17 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
         
         return {
           timestamp,
-          price: Math.round(closePrice),
-          percentChange: 0 // Will be calculated below
+          price: Math.round(closePrice)
         };
       });
 
-      // Calculate percentage changes
+      // Calculate percentage change for the entire period
       if (processedData.length > 0) {
         const startPrice = processedData[0].price;
         const endPrice = processedData[processedData.length - 1].price;
         const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
 
-        // Apply the total percent change to all points for consistent coloring
+        // Add the percentage change to each data point for consistent coloring
         return processedData.map(point => ({
           ...point,
           percentChange: totalPercentChange
@@ -407,6 +406,16 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       if (isCacheValid(newTimeframe) && dataCache[newTimeframe]) {
         setChartData(dataCache[newTimeframe]);
         setYAxisDomain(calculateYAxisDomain(dataCache[newTimeframe]));
+        
+        // Calculate and pass the percentage change when using cached data
+        if (onTimeframeChange && dataCache[newTimeframe].length > 0) {
+          const data = dataCache[newTimeframe];
+          const startPrice = data[0].price;
+          const endPrice = data[data.length - 1].price;
+          const changePercent = ((endPrice - startPrice) / startPrice) * 100;
+          onTimeframeChange(newTimeframe, Number(changePercent.toFixed(2)));
+        }
+        
         setIsLoading(false);
         return;
       }
@@ -416,13 +425,21 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
       setLastFetchTime(prev => ({ ...prev, [newTimeframe]: Date.now() }));
       setChartData(data);
       setYAxisDomain(calculateYAxisDomain(data));
+      
+      // Calculate and pass the percentage change for new data
+      if (onTimeframeChange && data.length > 0) {
+        const startPrice = data[0].price;
+        const endPrice = data[data.length - 1].price;
+        const changePercent = ((endPrice - startPrice) / startPrice) * 100;
+        onTimeframeChange(newTimeframe, Number(changePercent.toFixed(2)));
+      }
     } catch (err) {
       console.error('Error updating chart data:', err);
       setError(err.message);
     } finally {
       setIsLoading(false);
     }
-  }, [isCacheValid, dataCache, calculateYAxisDomain]);
+  }, [isCacheValid, dataCache, calculateYAxisDomain, onTimeframeChange]);
 
   const text = {
     french: {
@@ -460,26 +477,10 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }) => {
   // Effect for timeframe changes
   useEffect(() => {
     setIsTransitioning(true);
-    const updateData = async () => {
-      const data = await updateChartData(timeframe);
-      if (onTimeframeChange && data && data.length > 0) {
-        // For 1-year view, use the YTD change stored in percentChange
-        // For other timeframes, calculate the total change from start to end
-        let changePercent;
-        if (timeframe === '1y') {
-          changePercent = data[0].percentChange;
-        } else {
-          const startPrice = data[0].price;
-          const endPrice = data[data.length - 1].price;
-          changePercent = ((endPrice - startPrice) / startPrice) * 100;
-        }
-        onTimeframeChange(timeframe, Number(changePercent.toFixed(2)));
-      }
-    };
-    updateData();
+    updateChartData(timeframe);
     const timer = setTimeout(() => setIsTransitioning(false), 300);
     return () => clearTimeout(timer);
-  }, [timeframe, updateChartData, onTimeframeChange]);
+  }, [timeframe, updateChartData]);
 
   // Effect for live updates
   useEffect(() => {

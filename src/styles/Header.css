@@ -226,19 +226,18 @@
 }
 
 .dark .language-toggle {
-  color: var(--text-primary-dark);
-  background-color: transparent;
+  color: var(--accent-color-dark);
 }
 
 .dark .language-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: var(--text-primary-dark);
+  color: var(--accent-color-dark);
 }
 
 /* Individual Theme Toggle Styles */
 .app .theme-toggle {
   padding: 8px;
-  background-color: var(--accent-color-light);
+  background-color: transparent;
   border: none;
   color: var(--text-secondary-light);
   border-radius: 50%;
@@ -252,19 +251,25 @@
 }
 
 .app .theme-toggle:hover {
-  background-color: color-mix(in srgb, var(--accent-color-light) 90%, black);
-  color: var(--text-secondary-light);
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary-light);
   transform: translateY(-1px);
 }
 
+/* Apply specific theme icon rotation on hover if desired - adding example */
+/* 
+.theme-toggle:hover svg {
+  transform: rotate(15deg);
+}
+*/
+
 .app.dark .theme-toggle {
-  background-color: var(--accent-color-dark);
-  color: var(--text-primary-dark);
+  color: var(--accent-color-dark);
 }
 
 .app.dark .theme-toggle:hover {
-  background-color: color-mix(in srgb, var(--accent-color-dark) 90%, white);
-  color: var(--text-primary-dark);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--accent-color-dark);
 }
 
 .globe-icon {
@@ -333,6 +338,9 @@
     width: 32px;
     height: 32px;
     padding: 6px;
+    border: none; /* Reiterate */
+    border-radius: 50%;
+    font-size: inherit;
   }
 
   /* Individual Mobile Theme Toggle */
@@ -340,6 +348,9 @@
     width: 32px;
     height: 32px;
     padding: 6px;
+    border: none;
+    border-radius: 50%;
+    font-size: inherit;
   }
 
   .language-menu {
@@ -390,6 +401,7 @@
     display: flex !important;
     width: 26px;
     height: 22px;
+    margin-left: 0.5rem;
   }
 
   .burger-line {
@@ -442,10 +454,11 @@
   .app .theme-toggle,
   .app .language-toggle {
     padding: 5px;
+    font-size: inherit;
+    min-width: auto;
   }
 
   .burger-menu {
-    display: flex !important;
     width: 22px;
     height: 18px;
     flex-shrink: 0;

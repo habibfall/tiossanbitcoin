@@ -221,17 +221,18 @@
   transform: translateY(-1px);
 }
 
+/* Remove the hover tilt effect */
 .language-toggle:hover .globe-icon {
+  transform: rotate(0deg);
+}
+
+/* Add tilt effect when language menu is open */
+.language-toggle[aria-expanded="true"] .globe-icon {
   transform: rotate(15deg);
 }
 
-/* Add active state to reset the tilt when not being interacted with */
-.language-toggle:active .globe-icon {
-  transform: rotate(15deg);
-}
-
-/* Reset the tilt when not in hover or active state */
-.language-toggle .globe-icon {
+/* Reset the tilt when language menu is closed */
+.language-toggle[aria-expanded="false"] .globe-icon {
   transform: rotate(0deg);
   transition: transform 0.3s ease;
 }
@@ -352,11 +353,11 @@
   }
   
   /* Ensure the globe icon resets properly on mobile */
-  .language-toggle .globe-icon {
+  .language-toggle[aria-expanded="false"] .globe-icon {
     transform: rotate(0deg);
   }
   
-  .language-toggle:active .globe-icon {
+  .language-toggle[aria-expanded="true"] .globe-icon {
     transform: rotate(15deg);
   }
   

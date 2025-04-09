@@ -337,6 +337,11 @@
     border: none; /* Reiterate */
     border-radius: 50%;
     font-size: inherit;
+    background-color: rgba(0, 0, 0, 0.05); /* Add permanent background on mobile */
+  }
+  
+  .dark .language-toggle {
+    background-color: rgba(255, 255, 255, 0.1); /* Dark mode background */
   }
 
   /* Individual Mobile Theme Toggle */

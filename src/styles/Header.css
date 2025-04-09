@@ -390,7 +390,6 @@
     display: flex !important;
     width: 26px;
     height: 22px;
-    margin-left: 0.5rem;
   }
 
   .burger-line {
@@ -446,6 +445,7 @@
   }
 
   .burger-menu {
+    display: flex !important;
     width: 22px;
     height: 18px;
     flex-shrink: 0;

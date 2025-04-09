@@ -236,24 +236,11 @@
 
 /* Individual Theme Toggle Styles */
 .app .theme-toggle {
-  padding: 8px;
-  background-color: transparent;
-  border: none;
   color: var(--text-secondary-light);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
 }
 
 .app .theme-toggle:hover {
-  background-color: rgba(0, 0, 0, 0.05);
   color: var(--text-primary-light);
-  transform: translateY(-1px);
 }
 
 /* Apply specific theme icon rotation on hover if desired - adding example */

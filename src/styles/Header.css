@@ -250,13 +250,16 @@
 }
 */
 
-.app.dark .theme-toggle {
-  color: var(--accent-color-dark);
+.app.dark-mode .theme-toggle {
+  background-color: var(--accent-color-dark);
 }
 
-.app.dark .theme-toggle:hover {
+.app.dark-mode .theme-toggle:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  color: var(--accent-color-dark);
+}
+
+.app.dark-mode .theme-toggle:active {
+  background-color: var(--accent-color-dark);
 }
 
 .globe-icon {
@@ -409,6 +412,14 @@
   .header-logo-img {
     height: 35px;
   }
+
+  .app.dark-mode .theme-toggle {
+    background-color: var(--accent-color-dark) !important;
+  }
+
+  .app.dark-mode .theme-toggle:hover {
+    background-color: var(--accent-color-dark) !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -531,9 +542,13 @@
 }
 
 .app.dark-mode .theme-toggle {
-  background-color: var(--circle-orange);
+  background-color: var(--accent-color-dark);
 }
 
 .app.dark-mode .theme-toggle:hover {
-  background-color: var(--circle-orange-hover);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.app.dark-mode .theme-toggle:active {
+  background-color: var(--accent-color-dark);
 } 

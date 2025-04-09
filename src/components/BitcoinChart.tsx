@@ -197,6 +197,9 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
         const endPrice = processedData[processedData.length - 1].price;
         const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
 
+        console.log('Processed Data:', processedData);
+        console.log('Start Price:', startPrice, 'End Price:', endPrice, 'Total Percent Change:', totalPercentChange);
+
         // Add the percentage change to each data point
         return processedData.map(point => ({
           ...point,
@@ -260,6 +263,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
       if (onTimeframeChange && data.length > 0) {
         // Use the total percentage change for the period
         const totalPercentChange = data[0].percentChange;
+        console.log('Timeframe:', timeframe, 'Total Percent Change:', totalPercentChange);
         onTimeframeChange(timeframe, Number(totalPercentChange.toFixed(2)));
       }
     } catch (error) {

@@ -528,4 +528,12 @@
   width: auto;
   display: block;
   transition: filter 0.3s ease;
+}
+
+.app.dark-mode .theme-toggle {
+  background-color: var(--circle-orange);
+}
+
+.app.dark-mode .theme-toggle:hover {
+  background-color: var(--circle-orange-hover);
 } 

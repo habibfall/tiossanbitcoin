@@ -47,28 +47,31 @@ function AppContent() {
       }
       setIsFetching(true);
       
-      const [currentPriceResponse, marketChartResponse] = await Promise.all([
-        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd&include_24hr_change=true', {
-          cache: 'no-cache',
-          headers: {
-            'Accept': 'application/json'
-          }
-        }).then(res => res.json()),
-        fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30&interval=daily', {
-          cache: 'no-cache',
-          headers: {
-            'Accept': 'application/json'
-          }
-        }).then(res => res.json())
-      ]);
+      // Fetch current price and 24h change from Binance
+      const currentPriceResponse = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT', {
+        cache: 'no-cache',
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(res => res.json());
       
-      if (!currentPriceResponse.bitcoin?.usd || !marketChartResponse.prices) {
-        throw new Error('Invalid data from CoinGecko API');
+      // Fetch historical klines (candlestick) data for the past 30 days
+      const endTime = Date.now();
+      const startTime = endTime - (30 * 24 * 60 * 60 * 1000); // 30 days ago
+      
+      const marketChartResponse = await fetch(`https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=1d&startTime=${startTime}&endTime=${endTime}`, {
+        cache: 'no-cache',
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(res => res.json());
+      
+      if (!currentPriceResponse.lastPrice || !marketChartResponse || marketChartResponse.length === 0) {
+        throw new Error('Invalid data from Binance API');
       }
       
-      const currentPrice = currentPriceResponse.bitcoin.usd;
-      const change24h = currentPriceResponse.bitcoin.usd_24h_change;
-      const priceHistory = marketChartResponse.prices;
+      const currentPrice = parseFloat(currentPriceResponse.lastPrice);
+      const change24h = parseFloat(currentPriceResponse.priceChangePercent);
       const usdToFcfa = 655.957;
       const priceInFcfa = Math.round(currentPrice * usdToFcfa);
       
@@ -86,6 +89,12 @@ function AppContent() {
       const now = Date.now();
       const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
       const thirtyDaysAgo = now - (30 * 24 * 60 * 60 * 1000);
+      
+      // Process klines data to get price history
+      const priceHistory = marketChartResponse.map(kline => [
+        kline[0], // timestamp
+        parseFloat(kline[4]) // closing price
+      ]);
       
       const findClosestPrice = (timestamp) => {
         return priceHistory.reduce((closest, [time, price]) => {

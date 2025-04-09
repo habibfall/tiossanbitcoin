@@ -57,7 +57,7 @@ The application will open in your default browser at `http://localhost:3000`.
 - React
 - CSS3 with modern animations
 - Chart.js for price charts
-- CoinGecko API for price data
+- Binance API for price data
 
 ## License
 

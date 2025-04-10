@@ -150,7 +150,7 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
       setError(null);
       const config = getEndpointConfig(timeframe);
       const response = await fetch(
-        `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
+        `https://cors-anywhere.herokuapp.com/https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
       );
 
       if (!response.ok) {

@@ -10,6 +10,7 @@ const FooterContainer = styled.footer`
   font-size: 0.9rem;
   margin-top: 2rem;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: inherit;
 
   .dark & {
     background: var(--bg-secondary-dark);
@@ -40,11 +41,7 @@ const Footer = () => {
   return (
     <FooterContainer>
       <p>
-        © {currentYear} Made with ❤️ by{' '}
-        <a href="https://tiossanacademy.com" target="_blank" rel="noopener noreferrer">
-          Tiossan Academy
-        </a>{' '}
-        by Magatte Wade
+        © {currentYear} <a href="https://tiossanacademy.org" target="_blank" rel="noopener noreferrer">Tiossan Academy</a> by Magatte Wade
       </p>
     </FooterContainer>
   );

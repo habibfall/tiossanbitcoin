@@ -10,7 +10,7 @@ const FooterContainer = styled.footer`
   font-size: 0.9rem;
   margin-top: 2rem;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
-  font-family: inherit;
+  font-family: 'Cabinet Grotesk', sans-serif;
 
   .dark & {
     background: var(--bg-secondary-dark);

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Area } from 'recharts';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
@@ -91,11 +91,46 @@ const ChartWrapper = styled.div`
   justify-content: center;
 `;
 
+const getEndpointConfig = (timeframe) => {
+  switch (timeframe) {
+    case '24h':
+      return {
+        interval: '1h',
+        limit: 24,
+        startTime: Date.now() - 24 * 60 * 60 * 1000
+      };
+    case '7d':
+      return {
+        interval: '4h',
+        limit: 42,
+        startTime: Date.now() - 7 * 24 * 60 * 60 * 1000
+      };
+    case '30d':
+      return {
+        interval: '1d',
+        limit: 30,
+        startTime: Date.now() - 30 * 24 * 60 * 60 * 1000
+      };
+    case '1y':
+      return {
+        interval: '1d',
+        limit: 365,
+        startTime: Date.now() - 365 * 24 * 60 * 60 * 1000
+      };
+    default:
+      return {
+        interval: '1h',
+        limit: 24,
+        startTime: Date.now() - 24 * 60 * 60 * 1000
+      };
+  }
+};
+
 const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [timeframe, setTimeframe] = useState('1y');
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<ChartData[]>([]);
   const [yAxisDomain, setYAxisDomain] = useState(['auto', 'auto']);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [dataCache, setDataCache] = useState({});
@@ -103,12 +138,56 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
   const [isLive, setIsLive] = useState(true);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-  const chartWrapperRef = useCallback((node: HTMLDivElement) => {
-    if (node !== null) {
-      const { width, height } = node.getBoundingClientRect();
-      setDimensions({ width, height });
+  const chartWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  const fetchPriceData = useCallback(async (timeframe): Promise<ChartData[]> => {
+    if (dataCache[timeframe] && Date.now() - lastFetchTime[timeframe] < 60000) {
+      return dataCache[timeframe];
     }
-  }, []);
+
+    try {
+      setIsLoading(true);
+      setError(null);
+      const config = getEndpointConfig(timeframe);
+      const response = await fetch(
+        `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch price data');
+      }
+
+      const data = await response.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        throw new Error('Invalid data format from Binance API');
+      }
+
+      const usdToFcfa = 655.957;
+      let previousPrice: number | null = null;
+      const processedData = data.map((item) => {
+        const timestamp = parseInt(item[0]);
+        const closePrice = parseFloat(item[4]) * usdToFcfa;
+        const percentChange = previousPrice ? ((closePrice - previousPrice) / previousPrice) * 100 : 0;
+        previousPrice = closePrice;
+        return {
+          timestamp,
+          price: Math.round(closePrice),
+          percentChange
+        };
+      });
+
+      if (processedData && processedData.length > 0) {
+        setDataCache((prevCache) => ({ ...prevCache, [timeframe]: processedData }));
+        setLastFetchTime((prevTime) => ({ ...prevTime, [timeframe]: Date.now() }));
+      }
+      return processedData;
+    } catch (error) {
+      setError(error.message);
+      return [];
+    } finally {
+      setIsLoading(false);
+    }
+  }, [dataCache, lastFetchTime, onTimeframeChange]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -121,101 +200,6 @@ const BitcoinChart = ({ language = 'french', onTimeframeChange }: BitcoinChartPr
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const fetchPriceData = async (timeframe) => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      
-      const getEndpointConfig = () => {
-        switch (timeframe) {
-          case '24h':
-            return {
-              interval: '1h',
-              limit: 24,
-              startTime: Date.now() - 24 * 60 * 60 * 1000
-            };
-          case '7d':
-            return {
-              interval: '4h',
-              limit: 42,
-              startTime: Date.now() - 7 * 24 * 60 * 60 * 1000
-            };
-          case '30d':
-            return {
-              interval: '1d',
-              limit: 30,
-              startTime: Date.now() - 30 * 24 * 60 * 60 * 1000
-            };
-          case '1y':
-            return {
-              interval: '1d',
-              limit: 365,
-              startTime: Date.now() - 365 * 24 * 60 * 60 * 1000
-            };
-          default:
-            return {
-              interval: '1h',
-              limit: 24,
-              startTime: Date.now() - 24 * 60 * 60 * 1000
-            };
-        }
-      };
-
-      const config = getEndpointConfig();
-      
-      const response = await fetch(
-        `https://api.binance.com/api/v3/klines?symbol=BTCUSDT&interval=${config.interval}&limit=${config.limit}&startTime=${config.startTime}`
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch price data');
-      }
-
-      const data = await response.json();
-      
-      if (!Array.isArray(data) || data.length === 0) {
-        throw new Error('Invalid data format from Binance API');
-      }
-
-      const usdToFcfa = 655.957;
-      
-      // Process the data with proper timestamps and FCFA conversion
-      const processedData = data.map((item) => {
-        const timestamp = parseInt(item[0]);
-        const closePrice = parseFloat(item[4]) * usdToFcfa;
-        
-        return {
-          timestamp,
-          price: Math.round(closePrice)
-        };
-      });
-
-      // Calculate the total percentage change for the period
-      if (processedData.length > 0) {
-        const startPrice = processedData[0].price;
-        const endPrice = processedData[processedData.length - 1].price;
-        const totalPercentChange = ((endPrice - startPrice) / startPrice) * 100;
-
-        console.log('Processed Data:', processedData);
-        console.log('Start Price:', startPrice, 'End Price:', endPrice, 'Total Percent Change:', totalPercentChange);
-
-        // Add the percentage change to each data point
-        return processedData.map(point => ({
-          ...point,
-          percentChange: totalPercentChange
-        }));
-      }
-
-      return processedData;
-    } catch (error) {
-      console.error('Error fetching price data:', error);
-      setError(error.message);
-      return [];
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const calculateYAxisDomain = useCallback((data) => {
     if (!data || data.length === 0) return ['auto', 'auto'];

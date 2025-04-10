@@ -63,70 +63,79 @@ const ConverterContainer = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1.5rem;
   width: 100%;
 `;
 
 const InputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  position: relative;
   width: 100%;
+`;
 
-  input {
-    width: 100%;
-    padding: 16px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    font-size: 1.1rem;
-    transition: all 0.2s;
-    cursor: text;
-    font-weight: 500;
-    background-color: var(--bg-secondary-light);
-    color: var(--text-primary-light);
+const Input = styled.input`
+  width: 100%;
+  padding: 1.5rem 1rem 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  background-color: var(--bg-secondary-light);
+  color: var(--text-primary-light);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
 
-    &:hover {
-      border-color: #f59e0b;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
-    }
+  &:hover {
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.1);
+  }
 
-    &:focus {
-      outline: none;
-      border-color: #f59e0b;
-      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
-      transform: translateY(-1px);
-    }
+  &:focus {
+    outline: none;
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+  }
 
-    .dark & {
-      background-color: var(--bg-primary-dark);
-      color: var(--text-primary-dark);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
+  .dark & {
+    background-color: var(--bg-secondary-dark);
+    color: var(--text-primary-dark);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+`;
 
-    @media (max-width: 768px) {
-      padding: 14px;
-      font-size: 1rem;
-    }
+const Label = styled.label`
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
 
-    @media (max-width: 480px) {
-      padding: 12px;
-      font-size: 0.95rem;
-    }
+  ${Input}:focus + &,
+  ${Input}:not(:placeholder-shown) + & {
+    top: 0.5rem;
+    transform: translateY(0) scale(0.8);
+    color: #f59e0b;
+  }
+
+  .dark & {
+    color: rgba(255, 255, 255, 0.7);
   }
 `;
 
 const Select = styled.select`
   width: 100%;
-  padding: 16px;
+  padding: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  background: white;
-  cursor: pointer;
-  transition: all 0.2s;
+  background-color: var(--bg-secondary-light);
+  color: var(--text-primary-light);
   font-size: 1.1rem;
-  font-weight: 500;
-  color: #333;
+  transition: all 0.2s ease;
+  cursor: pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -135,35 +144,24 @@ const Select = styled.select`
   background-position: right 1rem center;
   background-size: 1.2em;
   padding-right: 2.5rem;
-  margin: 0.5rem 0;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.02em;
 
   &:hover {
     border-color: #f59e0b;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.1);
   }
 
   &:focus {
     outline: none;
     border-color: #f59e0b;
     box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
-    transform: translateY(-1px);
   }
 
   .dark & {
-    background-color: var(--bg-primary-dark);
-    border-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--bg-secondary-dark);
     color: var(--text-primary-dark);
-  }
-
-  @media (max-width: 768px) {
-    padding: 14px;
-    font-size: 1rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 12px;
-    font-size: 0.95rem;
+    border-color: rgba(255, 255, 255, 0.1);
   }
 `;
 
@@ -227,9 +225,9 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
 
   const exchangeRates = {
     FCFA: bitcoinPrice,
-    EUR: bitcoinPrice / 655.957, // FCFA to EUR
-    USD: bitcoinPrice / 600, // Approximate FCFA to USD
-    CAD: bitcoinPrice / 450, // Approximate FCFA to CAD
+    EUR: bitcoinPrice / 655.957,
+    USD: bitcoinPrice / 600,
+    CAD: bitcoinPrice / 450,
   };
 
   const text = {
@@ -274,7 +272,6 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
   const handleAmountChange = (e) => {
     const value = e.target.value;
     setAmount(value);
-    console.log('Amount changed:', value);
     if (value && !isNaN(value)) {
       handleConversion(value, inputCurrency);
     } else {
@@ -292,7 +289,6 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
   const handleCurrencyChange = (e) => {
     const currency = e.target.value;
     setInputCurrency(currency);
-    console.log('Currency changed:', currency);
     if (amount && !isNaN(amount)) {
       handleConversion(amount, currency);
     }
@@ -336,9 +332,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
     });
   };
 
-  // Update conversions when bitcoinPrice changes
   useEffect(() => {
-    console.log('Bitcoin Price:', bitcoinPrice);
     if (amount && !isNaN(amount)) {
       handleConversion(amount, inputCurrency);
     }
@@ -364,29 +358,27 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
       <h2>{text[language].title}</h2>
       <Form>
         <InputGroup>
-          <label htmlFor="amount">{text[language].amount}</label>
-          <input
+          <Input
             type="number"
             id="amount"
             value={amount}
             onChange={handleAmountChange}
-            placeholder="0.00"
+            placeholder=" "
             step="any"
           />
+          <Label htmlFor="amount">{text[language].amount}</Label>
         </InputGroup>
-        <InputGroup>
-          <Select
-            id="currency"
-            value={inputCurrency}
-            onChange={handleCurrencyChange}
-          >
-            {Object.keys(text[language].currencies).map(currency => (
-              <option key={currency} value={currency}>
-                {text[language].currencies[currency]}
-              </option>
-            ))}
-          </Select>
-        </InputGroup>
+        <Select
+          id="currency"
+          value={inputCurrency}
+          onChange={handleCurrencyChange}
+        >
+          {Object.keys(text[language].currencies).map(currency => (
+            <option key={currency} value={currency}>
+              {text[language].currencies[currency]}
+            </option>
+          ))}
+        </Select>
       </Form>
       <ResultsGrid>
         {Object.keys(conversions).map(currency => (

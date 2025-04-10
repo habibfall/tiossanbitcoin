@@ -308,7 +308,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
 
   const handleConversion = (value, fromCurrency) => {
     const numericValue = parseFloat(value);
-    if (isNaN(numericValue)) return;
+    if (isNaN(numericValue) || !bitcoinPrice) return;
 
     let btcAmount;
     switch (fromCurrency) {
@@ -345,6 +345,10 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
   };
 
   useEffect(() => {
+    if (!bitcoinPrice) {
+      console.error('Invalid Bitcoin Price:', bitcoinPrice);
+      return;
+    }
     if (amount && !isNaN(amount)) {
       handleConversion(amount, inputCurrency);
     }

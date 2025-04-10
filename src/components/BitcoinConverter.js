@@ -256,28 +256,11 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
     }
   };
 
-  useEffect(() => {
-    if (amount && bitcoinPrice) {
-      let btcAmount;
-      
-      // Convert input to BTC first
-      if (inputCurrency === 'BTC') {
-        btcAmount = parseFloat(amount);
-      } else if (inputCurrency === 'SAT') {
-        btcAmount = parseFloat(amount) / 100000000; // Convert satoshis to BTC
-      } else {
-        btcAmount = parseFloat(amount) / exchangeRates[inputCurrency];
-      }
-
-      // Then convert BTC to all currencies
-      setConversions({
-        BTC: btcAmount,
-        SAT: btcAmount * 100000000, // Convert BTC to satoshis
-        FCFA: btcAmount * exchangeRates.FCFA,
-        EUR: btcAmount * exchangeRates.EUR,
-        USD: btcAmount * exchangeRates.USD,
-        CAD: btcAmount * exchangeRates.CAD
-      });
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    setAmount(value);
+    if (value && !isNaN(value)) {
+      handleConversion(value, inputCurrency);
     } else {
       setConversions({
         BTC: null,
@@ -288,17 +271,74 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
         CAD: null
       });
     }
-  }, [amount, inputCurrency, bitcoinPrice]);
+  };
+
+  const handleCurrencyChange = (e) => {
+    const currency = e.target.value;
+    setInputCurrency(currency);
+    if (amount && !isNaN(amount)) {
+      handleConversion(amount, currency);
+    }
+  };
+
+  const handleConversion = (value, fromCurrency) => {
+    const numericValue = parseFloat(value);
+    if (isNaN(numericValue)) return;
+
+    let btcAmount;
+    switch (fromCurrency) {
+      case 'BTC':
+        btcAmount = numericValue;
+        break;
+      case 'SAT':
+        btcAmount = numericValue / 100000000;
+        break;
+      case 'FCFA':
+        btcAmount = numericValue / bitcoinPrice;
+        break;
+      case 'EUR':
+        btcAmount = (numericValue * 655.957) / bitcoinPrice;
+        break;
+      case 'USD':
+        btcAmount = (numericValue * 600) / bitcoinPrice;
+        break;
+      case 'CAD':
+        btcAmount = (numericValue * 450) / bitcoinPrice;
+        break;
+      default:
+        btcAmount = 0;
+    }
+
+    setConversions({
+      BTC: btcAmount,
+      SAT: btcAmount * 100000000,
+      FCFA: btcAmount * bitcoinPrice,
+      EUR: (btcAmount * bitcoinPrice) / 655.957,
+      USD: (btcAmount * bitcoinPrice) / 600,
+      CAD: (btcAmount * bitcoinPrice) / 450
+    });
+  };
+
+  // Update conversions when bitcoinPrice changes
+  useEffect(() => {
+    if (amount && !isNaN(amount)) {
+      handleConversion(amount, inputCurrency);
+    }
+  }, [bitcoinPrice]);
 
   const formatNumber = (value, currency) => {
     if (value === null) return '-';
     
-    const formatter = new Intl.NumberFormat(language === 'french' ? 'fr-FR' : 'en-US', {
-      minimumFractionDigits: currency === 'BTC' ? 8 : (currency === 'SAT' ? 0 : 2),
-      maximumFractionDigits: currency === 'BTC' ? 8 : (currency === 'SAT' ? 0 : 2),
-    });
-    
-    return `${formatter.format(value)} ${currency}`;
+    const options = {
+      BTC: { minimumFractionDigits: 8, maximumFractionDigits: 8 },
+      SAT: { minimumFractionDigits: 0, maximumFractionDigits: 0 },
+      FCFA: { minimumFractionDigits: 0, maximumFractionDigits: 0 },
+      EUR: { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+      USD: { minimumFractionDigits: 2, maximumFractionDigits: 2 },
+      CAD: { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+    };
+
+    return new Intl.NumberFormat('fr-FR', options[currency]).format(value);
   };
 
   return (
@@ -306,35 +346,37 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
       <h2>{text[language].title}</h2>
       <Form>
         <InputGroup>
+          <label htmlFor="amount">{text[language].amount}</label>
           <input
             type="number"
+            id="amount"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={handleAmountChange}
             placeholder="0.00"
             step="any"
-            min="0"
           />
+        </InputGroup>
+        <InputGroup>
+          <label htmlFor="currency">Devise</label>
           <Select
+            id="currency"
             value={inputCurrency}
-            onChange={(e) => setInputCurrency(e.target.value)}
+            onChange={handleCurrencyChange}
           >
-            {Object.entries(text[language].currencies).map(([code, name]) => (
-              <option key={code} value={code}>
-                {name}
+            {Object.keys(text[language].currencies).map(currency => (
+              <option key={currency} value={currency}>
+                {text[language].currencies[currency]}
               </option>
             ))}
           </Select>
         </InputGroup>
       </Form>
-      
       <ResultsGrid>
-        {Object.entries(conversions).map(([currency, value]) => (
-          currency !== inputCurrency && (
-            <ResultCard key={currency}>
-              <h3>{text[language].currencies[currency]}</h3>
-              <p>{formatNumber(value, currency)}</p>
-            </ResultCard>
-          )
+        {Object.keys(conversions).map(currency => (
+          <ResultCard key={currency}>
+            <h3>{text[language].currencies[currency]}</h3>
+            <p>{formatNumber(conversions[currency], currency)}</p>
+          </ResultCard>
         ))}
       </ResultsGrid>
     </ConverterContainer>

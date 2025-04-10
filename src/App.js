@@ -47,6 +47,9 @@ function AppContent() {
       }
       setIsFetching(true);
       
+      // Check if we're on a mobile device
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      
       // Fetch current price and 24h change from Binance
       const currentPriceResponse = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT', {
         cache: 'no-cache',
@@ -75,9 +78,9 @@ function AppContent() {
       const usdToFcfa = 655.957;
       const priceInFcfa = Math.round(currentPrice * usdToFcfa);
       
-      // Only update if price has changed significantly (more than 0.1%)
+      // Update more frequently on mobile devices
       const priceDiff = Math.abs((priceInFcfa - bitcoinPrice) / bitcoinPrice * 100);
-      if (!isInitialLoad && priceDiff < 0.1) {
+      if (!isInitialLoad && priceDiff < (isMobile ? 0.05 : 0.1)) {
         setIsFetching(false);
         return {
           price: priceInFcfa,
@@ -178,30 +181,43 @@ function AppContent() {
   useEffect(() => {
     let isMounted = true;
     let timeoutId;
+    let retryCount = 0;
+    const maxRetries = 5;
     
     const updatePrice = async () => {
       try {
         const data = await fetchBitcoinPrice();
         if (isMounted) {
           console.log('Price updated successfully:', data);
+          retryCount = 0; // Reset retry count on success
         }
       } catch (error) {
         console.error('Failed to update price:', error);
+        if (retryCount < maxRetries) {
+          retryCount++;
+          const retryDelay = Math.pow(2, retryCount) * 1000; // Exponential backoff
+          timeoutId = setTimeout(updatePrice, retryDelay);
+        }
       }
     };
 
     // Initial load
     updatePrice();
     
-    // Update price every 20 minutes
+    // Check if we're on a mobile device
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    // Update more frequently on mobile devices
+    const updateInterval = isMobile ? 5 * 60 * 1000 : 20 * 60 * 1000; // 5 minutes for mobile, 20 minutes for desktop
+    
     const interval = setInterval(() => {
       // Clear any pending updates
       if (timeoutId) {
         clearTimeout(timeoutId);
       }
       // Add a small random delay to prevent all clients from hitting the API at the same time
-      timeoutId = setTimeout(updatePrice, Math.random() * 5000);
-    }, 20 * 60 * 1000);
+      timeoutId = setTimeout(updatePrice, Math.random() * 2000); // Reduced random delay
+    }, updateInterval);
     
     return () => {
       isMounted = false;

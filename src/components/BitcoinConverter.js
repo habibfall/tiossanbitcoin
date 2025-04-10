@@ -113,10 +113,10 @@ const Input = styled.input`
 
 const Label = styled.label`
   position: absolute;
-  left: 1rem;
-  top: 1rem;
+  left: 0.75rem;
+  top: 0.75rem;
   color: #f59e0b;
-  font-size: 1rem;
+  font-size: 0.8rem;
   transition: all 0.2s ease;
   pointer-events: none;
   font-family: 'JetBrains Mono', monospace;
@@ -124,7 +124,7 @@ const Label = styled.label`
 
   ${Input}:focus + &,
   ${Input}:not(:placeholder-shown) + & {
-    top: 0.5rem;
+    top: 0.25rem;
     transform: translateY(0) scale(0.8);
     color: #f59e0b;
   }

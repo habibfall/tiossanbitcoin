@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+
 const CACHE_NAME = 'bitcoin-tiossan-v1';
 const urlsToCache = [
   '/',

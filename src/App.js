@@ -8,6 +8,7 @@ import FAQ from './components/FAQ';
 import Header from './components/Header';
 import BitcoinNews from './components/BitcoinNews';
 import BitcoinQuiz from './components/BitcoinQuiz';
+import Footer from './components/Footer';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { text } from './data/translations';
 
@@ -278,6 +279,11 @@ function AppContent() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
         text={text}
+        isLanguageMenuOpen={isLanguageMenuOpen}
+        toggleLanguageMenu={toggleLanguageMenu}
+        selectLanguage={selectLanguage}
+        languageMenuRef={languageMenuRef}
+        languageNames={languageNames}
       />
       <main className="price-container">
         {activeTab === 'price' && (
@@ -333,9 +339,7 @@ function AppContent() {
           </div>
         )}
       </main>
-      <footer className="footer">
-        <p>{text?.[language]?.footerRights?.replace('{year}', new Date().getFullYear()) ?? ''}</p>
-      </footer>
+      <Footer />
     </div>
   );
 }

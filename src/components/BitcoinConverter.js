@@ -137,7 +137,7 @@ const Label = styled.label`
 const Select = styled.select`
   width: 100%;
   padding: 1rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   background-color: var(--bg-secondary-light);
   color: var(--text-primary-light);
@@ -169,7 +169,11 @@ const Select = styled.select`
   .dark & {
     background-color: var(--bg-secondary-dark);
     color: var(--text-primary-dark);
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
   }
 `;
 

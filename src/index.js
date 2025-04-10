@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import 'whatwg-fetch';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 
 // Performance optimization: Use React.lazy for code splitting
 const root = ReactDOM.createRoot(document.getElementById('root'));

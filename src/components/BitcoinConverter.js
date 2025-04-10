@@ -307,50 +307,58 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
   };
 
   const handleConversion = (value, fromCurrency) => {
-    const numericValue = parseFloat(value);
-    if (isNaN(numericValue) || !bitcoinPrice) return;
+    try {
+      const numericValue = parseFloat(value);
+      if (isNaN(numericValue) || !bitcoinPrice) return;
 
-    let btcAmount;
-    switch (fromCurrency) {
-      case 'BTC':
-        btcAmount = numericValue;
-        break;
-      case 'SAT':
-        btcAmount = numericValue / 100000000;
-        break;
-      case 'FCFA':
-        btcAmount = numericValue / bitcoinPrice;
-        break;
-      case 'EUR':
-        btcAmount = (numericValue * 655.957) / bitcoinPrice;
-        break;
-      case 'USD':
-        btcAmount = (numericValue * 600) / bitcoinPrice;
-        break;
-      case 'CAD':
-        btcAmount = (numericValue * 450) / bitcoinPrice;
-        break;
-      default:
-        btcAmount = 0;
+      let btcAmount;
+      switch (fromCurrency) {
+        case 'BTC':
+          btcAmount = numericValue;
+          break;
+        case 'SAT':
+          btcAmount = numericValue / 100000000;
+          break;
+        case 'FCFA':
+          btcAmount = numericValue / bitcoinPrice;
+          break;
+        case 'EUR':
+          btcAmount = (numericValue * 655.957) / bitcoinPrice;
+          break;
+        case 'USD':
+          btcAmount = (numericValue * 600) / bitcoinPrice;
+          break;
+        case 'CAD':
+          btcAmount = (numericValue * 450) / bitcoinPrice;
+          break;
+        default:
+          btcAmount = 0;
+      }
+
+      setConversions({
+        BTC: btcAmount,
+        SAT: btcAmount * 100000000,
+        FCFA: btcAmount * bitcoinPrice,
+        EUR: (btcAmount * bitcoinPrice) / 655.957,
+        USD: (btcAmount * bitcoinPrice) / 600,
+        CAD: (btcAmount * bitcoinPrice) / 450
+      });
+    } catch (error) {
+      console.error('Error in handleConversion:', error);
     }
-
-    setConversions({
-      BTC: btcAmount,
-      SAT: btcAmount * 100000000,
-      FCFA: btcAmount * bitcoinPrice,
-      EUR: (btcAmount * bitcoinPrice) / 655.957,
-      USD: (btcAmount * bitcoinPrice) / 600,
-      CAD: (btcAmount * bitcoinPrice) / 450
-    });
   };
 
   useEffect(() => {
-    if (!bitcoinPrice) {
-      console.error('Invalid Bitcoin Price:', bitcoinPrice);
-      return;
-    }
-    if (amount && !isNaN(amount)) {
-      handleConversion(amount, inputCurrency);
+    try {
+      if (!bitcoinPrice) {
+        console.error('Invalid Bitcoin Price:', bitcoinPrice);
+        return;
+      }
+      if (amount && !isNaN(amount)) {
+        handleConversion(amount, inputCurrency);
+      }
+    } catch (error) {
+      console.error('Error in useEffect:', error);
     }
   }, [bitcoinPrice]);
 

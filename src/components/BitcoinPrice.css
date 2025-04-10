@@ -85,7 +85,7 @@
 
 .input-field {
   background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(247, 147, 26, 0.5);
   border-radius: 8px;
   color: #ffffff;
   padding: 0.5rem 0.75rem;
@@ -96,8 +96,7 @@
 }
 
 .input-field:hover, .input-field:focus {
-  box-shadow: 0 0 15px rgba(247, 147, 26, 0.4);
-  border-color: rgba(247, 147, 26, 0.5);
+  box-shadow: none;
   outline: none;
 }
 

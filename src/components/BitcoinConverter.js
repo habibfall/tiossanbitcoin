@@ -259,6 +259,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
   const handleAmountChange = (e) => {
     const value = e.target.value;
     setAmount(value);
+    console.log('Amount changed:', value);
     if (value && !isNaN(value)) {
       handleConversion(value, inputCurrency);
     } else {
@@ -276,6 +277,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
   const handleCurrencyChange = (e) => {
     const currency = e.target.value;
     setInputCurrency(currency);
+    console.log('Currency changed:', currency);
     if (amount && !isNaN(amount)) {
       handleConversion(amount, currency);
     }
@@ -321,6 +323,7 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
 
   // Update conversions when bitcoinPrice changes
   useEffect(() => {
+    console.log('Bitcoin Price:', bitcoinPrice);
     if (amount && !isNaN(amount)) {
       handleConversion(amount, inputCurrency);
     }

@@ -45,6 +45,18 @@ const ConverterContainer = styled.div`
       font-size: 1.25rem;
     }
   }
+
+  input[type='number'] {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
 `;
 
 const Form = styled.form`

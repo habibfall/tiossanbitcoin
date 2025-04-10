@@ -360,7 +360,6 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
           />
         </InputGroup>
         <InputGroup>
-          <label htmlFor="currency">Devise</label>
           <Select
             id="currency"
             value={inputCurrency}

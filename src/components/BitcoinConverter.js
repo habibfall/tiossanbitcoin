@@ -69,6 +69,8 @@ const InputGroup = styled.div`
     transition: all 0.2s;
     cursor: text;
     font-weight: 500;
+    background-color: var(--bg-primary-dark);
+    color: var(--text-primary-dark);
 
     &:hover {
       border-color: #f59e0b;

@@ -79,6 +79,9 @@ function AppContent() {
       const usdToFcfa = 655.957;
       const priceInFcfa = Math.round(currentPrice * usdToFcfa);
       
+      // Ensure bitcoinPrice is set correctly
+      setBitcoinPrice(priceInFcfa);
+
       // Update more frequently on mobile devices
       const priceDiff = Math.abs((priceInFcfa - bitcoinPrice) / bitcoinPrice * 100);
       if (!isInitialLoad && priceDiff < (isMobile ? 0.05 : 0.1)) {
@@ -123,7 +126,6 @@ function AppContent() {
       const updates = () => {
         setLastUpdated(new Date());
         setIsPriceUpdating(true);
-        setBitcoinPrice(priceInFcfa);
         setPriceChanges(newPriceChanges);
         if (timeframe !== '1y') {
           setPriceChange(newPriceChanges[timeframe]);

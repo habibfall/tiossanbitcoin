@@ -75,7 +75,7 @@ const InputGroup = styled.div`
 const Input = styled.input`
   width: 100%;
   padding: 1.5rem 1rem 0.5rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   font-size: 1.1rem;
   transition: all 0.2s ease;
@@ -83,6 +83,15 @@ const Input = styled.input`
   color: var(--text-primary-light);
   font-family: 'JetBrains Mono', monospace;
   letter-spacing: -0.02em;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: textfield;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
   &:hover {
     border-color: #f59e0b;
@@ -98,17 +107,16 @@ const Input = styled.input`
   .dark & {
     background-color: var(--bg-secondary-dark);
     color: var(--text-primary-dark);
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
   }
 `;
 
 const Label = styled.label`
   position: absolute;
   left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #666;
-  font-size: 1.1rem;
+  top: 1rem;
+  color: #f59e0b;
+  font-size: 1rem;
   transition: all 0.2s ease;
   pointer-events: none;
   font-family: 'JetBrains Mono', monospace;
@@ -122,7 +130,7 @@ const Label = styled.label`
   }
 
   .dark & {
-    color: rgba(255, 255, 255, 0.7);
+    color: #f59e0b;
   }
 `;
 

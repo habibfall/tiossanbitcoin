@@ -47,14 +47,15 @@ const ConverterContainer = styled.div`
   }
 
   input[type='number'] {
-    -webkit-appearance: none;
+    -webkit-appearance: textfield;
     -moz-appearance: textfield;
     appearance: textfield;
 
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+      -webkit-appearance: inner-spin-button;
+      appearance: inner-spin-button;
+      color: var(--accent-color-light);
     }
   }
 `;
@@ -81,8 +82,8 @@ const InputGroup = styled.div`
     transition: all 0.2s;
     cursor: text;
     font-weight: 500;
-    background-color: var(--bg-primary-dark);
-    color: var(--text-primary-dark);
+    background-color: var(--bg-secondary-light);
+    color: var(--text-primary-light);
 
     &:hover {
       border-color: #f59e0b;
@@ -98,9 +99,9 @@ const InputGroup = styled.div`
     }
 
     .dark & {
-      background: var(--bg-primary-dark);
-      border-color: rgba(255, 255, 255, 0.1);
+      background-color: var(--bg-primary-dark);
       color: var(--text-primary-dark);
+      border-color: rgba(255, 255, 255, 0.1);
     }
 
     @media (max-width: 768px) {

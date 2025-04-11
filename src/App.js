@@ -259,6 +259,16 @@ function AppContent() {
     }));
   }, []);
 
+  useEffect(() => {
+    document.addEventListener('DOMContentLoaded', function() {
+      const inputs = document.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.style.border = '2px solid #f7931a';
+        input.style.borderRadius = '8px';
+      });
+    });
+  }, []);
+
   return (
     <div className={`app ${isDarkMode ? 'dark' : ''}`}>
       {isDarkMode && (

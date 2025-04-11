@@ -389,6 +389,12 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
             onChange={handleAmountChange}
             placeholder=" "
             step="any"
+            style={{
+              border: '2px solid #f7931a',
+              borderRadius: '12px',
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              color: '#ffffff',
+            }}
           />
           <Label htmlFor="amount">{text[language].amount}</Label>
         </InputGroup>
@@ -396,6 +402,12 @@ const BitcoinConverter = ({ language = 'french', bitcoinPrice }) => {
           id="currency"
           value={inputCurrency}
           onChange={handleCurrencyChange}
+          style={{
+            border: '2px solid #f7931a',
+            borderRadius: '12px',
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+            color: '#ffffff',
+          }}
         >
           {Object.keys(text[language].currencies).map(currency => (
             <option key={currency} value={currency}>

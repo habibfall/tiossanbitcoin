@@ -219,7 +219,22 @@ select[name="cryptocurrency"],
   border: 2px solid #f7931a !important;
 }
 
-input#amount, select#currency {
+input#amount {
   border: 2px solid #f7931a !important;
   border-radius: 12px !important;
+}
+
+select#currency {
+  border: 2px solid #f7931a !important;
+  border-radius: 12px !important;
+}
+
+input[type="number"], select {
+  border: 2px solid #f7931a !important;
+  border-radius: 12px !important;
+}
+
+input:focus, select:focus {
+  border: 2px solid #f7931a !important;
+  outline: none !important;
 } 

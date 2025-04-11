@@ -197,4 +197,16 @@
     font-size: 0.8rem;
     margin-top: 0.75rem;
   }
+}
+
+input, select {
+  border: 2px solid #f7931a !important;
+  border-radius: 8px !important;
+}
+
+.bitcoin-selector, 
+select[name="cryptocurrency"],
+.dropdown-container {
+  border: 2px solid #f7931a !important;
+  border-radius: 8px !important;
 } 

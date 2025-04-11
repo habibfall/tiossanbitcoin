@@ -219,19 +219,20 @@ select[name="cryptocurrency"],
   border: 2px solid #f7931a !important;
 }
 
-input#amount {
-  border: 2px solid #f7931a !important;
-  border-radius: 12px !important;
+input#amount, select#currency {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  font-size: 1.1rem;
+  width: 100%;
+  max-width: 200px;
+  transition: border-color 0.3s ease;
 }
 
-select#currency {
-  border: 2px solid #f7931a !important;
-  border-radius: 12px !important;
-}
-
-input[type="number"], select {
-  border: 2px solid #f7931a !important;
-  border-radius: 12px !important;
+input#amount:hover, select#currency:hover {
+  border-color: #f7931a;
 }
 
 input:focus, select:focus {

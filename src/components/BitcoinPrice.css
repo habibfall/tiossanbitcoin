@@ -209,4 +209,17 @@ select[name="cryptocurrency"],
 .dropdown-container {
   border: 2px solid #f7931a !important;
   border-radius: 8px !important;
+}
+
+.fGDuWx {
+  border: 2px solid #f7931a !important;
+}
+
+#currency {
+  border: 2px solid #f7931a !important;
+}
+
+input#amount, select#currency {
+  border: 2px solid #f7931a !important;
+  border-radius: 12px !important;
 } 
